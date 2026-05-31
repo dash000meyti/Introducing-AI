@@ -1,0 +1,26 @@
+---
+description: Engine core conventions (clock, loop, getters)
+globs: src/lib/engine/**
+alwaysApply: false
+---
+
+# Engine Conventions
+
+- One master clock: `AudioController`. One rAF loop guarded by `rafId` (never
+  start a second concurrent loop).
+- Keep the per-frame delta clamp. It prevents a throttled/backgrounded tab from
+  skipping whole steps when rAF resumes with a large gap.
+
+```ts
+// Required: clamp so a resumed rAF cannot jump the timeline.
+const delta = Math.min(now - this.lastFrame, 100);
+```
+
+- Getters are pure: no side effects, no mutation, no I/O. They derive view state
+  from `$state` fields only.
+- State transitions (phase changes, step/section moves) go through the engine's
+  methods, not getters.
+- Reusable timing/viseme math lives in `Timeline.ts`. Keep `AudioController`
+  focused on the clock and sound output.
+- Guard browser-only APIs (`requestAnimationFrame`, `performance`, `Audio`) for
+  safety even though the route is client-rendered.

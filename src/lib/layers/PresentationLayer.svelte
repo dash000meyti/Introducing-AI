@@ -53,7 +53,6 @@
 </script>
 
 <div class="presentation-frame" style:opacity>
-	<div class="frame-bracket"></div>
 	<div class="reveal" bind:this={deckEl}>
 		<div class="slides">
 			{#each slides as slide (slide.id)}
@@ -100,29 +99,20 @@
 <style>
 	.presentation-frame {
 		position: absolute;
-		top: 9%;
+		top: 10.2%;
 		left: 50%;
-		width: 64%;
+		width: 75.5%;
 		aspect-ratio: 2 / 3;
 		transform: translateX(-50%);
-		border-radius: 10px;
+		border-radius: 4px;
 		overflow: hidden;
 		background: var(--slide-bg, #fbfbf9);
-		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+		box-shadow: 0 6px 22px rgba(0, 0, 0, 0.22);
 		transition: opacity 700ms ease;
 	}
 
 	:global(.theme-dark) .presentation-frame {
 		--slide-bg: #f5f4f1;
-	}
-
-	.frame-bracket {
-		position: absolute;
-		inset: 0;
-		z-index: 2;
-		pointer-events: none;
-		border: 1px solid rgba(0, 0, 0, 0.06);
-		border-radius: 10px;
 	}
 
 	.reveal {

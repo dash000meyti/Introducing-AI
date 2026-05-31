@@ -1,0 +1,26 @@
+---
+description: PixiJS character rendering conventions
+globs: src/lib/character/**
+alwaysApply: false
+---
+
+# Character Rendering
+
+`CharacterRenderer` is intentionally sprite-agnostic. Keep its public API stable:
+
+- `init(host)`, `setView(partial)`, `resize()`, `destroy()`.
+- The engine/layer feeds state via `setView`; it must not know whether the
+  character is drawn with Graphics or sprite sheets.
+
+When upgrading the placeholder to real sprite sheets, reimplement the private
+draw/animate methods only. Do NOT change the public API or the engine wiring.
+
+## Visemes and lighting
+
+- Mouth/viseme geometry lives in `visemes.ts` (`MOUTH_SHAPES`). Add new shapes
+  there, not inline in the renderer.
+- Honor lighting `character: on | off`:
+  - `on` = normal palette.
+  - `off` = flat silhouette in the theme background colour (no face/mouth).
+- Body animation (`walkIn`, `idle`, `gesture`, `wave`) is driven by transforms in
+  the ticker; redraw geometry only when palette/emotion/mouth actually change.

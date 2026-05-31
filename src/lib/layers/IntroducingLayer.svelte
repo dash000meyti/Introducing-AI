@@ -35,8 +35,8 @@
 	.camera {
 		position: absolute;
 		inset: 0;
-		/* Zoom-in focuses on the character at the lower-centre of the stage. */
-		transform-origin: 50% 82%;
+		/* Zoom-in focuses on the character standing on the stage disc. */
+		transform-origin: 50% 58%;
 		transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
 		will-change: transform;
 	}

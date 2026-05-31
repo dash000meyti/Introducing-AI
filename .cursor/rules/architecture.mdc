@@ -1,0 +1,40 @@
+---
+description: Core layered architecture and DRY structure for the presentation platform
+alwaysApply: true
+---
+
+# Architecture
+
+Single source of truth: `PresentationEngine` (`src/lib/engine/PresentationEngine.svelte.ts`)
+runs ONE rAF loop and exposes reactive getters. Every layer is a pure consumer.
+
+- Never add a second clock, timeline, or `requestAnimationFrame` loop in a layer.
+- Layers read engine state; they do not own presentation logic.
+
+## Where things go (keep it here, do not duplicate)
+
+| Concern | Location |
+|---|---|
+| Engine, clock, types, helpers | `src/lib/engine/` |
+| Stage layers (backstage/presentation/character/overlay/camera) | `src/lib/layers/` |
+| Player controls + timeline | `src/lib/navigation/` |
+| Transcript | `src/lib/transcript/` |
+| PixiJS character rendering | `src/lib/character/` |
+| Scenario JSON content | `static/data/presentations/` |
+
+## DRY
+
+Reuse existing engine getters instead of recomputing in components:
+`lighting`, `zoom`, `mouthShape`, `activeOverlays`, `transcriptText`,
+`sectionProgress`, `overallProgress`, `stepProgress`.
+
+Reusable timing/viseme math belongs in `src/lib/engine/Timeline.ts`, not inline
+in a component.
+
+```ts
+// BAD: layer recomputes mouth state from raw visemes
+const shape = step.visemes.findLast(v => v.t <= t)?.shape ?? 'rest';
+
+// GOOD: consume the engine
+const shape = engine.mouthShape;
+```

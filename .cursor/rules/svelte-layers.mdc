@@ -1,0 +1,36 @@
+---
+description: Svelte 5 conventions for layers and UI components
+globs: **/*.svelte
+alwaysApply: false
+---
+
+# Svelte Layer Conventions
+
+- Svelte 5 runes only: `$state`, `$derived`, `$effect`, `$props`. No legacy
+  stores or `export let`.
+- Get the shared engine via `getEngine()` from `src/lib/engine/context.ts`.
+  Never instantiate `PresentationEngine` in a layer (only the root page does).
+- Components are presentational: read `$derived` engine state and render. Keep
+  presentation logic in the engine.
+
+## Bridging to imperative libraries (PixiJS / Reveal.js)
+
+Push reactive state into imperative APIs inside `$effect`, and always tear down
+in `onDestroy`.
+
+```svelte
+<script lang="ts">
+  const engine = getEngine();
+  $effect(() => {
+    void engine.currentSlide;   // track dependency
+    deck?.slide(engine.currentSlide, 0);
+  });
+  onDestroy(() => deck?.destroy());
+</script>
+```
+
+## Mobile + RTL
+
+- Mobile-first; the app is framed as a phone. Avoid desktop-only assumptions.
+- The document is RTL (`dir="rtl"`). Wrap LTR fragments such as numeric counters
+  with `dir="ltr"` to avoid bidi reordering (e.g. `2 / 5`).

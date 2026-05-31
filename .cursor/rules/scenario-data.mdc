@@ -1,0 +1,32 @@
+---
+description: Data-driven scenario contract for presentation content
+globs: src/lib/engine/types.ts,src/lib/data/**,static/data/**
+alwaysApply: false
+---
+
+# Scenario Contract
+
+All presentation content is data-driven through the `Scenario` type. The shape is
+`Scenario -> slides[] + sections[] -> steps[]`.
+
+- Never hardcode copy, slide content, timing, lighting, or zoom inside a layer or
+  the engine. It belongs in the scenario JSON.
+- Keep this the clean seam for future LLM generation: an LLM only needs to emit
+  this same JSON shape.
+
+## Adding a capability (strict order)
+
+1. Extend the type in `src/lib/engine/types.ts`.
+2. Consume it in `PresentationEngine` (add/extend a getter or transition).
+3. Render it in the relevant layer.
+
+Do not skip step 1 or 2 by reading raw fields directly in a component.
+
+## Authoring scenarios
+
+- New files live in `static/data/presentations/<id>.json` and load via
+  `loadScenario(id)` in `src/lib/data/loadScenario.ts`.
+- Keep the JSON consistent with the types; every `Step` needs `duration`,
+  `lighting`, and `zoom`. Reference slides by index into `slides[]`.
+- `audio` and `visemes` are optional; without them the engine uses the manual
+  clock and synthetic lip-sync.

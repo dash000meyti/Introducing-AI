@@ -319,10 +319,11 @@ export class CharacterRenderer {
 		const h = this.host.clientHeight || 700;
 		this.app.renderer.resize(w, h);
 
-		const scale = (h * 0.82) / DESIGN_HEIGHT;
+		// Sized and placed so the figure stands on the stage disc in the artwork.
+		const scale = (h * 0.6) / DESIGN_HEIGHT;
 		this.rig.scale.set(scale);
 		this.baseX = w / 2;
-		this.baseY = h * 0.985;
+		this.baseY = h * 0.88;
 		this.rig.x = this.baseX;
 		this.rig.y = this.baseY;
 	}

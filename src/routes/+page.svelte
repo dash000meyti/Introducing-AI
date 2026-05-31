@@ -39,13 +39,9 @@
 		<NavigationLayer />
 	{/if}
 
-	<!-- Stage 1: Landing -->
+	<!-- Stage 1: Landing (brand is part of the stage artwork) -->
 	{#if phase === 'landing'}
 		<div class="screen landing">
-			<div class="brand">
-				<h1>{engine.scenario?.title ?? 'مهدی گودینی'}</h1>
-				<p>{engine.scenario?.subtitle ?? ''}</p>
-			</div>
 			{#if error}
 				<p class="err">{error}</p>
 			{:else}

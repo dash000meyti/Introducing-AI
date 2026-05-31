@@ -84,7 +84,7 @@ export class PresentationEngine {
 	get lighting(): Lighting {
 		switch (this.phase) {
 			case 'landing':
-				return { backstage: 'stage', presentation: 'off', character: 'off' };
+				return { backstage: 'allOn', presentation: 'off', character: 'off' };
 			case 'intro':
 				return { backstage: 'presentation', presentation: 'on', character: 'off' };
 			case 'entrance':

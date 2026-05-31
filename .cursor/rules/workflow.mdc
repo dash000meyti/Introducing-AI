@@ -1,0 +1,33 @@
+---
+description: How to advance the project completely and precisely
+alwaysApply: true
+---
+
+# Delivery Workflow
+
+Progress the project completely and precisely. A change is NOT done until:
+
+1. `npm run check` passes with 0 errors and 0 warnings.
+2. `npm run build` succeeds.
+3. The affected flow is verified running in the browser (landing -> start ->
+   entrance -> playback -> interaction -> end, as relevant).
+
+## Principles
+
+- Keep changes scoped and non-duplicative. Extend existing modules instead of
+  copy-pasting logic.
+- Leave no dead code, stub, or unused placeholder behind. If you add a seam for
+  the future, keep it minimal and documented.
+- Use the dedicated layer/engine/data location (see architecture rule). Do not
+  invent parallel structures.
+- Update todos as you go; do not stop mid-plan.
+
+## MVP vs future seams
+
+The MVP is data-driven (static JSON scenarios). Do NOT bolt LLM calls, content
+generation, or Q&A logic into the engine or layers. Such features plug in behind
+the `Scenario` contract and feed the same JSON shape.
+
+## Comments
+
+Explain intent/trade-offs only. Do not narrate what the code obviously does.
