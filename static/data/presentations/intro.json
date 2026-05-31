@@ -78,7 +78,7 @@
 		{
 			"id": "about",
 			"title": "درباره من",
-			"interactionPause": 6000,
+			"interactionPause": 8000,
 			"questions": [
 				{ "id": "q-portfolio", "label": "نمونه کارهایت را نشان بده", "gotoSectionId": "portfolio" },
 				{ "id": "q-skills", "label": "چه مهارت‌هایی داری؟", "gotoSectionId": "skills" }
@@ -147,7 +147,7 @@
 		{
 			"id": "skills",
 			"title": "مهارت‌ها",
-			"interactionPause": 5000,
+			"interactionPause": 8000,
 			"questions": [
 				{ "id": "q-back-portfolio", "label": "نمونه کارها", "gotoSectionId": "portfolio" }
 			],

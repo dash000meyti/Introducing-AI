@@ -5,13 +5,59 @@
 	const engine = getEngine();
 
 	const isPlaying = $derived(engine.phase === 'playing');
+	const isLanding = $derived(engine.phase === 'landing');
 	const canInteract = $derived(engine.canInteract);
 	const questions = $derived(engine.currentQuestions);
 	const interactionSeconds = $derived(Math.ceil(engine.interactionRemainingMs / 1000));
 </script>
 
-<nav class="navigation" class:light={engine.theme === 'light'}>
-	{#if canInteract}
+<nav class="navigation" class:light={engine.theme === 'light'} class:landing={isLanding}>
+	{#if isLanding}
+		<div class="landing-controls">
+			<button class="ctrl icon-only" onclick={() => engine.toggleTheme()} aria-label="theme">
+				{#if engine.theme === 'dark'}
+					<svg viewBox="0 0 24 24" fill="currentColor"
+						><path d="M12 3a9 9 0 1 0 9 9c-4 1-8-3-9-9z" /></svg
+					>
+				{:else}
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+						><circle cx="12" cy="12" r="4" /><path
+							d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"
+							stroke-linecap="round"
+						/></svg
+					>
+				{/if}
+			</button>
+
+			<button class="start-cta" disabled={!engine.scenario} onclick={() => engine.start()}>
+				{engine.scenario ? 'شروع ارائه' : 'در حال آماده‌سازی…'}
+			</button>
+
+			<button
+				class="ctrl icon-only"
+				class:active={engine.muted}
+				onclick={() => engine.toggleMute()}
+				aria-label="mute"
+			>
+				{#if engine.muted}
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+						><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" stroke="none" /><path
+							d="m17 9 4 6M21 9l-4 6"
+							stroke-linecap="round"
+						/></svg
+					>
+				{:else}
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+						><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" stroke="none" /><path
+							d="M16 8a5 5 0 0 1 0 8"
+							stroke-linecap="round"
+						/></svg
+					>
+				{/if}
+			</button>
+		</div>
+	{:else}
+		{#if canInteract}
 		<div class="interaction">
 			<div class="interaction-head">
 				<span>سوالی دارید؟</span>
@@ -112,6 +158,7 @@
 			<span>{engine.muted ? 'بی‌صدا' : 'صدا'}</span>
 		</button>
 	</div>
+	{/if}
 </nav>
 
 <style>
@@ -128,9 +175,19 @@
 		flex-direction: column;
 		gap: 9px;
 	}
+	.navigation.landing {
+		padding-top: 0;
+	}
 	.navigation.light {
 		color: #14110a;
 		background: linear-gradient(to top, rgba(245, 244, 240, 0.95), rgba(245, 244, 240, 0));
+	}
+	.landing-controls {
+		direction: ltr;
+		display: grid;
+		grid-template-columns: 44px minmax(0, 1fr) 44px;
+		align-items: center;
+		gap: 10px;
 	}
 
 	.status {
@@ -173,6 +230,35 @@
 	.ctrl svg {
 		width: 18px;
 		height: 18px;
+	}
+	.ctrl.icon-only {
+		justify-content: center;
+		width: 44px;
+		height: 44px;
+		padding: 0;
+		border-radius: 999px;
+	}
+	.start-cta {
+		height: 52px;
+		padding: 0 24px;
+		border: none;
+		border-radius: 999px;
+		background: var(--accent);
+		color: #1a1407;
+		font-size: 17px;
+		font-weight: 900;
+		box-shadow: 0 10px 30px rgba(244, 180, 0, 0.35);
+		transition: transform 150ms ease;
+		white-space: nowrap;
+	}
+	.start-cta:disabled {
+		opacity: 0.6;
+		background: #cfcabd;
+		color: #555;
+		box-shadow: none;
+	}
+	.start-cta:not(:disabled):active {
+		transform: scale(0.97);
 	}
 	.ctrl.active {
 		background: var(--accent);

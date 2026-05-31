@@ -33,7 +33,7 @@ export class PresentationEngine {
 
 	// User-controllable state.
 	theme = $state<Theme>('dark');
-	zoom = $state<Zoom>('out');
+	zoom = $state<Zoom>('in');
 	muted = $state(false);
 
 	// Live clock state.
@@ -52,6 +52,7 @@ export class PresentationEngine {
 	setScenario(scenario: Scenario) {
 		this.scenario = scenario;
 		this.theme = scenario.theme;
+		this.zoom = 'in';
 		this.sectionIndex = 0;
 		this.stepIndex = 0;
 		this.currentSlide = 0;
@@ -195,6 +196,7 @@ export class PresentationEngine {
 		this.stepIndex = 0;
 		this.currentSlide = 0;
 		this.phaseElapsed = 0;
+		this.zoom = 'in';
 		this.phase = 'intro';
 		this.startLoop();
 	}

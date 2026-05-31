@@ -10,14 +10,12 @@
 	// Create the engine once and expose it to all layers via context.
 	const engine = setEngine(new PresentationEngine());
 
-	let loaded = $state(false);
 	let error = $state<string | null>(null);
 
 	onMount(async () => {
 		try {
 			const scenario = await loadScenario('intro');
 			engine.setScenario(scenario);
-			loaded = true;
 		} catch (e) {
 			error = e instanceof Error ? e.message : String(e);
 		}
@@ -35,19 +33,13 @@
 		<TranscriptLayer />
 	{/if}
 
-	{#if phase !== 'landing'}
-		<NavigationLayer />
-	{/if}
+	<NavigationLayer />
 
 	<!-- Stage 1: Landing (brand is part of the stage artwork) -->
 	{#if phase === 'landing'}
 		<div class="screen landing">
 			{#if error}
 				<p class="err">{error}</p>
-			{:else}
-				<button class="start" disabled={!loaded} onclick={() => engine.start()}>
-					{loaded ? 'شروع ارائه' : 'در حال آماده‌سازی…'}
-				</button>
 			{/if}
 		</div>
 	{/if}
@@ -89,6 +81,9 @@
 		justify-content: center;
 		padding-bottom: 0;
 		background: rgba(0, 0, 0, 0.35);
+	}
+	.landing {
+		pointer-events: none;
 	}
 
 	.brand h1 {

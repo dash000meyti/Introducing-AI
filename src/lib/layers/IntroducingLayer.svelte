@@ -78,11 +78,11 @@
 
 	.camera.zoom-in {
 		transition-duration: 500ms, 500ms;
-		transition-timing-function: cubic-bezier(0.8, 1, 0.8, 1), cubic-bezier(0.18, 1, 0.18, 1);
+		transition-timing-function: ease-in-out, ease-out;
 	}
 
 	.camera.zoom-out {
 		transition-duration: 500ms, 500ms;
-		transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.16, 1, 0.3, 1);
+		transition-timing-function: ease-out, ease-in-out;
 	}
 </style>
