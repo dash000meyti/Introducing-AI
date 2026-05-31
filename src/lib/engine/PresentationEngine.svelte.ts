@@ -23,7 +23,7 @@ import type {
 } from './types';
 
 const INTRO_MS = 2200; // room darkens, first slide + title appear
-const ENTRANCE_MS = 2600; // character walks in under the spotlight
+const ENTRANCE_MS = 1200; // character fades in under the spotlight
 
 export class PresentationEngine {
 	scenario = $state<Scenario | null>(null);

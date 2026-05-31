@@ -1,25 +1,41 @@
-// Viseme definitions for the placeholder character. Each mouth shape maps to a
-// simple drawing primitive. When real sprite sheets arrive, replace `rx/ry/line`
-// with the matching sprite frame name for each shape.
+// Maps engine state to the provided character image files (in
+// /assets/character/<name>.png). The character is sprite/texture based: each
+// state is a full-frame face. When the full version arrives, extend these maps.
 
-import type { MouthShape } from '../engine/types';
+import type { Emotion, MouthShape } from '../engine/types';
 
-export interface MouthGeometry {
-	rx: number;
-	ry: number;
-	/** Draw as a flat line (closed mouth) instead of an ellipse. */
-	line?: boolean;
-	/** Future: sprite-sheet frame name for this viseme. */
-	frame?: string;
-}
-
-export const MOUTH_SHAPES: Record<MouthShape, MouthGeometry> = {
-	rest: { rx: 12, ry: 2, line: true, frame: 'mouth_rest' },
-	mbp: { rx: 14, ry: 1.5, line: true, frame: 'mouth_mbp' },
-	ah: { rx: 13, ry: 13, frame: 'mouth_ah' },
-	ee: { rx: 18, ry: 4, frame: 'mouth_ee' },
-	oh: { rx: 11, ry: 11, frame: 'mouth_oh' },
-	oo: { rx: 7, ry: 8, frame: 'mouth_oo' },
-	fv: { rx: 14, ry: 3, frame: 'mouth_fv' },
-	l: { rx: 10, ry: 7, frame: 'mouth_l' }
+/** Lip-sync: mouth shape -> viseme image filename (without extension). */
+export const VISEME_FILE: Record<MouthShape, string> = {
+	rest: 'neutral',
+	ah: 'viseme-a',
+	ee: 'viseme-e',
+	oh: 'viseme-o',
+	oo: 'viseme-u',
+	mbp: 'viseme-m-b-p',
+	fv: 'viseme-f-v',
+	l: 'viseme-l-n-t-d'
 };
+
+/** Resting expression (when not speaking) -> image filename. */
+export const EXPRESSION_FILE: Record<Emotion, string> = {
+	neutral: 'neutral',
+	happy: 'slight-smile',
+	thinking: 'focused-slight-smile',
+	surprised: 'neutral'
+};
+
+/** Blink frames. */
+export const BLINK = {
+	half: 'blink-half',
+	closed: 'blink-closed'
+} as const;
+
+/** Every image the renderer needs to preload. */
+export const ALL_CHARACTER_FILES: string[] = [
+	...new Set([
+		...Object.values(VISEME_FILE),
+		...Object.values(EXPRESSION_FILE),
+		BLINK.half,
+		BLINK.closed
+	])
+];

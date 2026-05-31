@@ -19,24 +19,26 @@
 
 	function syncView() {
 		renderer?.setView({
-			body: engine.body,
 			mouth: engine.mouthShape,
-			emotion: engine.emotion,
+			// Give a friendly slight smile while waiting for interaction.
+			emotion: engine.canInteract ? 'happy' : engine.emotion,
 			lit: engine.lighting.character === 'on',
 			theme: engine.theme,
-			visible: engine.characterVisible
+			visible: engine.characterVisible,
+			speaking: engine.isPlaying
 		});
 	}
 
 	// Push reactive engine state into the imperative PixiJS renderer.
 	$effect(() => {
 		// Touch the reactive sources so this effect re-runs when they change.
-		void engine.body;
 		void engine.mouthShape;
 		void engine.emotion;
+		void engine.canInteract;
 		void engine.lighting.character;
 		void engine.theme;
 		void engine.characterVisible;
+		void engine.isPlaying;
 		syncView();
 	});
 
