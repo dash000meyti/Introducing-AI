@@ -37,6 +37,11 @@ const BLINK_CLOSED_MS = 90;
 type BlinkPhase = 'idle' | 'closing' | 'closed' | 'opening';
 
 export class CharacterRenderer {
+	/** Sprite-box height as a fraction of the full-stage height. */
+	private static readonly FIGURE_H = 0.28;
+	/** Vertical anchor (sprite bottom) as a fraction of the stage height. */
+	private static readonly FEET_Y = 0.845;
+
 	private app: Application | null = null;
 	private host: HTMLElement | null = null;
 	private sprite: Sprite | null = null;
@@ -198,9 +203,12 @@ export class CharacterRenderer {
 		this.app.renderer.resize(w, h);
 
 		const texH = this.sprite.texture.height || 1;
-		// Sized and placed so the figure stands on the stage disc in the artwork.
-		this.sprite.scale.set((h * 0.6) / texH);
-		this.sprite.position.set(w / 2, h * 0.88);
+		// Sized and placed relative to the full-stage artwork so the presenter is a
+		// human-scale figure standing on the stage disc (disc sits at ~0.85h, feet
+		// rest just in front of it). FIGURE_H is the sprite-box height as a fraction
+		// of the stage height; the artwork itself is only ~91% filled vertically.
+		this.sprite.scale.set((h * CharacterRenderer.FIGURE_H) / texH);
+		this.sprite.position.set(w / 2, h * CharacterRenderer.FEET_Y);
 	}
 
 	resize() {
