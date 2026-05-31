@@ -9,6 +9,9 @@
 	--stage-dark-bg: #0c0d10;
 	--stage-dark-floor: #16181d;
 	--stage-dark-wall: #1c1f26;
+
+	/* Liquid-glass (macOS Tahoe style) blur applied to floating chrome. */
+	--glass-blur: blur(22px) saturate(185%);
 }
 
 html,

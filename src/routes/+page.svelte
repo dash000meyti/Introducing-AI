@@ -43,17 +43,6 @@
 			{/if}
 		</div>
 	{/if}
-
-	<!-- Stage 6: Ended -->
-	{#if phase === 'ended'}
-		<div class="screen ended">
-			<div class="brand">
-				<h1>سپاس از همراهی شما</h1>
-				<p>{engine.scenario?.subtitle ?? ''}</p>
-			</div>
-			<button class="start" onclick={() => engine.restart()}>شروع دوباره</button>
-		</div>
-	{/if}
 </div>
 
 <style>
@@ -77,49 +66,8 @@
 		text-align: center;
 		animation: screen-in 500ms ease both;
 	}
-	.ended {
-		justify-content: center;
-		padding-bottom: 0;
-		background: rgba(0, 0, 0, 0.35);
-	}
 	.landing {
 		pointer-events: none;
-	}
-
-	.brand h1 {
-		margin: 0;
-		font-size: 34px;
-		font-weight: 900;
-		color: var(--accent);
-		text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
-	}
-	.brand p {
-		margin: 6px 0 0;
-		font-size: 16px;
-		font-weight: 500;
-		color: #efe9da;
-		opacity: 0.9;
-	}
-
-	.start {
-		padding: 14px 34px;
-		border: none;
-		border-radius: 999px;
-		background: var(--accent);
-		color: #1a1407;
-		font-size: 16px;
-		font-weight: 800;
-		box-shadow: 0 10px 30px rgba(244, 180, 0, 0.35);
-		transition: transform 150ms ease;
-	}
-	.start:disabled {
-		opacity: 0.6;
-		background: #cfcabd;
-		color: #555;
-		box-shadow: none;
-	}
-	.start:not(:disabled):active {
-		transform: scale(0.96);
 	}
 
 	.err {

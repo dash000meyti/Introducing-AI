@@ -401,6 +401,8 @@ export class PresentationEngine {
 	private enterInteraction(pauseMs: number) {
 		this.audio.pause();
 		this.interactionRemainingMs = pauseMs;
+		// Pull back to the character close-up so the question prompt has focus.
+		this.zoom = 'in';
 		this.phase = 'interaction';
 		this.startLoop();
 	}
@@ -408,7 +410,7 @@ export class PresentationEngine {
 	private end() {
 		this.audio.pause();
 		this.phase = 'ended';
-		this.zoom = 'out';
+		this.zoom = 'in';
 	}
 
 	dispose() {

@@ -37,7 +37,7 @@
 		padding: 0;
 		border: none;
 		border-radius: 999px;
-		background: rgba(255, 255, 255, 0.18);
+		background: color-mix(in srgb, currentColor 22%, transparent);
 		overflow: hidden;
 		position: relative;
 	}
