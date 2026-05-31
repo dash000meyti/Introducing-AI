@@ -1,0 +1,54 @@
+@import 'tailwindcss';
+
+:root {
+	--accent: #f4b400;
+	--accent-soft: #ffd24d;
+	--stage-light-bg: #e9e7e2;
+	--stage-light-floor: #d7d4cd;
+	--stage-light-wall: #f1efea;
+	--stage-dark-bg: #0c0d10;
+	--stage-dark-floor: #16181d;
+	--stage-dark-wall: #1c1f26;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	background: #000;
+	font-family: 'Vazirmatn', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	overscroll-behavior: none;
+	touch-action: manipulation;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+button {
+	font-family: inherit;
+	cursor: pointer;
+}
+
+/* Hide scrollbars on the mobile stage while keeping scroll where needed */
+.no-scrollbar::-webkit-scrollbar {
+	display: none;
+}
+.no-scrollbar {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+@keyframes pulse-glow {
+	0%,
+	100% {
+		opacity: 0.55;
+	}
+	50% {
+		opacity: 1;
+	}
+}

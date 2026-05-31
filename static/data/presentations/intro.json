@@ -1,0 +1,186 @@
+{
+	"id": "intro-mehdi",
+	"title": "مهدی گودینی",
+	"subtitle": "طراح و توسعه‌دهنده تجربه کاربر",
+	"theme": "dark",
+	"slides": [
+		{
+			"id": "s-title",
+			"kind": "title",
+			"title": "مهدی گودینی",
+			"subtitle": "طراح و توسعه‌دهنده تجربه کاربر"
+		},
+		{
+			"id": "s-about",
+			"kind": "text",
+			"title": "درباره من",
+			"body": "سازندهٔ تجربه‌های دیجیتال تعاملی، با تمرکز بر طراحی محصول و رابط کاربری."
+		},
+		{
+			"id": "s-portfolio",
+			"kind": "grid",
+			"title": "نمونه کارها",
+			"images": ["", "", "", "", "", ""]
+		},
+		{
+			"id": "s-skills",
+			"kind": "text",
+			"title": "مهارت‌ها",
+			"bullets": ["طراحی تجربه و رابط کاربری", "توسعهٔ فرانت‌اند", "انیمیشن و تعامل", "روایت محصول"]
+		},
+		{
+			"id": "s-end",
+			"kind": "title",
+			"title": "سپاس از همراهی شما",
+			"subtitle": "بیایید با هم چیزی بسازیم"
+		}
+	],
+	"sections": [
+		{
+			"id": "intro",
+			"title": "معرفی",
+			"steps": [
+				{
+					"id": "intro-1",
+					"text": "سلام! من مهدی هستم. خوشحالم که اینجا کنار شما روی این استیج ایستاده‌ام.",
+					"duration": 5200,
+					"slide": 0,
+					"zoom": "in",
+					"body": "wave",
+					"emotion": "happy",
+					"lighting": { "backstage": "stage", "presentation": "on", "character": "on" },
+					"visemes": [
+						{ "t": 0, "shape": "rest" },
+						{ "t": 200, "shape": "ee" },
+						{ "t": 450, "shape": "ah" },
+						{ "t": 700, "shape": "mbp" },
+						{ "t": 1100, "shape": "oh" },
+						{ "t": 1600, "shape": "ee" },
+						{ "t": 2200, "shape": "ah" },
+						{ "t": 2800, "shape": "oo" },
+						{ "t": 3400, "shape": "ee" },
+						{ "t": 4000, "shape": "ah" },
+						{ "t": 4800, "shape": "rest" }
+					]
+				},
+				{
+					"id": "intro-2",
+					"text": "در چند دقیقهٔ بعد، کمی دربارهٔ کارم و چیزهایی که می‌سازم صحبت می‌کنم.",
+					"duration": 5000,
+					"slide": 0,
+					"zoom": "in",
+					"body": "gesture",
+					"emotion": "neutral",
+					"lighting": { "backstage": "stage", "presentation": "on", "character": "on" }
+				}
+			]
+		},
+		{
+			"id": "about",
+			"title": "درباره من",
+			"interactionPause": 6000,
+			"questions": [
+				{ "id": "q-portfolio", "label": "نمونه کارهایت را نشان بده", "gotoSectionId": "portfolio" },
+				{ "id": "q-skills", "label": "چه مهارت‌هایی داری؟", "gotoSectionId": "skills" }
+			],
+			"steps": [
+				{
+					"id": "about-1",
+					"text": "من تجربه‌های دیجیتال تعاملی می‌سازم؛ جایی که طراحی و مهندسی به هم می‌رسند.",
+					"duration": 5400,
+					"slide": 1,
+					"zoom": "out",
+					"body": "idle",
+					"emotion": "neutral",
+					"lighting": { "backstage": "presentation", "presentation": "on", "character": "on" }
+				},
+				{
+					"id": "about-2",
+					"text": "حالا می‌توانید مسیر ادامهٔ ارائه را خودتان انتخاب کنید.",
+					"cue": "[منتظر انتخاب شما]",
+					"duration": 4200,
+					"slide": 1,
+					"zoom": "out",
+					"body": "gesture",
+					"emotion": "happy",
+					"lighting": { "backstage": "presentation", "presentation": "on", "character": "on" }
+				}
+			]
+		},
+		{
+			"id": "portfolio",
+			"title": "نمونه کارها",
+			"steps": [
+				{
+					"id": "portfolio-1",
+					"text": "این‌ها بخشی از پروژه‌هایی است که روی آن‌ها کار کرده‌ام.",
+					"duration": 5600,
+					"slide": 2,
+					"zoom": "out",
+					"body": "idle",
+					"emotion": "neutral",
+					"lighting": { "backstage": "presentation", "presentation": "on", "character": "on" },
+					"overlays": [
+						{
+							"id": "ov-highlight",
+							"kind": "highlight",
+							"x": 50,
+							"y": 26,
+							"w": 42,
+							"h": 16,
+							"at": 1200,
+							"until": 4500
+						},
+						{
+							"id": "ov-callout",
+							"kind": "callout",
+							"text": "پروژهٔ منتخب",
+							"x": 32,
+							"y": 26,
+							"at": 1600,
+							"until": 4500
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "skills",
+			"title": "مهارت‌ها",
+			"interactionPause": 5000,
+			"questions": [
+				{ "id": "q-back-portfolio", "label": "نمونه کارها", "gotoSectionId": "portfolio" }
+			],
+			"steps": [
+				{
+					"id": "skills-1",
+					"text": "از طراحی تجربهٔ کاربری تا توسعهٔ فرانت‌اند و انیمیشن، تمام مسیر را پوشش می‌دهم.",
+					"duration": 5800,
+					"slide": 3,
+					"zoom": "out",
+					"body": "gesture",
+					"emotion": "neutral",
+					"lighting": { "backstage": "presentation", "presentation": "on", "character": "on" }
+				}
+			]
+		},
+		{
+			"id": "closing",
+			"title": "پایان",
+			"steps": [
+				{
+					"id": "closing-1",
+					"text": "از اینکه تا اینجا همراهم بودید سپاسگزارم. امیدوارم به‌زودی با هم کار کنیم!",
+					"cue": "[صدای دست زدن]",
+					"duration": 5600,
+					"slide": 4,
+					"zoom": "in",
+					"body": "wave",
+					"emotion": "happy",
+					"sfx": ["applause"],
+					"lighting": { "backstage": "allOn", "presentation": "on", "character": "on" }
+				}
+			]
+		}
+	]
+}
