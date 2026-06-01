@@ -52,7 +52,18 @@ Key files:
 - `src/lib/engine/Timeline.ts` — viseme/timing helpers
 - `src/lib/engine/types.ts` — the `Scenario` contract
 - `src/lib/character/CharacterRenderer.ts` — PixiJS figure (sprite-swappable)
+- `src/lib/character/visemes.ts` — engine-state → character image maps
 - `src/lib/layers/*`, `src/lib/navigation/*`, `src/lib/transcript/*` — layers
+- `src/lib/data/loadScenario.ts` — fetches a scenario by id
+
+### Reveal.js + async content (gotcha)
+
+The slide deck loads its scenario asynchronously, so `PresentationLayer` mounts
+and initializes Reveal **before** the `<section>` slides exist in the DOM. Reveal
+only displays sections it has registered, so the layer must call `deck.sync()`
+(after a Svelte `tick()` flushes the `{#each}`) whenever the slide count changes,
+then `deck.slide(index)`. Skipping the re-sync is why a freshly loaded deck shows
+no slides. The same path keeps a future LLM-generated deck working.
 
 ## Scenarios
 
@@ -68,14 +79,22 @@ See `static/data/presentations/intro.json` for the worked example.
 
 ## Placeholders (MVP)
 
-- **Character**: a stylised PixiJS figure with synthetic lip-sync when a step has no
-  authored `visemes`. Replace the draw methods in `CharacterRenderer` with sprite
-  sheets to upgrade.
-- **Audio**: steps run on the manual clock when no audio file is present; add files
-  under `static/audio/` and reference them via `Step.audio` / sfx under
-  `static/audio/sfx/`.
-- **Backstage**: rendered in CSS. To use artwork, drop images at
-  `static/assets/backstage/{light,dark}/{allOff,allOn,stage,presentation}.png`.
+- **Character**: a PixiJS sprite that swaps full-frame face textures for lip-sync
+  visemes, emotions, and an automatic blink. Locomotion (walk/gesture) is stubbed
+  in the public API but not animated yet. Faces live in
+  `static/assets/character/*.png` and are mapped from engine state in
+  `src/lib/character/visemes.ts`. When a step has no authored `visemes` the engine
+  synthesises a talking flutter.
+- **Audio**: the authoritative timeline is a manual clock, so steps run on
+  `Step.duration` when no audio file is present. Add files under `static/audio/`
+  and reference them via `Step.audio`; ambient effects load from
+  `static/audio/sfx/<name>.mp3` via `Step.sfx`.
+- **Backstage**: real stage artwork — one JPG per lighting state, per theme — at
+  `static/assets/backstage/{light,dark}/{off,stage,slide,person}.jpg`, layered and
+  crossfaded by opacity (`off`=all off, `stage`=all on, `slide`=presentation light,
+  `person`=character light).
+- **Slides**: authored as data in the scenario and rendered by Reveal.js. Drop
+  slide imagery under `static/assets/slides/` and reference it from the scenario.
 
 ## Future (designed-for, not built)
 

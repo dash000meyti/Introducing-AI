@@ -29,6 +29,28 @@ in `onDestroy`.
 </script>
 ```
 
+### Reveal.js only renders sections it has registered
+
+Scenario content loads asynchronously, so the deck usually initializes with an
+EMPTY `<div class="slides">`. Reveal hides every `<section>` it has not tagged
+`present/past/future`, so slides added reactively afterwards stay invisible. When
+the slide set changes you MUST re-register them:
+
+```svelte
+$effect(() => {
+  const count = slides.length;          // track the set
+  const index = engine.currentSlide;
+  if (!ready || !deck) return;
+  void (async () => {
+    await tick();                        // flush {#each} into the DOM first
+    if (count !== syncedCount) { deck.sync(); syncedCount = count; }
+    deck.slide(index, 0);
+  })();
+});
+```
+
+Calling `deck.slide()` alone is not enough on a freshly loaded/changed deck.
+
 ## Mobile + RTL
 
 - Mobile-first; the app is framed as a phone. Avoid desktop-only assumptions.

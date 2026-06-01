@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
+	import { onMount, onDestroy, tick } from 'svelte';
 	import { getEngine } from '$lib/engine/context';
 	import 'reveal.js/reveal.css';
 
@@ -13,6 +13,10 @@
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let deck: any = null;
 	let ready = $state(false);
+	// Number of <section>s Reveal has registered. The scenario (and therefore the
+	// slide set) loads asynchronously, so the deck is usually empty at init time;
+	// we must re-sync whenever the count changes.
+	let syncedCount = -1;
 
 	onMount(async () => {
 		const Reveal = (await import('reveal.js')).default;
@@ -34,13 +38,24 @@
 		});
 		await deck.initialize();
 		ready = true;
-		deck.slide(engine.currentSlide, 0);
 	});
 
-	// Drive the deck from the engine.
+	// Keep the deck in step with the engine. Reveal only displays <section>s it has
+	// registered, so a changed slide set (e.g. the async scenario load, or a future
+	// LLM-generated deck) must be re-synced before we can navigate to a slide.
 	$effect(() => {
+		const count = slides.length;
 		const index = engine.currentSlide;
-		if (ready && deck) deck.slide(index, 0);
+		if (!ready || !deck) return;
+		void (async () => {
+			// Let Svelte flush the {#each} into the DOM before Reveal reads it.
+			await tick();
+			if (count !== syncedCount) {
+				deck.sync();
+				syncedCount = count;
+			}
+			deck.slide(index, 0);
+		})();
 	});
 
 	onDestroy(() => {
