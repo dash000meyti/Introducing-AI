@@ -1,17 +1,25 @@
 <script lang="ts">
-	import { tick } from 'svelte';
+	import { onDestroy, tick } from 'svelte';
 	import { getEngine } from '$lib/engine/context';
 	import { fade } from 'svelte/transition';
 
 	const engine = getEngine();
+	/** Higher = softer/slower glide toward the active word (ms time constant). */
+	const SCROLL_TAU_MS = 360;
 
 	const view = $derived(engine.transcriptView);
 	const tokens = $derived(view.tokens);
 	const visible = $derived(tokens.some((t) => t.visible));
+	const reduceMotion =
+		typeof matchMedia !== 'undefined' &&
+		matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 	let viewport = $state<HTMLElement>();
 	let wordEls = $state<(HTMLElement | undefined)[]>([]);
 	let offset = $state(0);
+	let scrollTarget = $state<number | null>(null);
+	let scrollRaf: number | null = null;
+	let lastSection = $state(-1);
 
 	function wordRef(node: HTMLElement, index: number) {
 		wordEls[index] = node;
@@ -25,25 +33,90 @@
 		};
 	}
 
-	function recenter() {
-		if (!viewport) return;
+	function centerDelta(): number {
+		if (!viewport) return 0;
 		const current = wordEls[view.activeWordIndex];
-		if (!current) return;
+		if (!current) return 0;
 		const vRect = viewport.getBoundingClientRect();
 		const aRect = current.getBoundingClientRect();
-		const delta =
-			vRect.left + vRect.width / 2 - (aRect.left + aRect.width / 2);
-		offset += delta;
+		return vRect.left + vRect.width / 2 - (aRect.left + aRect.width / 2);
+	}
+
+	function measureTarget(): number {
+		return offset + centerDelta();
+	}
+
+	function stopScroll() {
+		if (scrollRaf !== null) {
+			cancelAnimationFrame(scrollRaf);
+			scrollRaf = null;
+		}
+		scrollTarget = null;
+	}
+
+	function startScrollLoop() {
+		if (scrollRaf !== null) return;
+
+		let last = performance.now();
+
+		const frame = (now: number) => {
+			const dt = Math.min(now - last, 32);
+			last = now;
+
+			if (scrollTarget === null) {
+				scrollRaf = null;
+				return;
+			}
+
+			const dist = scrollTarget - offset;
+			if (Math.abs(dist) < 0.5) {
+				offset = scrollTarget;
+				scrollTarget = null;
+				scrollRaf = null;
+				return;
+			}
+
+			// Exponential ease: gentle start and soft landing on the target.
+			const alpha = 1 - Math.exp(-dt / SCROLL_TAU_MS);
+			offset += dist * alpha;
+			scrollRaf = requestAnimationFrame(frame);
+		};
+
+		scrollRaf = requestAnimationFrame(frame);
+	}
+
+	function applyCenter(smooth: boolean) {
+		const target = measureTarget();
+
+		if (!smooth || reduceMotion) {
+			stopScroll();
+			offset = target;
+			return;
+		}
+
+		scrollTarget = target;
+		startScrollLoop();
 	}
 
 	$effect(() => {
 		void view.activeWordIndex;
-		void tokens;
+		const section = engine.sectionIndex;
+		const sectionChanged = section !== lastSection;
+		lastSection = section;
+
+		const smooth = view.activeWordIndex > 0;
 		tick().then(() => {
-			recenter();
-			requestAnimationFrame(recenter);
+			requestAnimationFrame(() => {
+				if (sectionChanged) {
+					stopScroll();
+					offset = measureTarget();
+				}
+				applyCenter(smooth);
+			});
 		});
 	});
+
+	onDestroy(() => stopScroll());
 </script>
 
 {#if visible}
@@ -147,7 +220,7 @@
 	.word {
 		font-family: var(--font-body);
 		font-size: 15px;
-		font-weight: 600;
+		font-weight: 700;
 		line-height: 44px;
 		color: var(--text-muted);
 		transition: color 180ms ease;
@@ -157,6 +230,5 @@
 	}
 	.word.active {
 		color: var(--text-primary);
-		font-weight: 700;
 	}
 </style>
