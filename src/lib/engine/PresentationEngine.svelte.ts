@@ -6,7 +6,7 @@
 // future LLM-driven run only needs to feed in a different Scenario.
 
 import { AudioController } from './AudioController';
-import { resolveMouthShape } from './Timeline';
+import { buildTranscriptView, resolveMouthShape } from './Timeline';
 import type {
 	BodyAnimation,
 	Emotion,
@@ -19,6 +19,7 @@ import type {
 	Section,
 	Step,
 	Theme,
+	TranscriptView,
 	Zoom
 } from './types';
 
@@ -148,6 +149,29 @@ export class PresentationEngine {
 	get transcriptCue(): string | undefined {
 		if (this.phase === 'playing' || this.phase === 'interaction') return this.currentStep?.cue;
 		return undefined;
+	}
+
+	/** Continuous section transcript for the ticker (all steps on one line). */
+	get transcriptView(): TranscriptView {
+		if (this.phase === 'playing' || this.phase === 'paused' || this.phase === 'interaction') {
+			const steps = this.currentSection?.steps ?? [];
+			if (steps.length === 0) {
+				return { tokens: [], activeWordIndex: 0, activeFraction: 0 };
+			}
+			return buildTranscriptView(steps, this.stepIndex, this.stepProgress);
+		}
+		if (this.phase === 'ended') {
+			const sections = this.scenario?.sections ?? [];
+			const lastSection = sections[sections.length - 1];
+			if (lastSection?.steps.length) {
+				return buildTranscriptView(
+					lastSection.steps,
+					lastSection.steps.length - 1,
+					1
+				);
+			}
+		}
+		return { tokens: [], activeWordIndex: 0, activeFraction: 0 };
 	}
 
 	get canInteract(): boolean {

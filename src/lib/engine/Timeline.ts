@@ -1,7 +1,7 @@
 // Pure timing helpers used by the PresentationEngine. Kept side-effect free so
 // they are trivially testable and reusable by a future LLM-driven sequencer.
 
-import type { MouthShape, Step, Viseme } from './types';
+import type { MouthShape, Step, TranscriptToken, TranscriptView, Viseme } from './types';
 
 // Synthetic mouth flutter cycle used when a step has no authored visemes.
 const SYNTH_VISEMES: MouthShape[] = ['ah', 'rest', 'ee', 'oh', 'rest', 'oo', 'ah', 'rest'];
@@ -35,4 +35,101 @@ function resolveAuthoredViseme(visemes: Viseme[], timeMs: number): MouthShape {
 /** Total number of steps across every section. */
 export function countSteps(sections: { steps: unknown[] }[]): number {
 	return sections.reduce((sum, s) => sum + s.steps.length, 0);
+}
+
+function splitWords(text: string): string[] {
+	return text.length ? text.split(/\s+/).filter(Boolean) : [];
+}
+
+/** Map step progress (0..1) onto a local word index + intra-word fraction. */
+export function resolveWordProgress(
+	words: string[],
+	text: string,
+	stepProgress: number
+): { activeIndex: number; activeFraction: number } {
+	if (words.length === 0) return { activeIndex: 0, activeFraction: 0 };
+
+	const readChars = text.length * stepProgress;
+	const starts: number[] = [];
+	let pos = 0;
+	for (const w of words) {
+		starts.push(pos);
+		pos += w.length + 1;
+	}
+
+	let activeIndex = 0;
+	for (let i = 0; i < starts.length; i++) {
+		if (starts[i] <= readChars) activeIndex = i;
+		else break;
+	}
+
+	const w = words[activeIndex];
+	const into = readChars - starts[activeIndex];
+	const activeFraction = w ? Math.min(1, Math.max(0, into / w.length)) : 0;
+	return { activeIndex, activeFraction };
+}
+
+/**
+ * Build a continuous section transcript: all steps on one line, with karaoke
+ * progress flowing across step boundaries instead of resetting each beat.
+ */
+export function buildTranscriptView(
+	steps: Step[],
+	stepIndex: number,
+	stepProgress: number
+): TranscriptView {
+	const safeIndex = Math.min(Math.max(stepIndex, 0), Math.max(steps.length - 1, 0));
+
+	let wordOffset = 0;
+	for (let si = 0; si < safeIndex; si++) {
+		wordOffset += splitWords(steps[si]?.text ?? '').length;
+	}
+
+	const currentStep = steps[safeIndex];
+	const currentWords = splitWords(currentStep?.text ?? '');
+	const currentText = currentStep?.text ?? '';
+	const { activeIndex: localActive, activeFraction } = resolveWordProgress(
+		currentWords,
+		currentText,
+		stepProgress
+	);
+	const activeWordIndex = wordOffset + localActive;
+	const onLastWord = currentWords.length > 0 && localActive >= currentWords.length - 1;
+
+	const tokens: TranscriptToken[] = [];
+	let wordIndex = 0;
+
+	for (let si = 0; si < steps.length; si++) {
+		const step = steps[si];
+		const words = splitWords(step.text ?? '');
+
+		for (const word of words) {
+			tokens.push({
+				kind: 'word',
+				text: word,
+				wordIndex,
+				spoken: wordIndex <= activeWordIndex,
+				active: wordIndex === activeWordIndex,
+				visible: true
+			});
+			wordIndex += 1;
+		}
+
+		if (step.cue && si <= safeIndex) {
+			const cueSpoken =
+				si < safeIndex ||
+				(si === safeIndex &&
+					(stepProgress >= 1 ||
+						(onLastWord && (activeFraction >= 0.6 || stepProgress >= 0.9))));
+			tokens.push({
+				kind: 'cue',
+				text: step.cue,
+				spoken: cueSpoken,
+				active: false,
+				visible: true
+			});
+		}
+	}
+
+	return { tokens, activeWordIndex, activeFraction };
 }

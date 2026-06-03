@@ -65,6 +65,24 @@ export interface OverlayDef {
 	until?: number;
 }
 
+/** One token in the continuous section transcript ticker. */
+export interface TranscriptToken {
+	kind: 'word' | 'cue';
+	text: string;
+	/** Word tokens only: stable index for scroll centring. */
+	wordIndex?: number;
+	spoken: boolean;
+	active: boolean;
+	visible: boolean;
+}
+
+/** Precomputed transcript state for the Transcript layer. */
+export interface TranscriptView {
+	tokens: TranscriptToken[];
+	activeWordIndex: number;
+	activeFraction: number;
+}
+
 /** A single beat of the presentation. */
 export interface Step {
 	id: string;
