@@ -51,14 +51,15 @@
 		border: 3px solid var(--accent);
 		border-radius: 12px;
 		box-shadow:
-			0 0 0 9999px rgba(0, 0, 0, 0.28),
-			0 0 24px rgba(244, 180, 0, 0.55);
+			0 0 0 9999px var(--overlay-backdrop),
+			0 0 24px color-mix(in srgb, var(--accent) 55%, transparent);
 	}
 
 	.tooltip {
 		transform: translate(-50%, -120%);
-		background: #1c1c1f;
-		color: #fff;
+		background: var(--overlay-tooltip-bg);
+		color: var(--overlay-tooltip-text);
+		font-family: var(--font-body);
 		font-size: 13px;
 		padding: 8px 12px;
 		border-radius: 10px;
@@ -72,7 +73,7 @@
 		left: 50%;
 		transform: translateX(-50%);
 		border: 6px solid transparent;
-		border-top-color: #1c1c1f;
+		border-top-color: var(--overlay-tooltip-bg);
 		border-bottom: 0;
 	}
 
@@ -92,7 +93,8 @@
 	}
 	.callout-text {
 		background: var(--accent);
-		color: #1a1407;
+		color: var(--accent-contrast);
+		font-family: var(--font-title);
 		font-weight: 700;
 		font-size: 13px;
 		padding: 6px 12px;
@@ -104,11 +106,12 @@
 		inset: 0;
 		display: grid;
 		place-items: center;
-		background: rgba(0, 0, 0, 0.45);
+		background: var(--overlay-backdrop);
 	}
 	.popup-card {
-		background: #fff;
-		color: #1c1c1c;
+		background: var(--popup-surface);
+		color: var(--popup-text);
+		font-family: var(--font-body);
 		font-size: 16px;
 		line-height: 1.7;
 		padding: 22px 26px;

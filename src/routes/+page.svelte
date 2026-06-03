@@ -26,7 +26,7 @@
 	const phase = $derived(engine.phase);
 </script>
 
-<div class="stage">
+<div class="stage" class:theme-light={engine.theme === 'light'} class:theme-dark={engine.theme === 'dark'}>
 	<IntroducingLayer />
 
 	{#if phase !== 'landing'}

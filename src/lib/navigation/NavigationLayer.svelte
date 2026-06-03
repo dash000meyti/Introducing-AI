@@ -30,7 +30,7 @@
 	}
 </script>
 
-<nav class="navigation" class:light={engine.theme === 'light'}>
+<nav class="navigation">
 	{#if showProgress}
 		<button
 			class="progress glass"
@@ -166,21 +166,6 @@
 		flex-direction: column;
 		align-items: stretch;
 		pointer-events: none;
-		/* Liquid-glass (macOS Tahoe) palette, shared by every floating surface. */
-		--glass-bg: rgba(22, 22, 26, 0.4);
-		--glass-edge: rgba(255, 255, 255, 0.18);
-		--glass-hi: rgba(255, 255, 255, 0.25);
-		--fg: #f4f2ec;
-		--orb-bg: rgba(255, 255, 255, 0.12);
-		--orb-edge: rgba(255, 255, 255, 0.2);
-	}
-	.navigation.light {
-		--glass-bg: rgba(250, 249, 246, 0.5);
-		--glass-edge: rgba(255, 255, 255, 0.7);
-		--glass-hi: rgba(255, 255, 255, 0.9);
-		--fg: #1f1c16;
-		--orb-bg: rgba(255, 255, 255, 0.5);
-		--orb-edge: rgba(255, 255, 255, 0.7);
 	}
 
 	/* Shared frosted-glass surface. */
@@ -192,7 +177,7 @@
 		box-shadow:
 			0 14px 38px rgba(0, 0, 0, 0.34),
 			inset 0 1px 0 var(--glass-hi);
-		color: var(--fg);
+		color: var(--glass-fg);
 	}
 
 	/* ---- progress bar (top) -------------------------------------------- */
@@ -264,6 +249,7 @@
 		font-size: 14px;
 	}
 	.title {
+		font-family: var(--font-title);
 		font-weight: 800;
 	}
 	.count {
@@ -293,7 +279,7 @@
 		padding: 0 8px;
 		border-radius: 999px;
 		background: var(--accent);
-		color: #1a1407;
+		color: var(--accent-contrast);
 		font-size: 12px;
 		font-weight: 800;
 	}
@@ -326,7 +312,7 @@
 	}
 	.pill.continue {
 		background: var(--accent);
-		color: #1a1407;
+		color: var(--accent-contrast);
 		border-color: transparent;
 	}
 	.pill.zoom {
@@ -336,7 +322,7 @@
 	}
 	.pill.zoom.active {
 		background: var(--accent);
-		color: #1a1407;
+		color: var(--accent-contrast);
 		border-color: transparent;
 	}
 
@@ -360,7 +346,7 @@
 		border: 1px solid var(--orb-edge);
 		border-radius: 50%;
 		background: var(--orb-bg);
-		color: var(--fg);
+		color: var(--glass-fg);
 		box-shadow: inset 0 1px 0 var(--glass-hi);
 		transition: transform 120ms ease;
 	}
@@ -382,7 +368,8 @@
 		border: none;
 		border-radius: 999px; /* fully rounded */
 		background: var(--accent);
-		color: #1a1407;
+		color: var(--accent-contrast);
+		font-family: var(--font-title);
 		font-size: 17px;
 		font-weight: 900;
 		white-space: nowrap;

@@ -24,6 +24,7 @@ import type {
 
 const INTRO_MS = 2200; // room darkens, first slide + title appear
 const ENTRANCE_MS = 1200; // character fades in under the spotlight
+const THEME_STORAGE_KEY = 'introducing-ai.theme';
 
 export class PresentationEngine {
 	scenario = $state<Scenario | null>(null);
@@ -32,7 +33,7 @@ export class PresentationEngine {
 	stepIndex = $state(0);
 
 	// User-controllable state.
-	theme = $state<Theme>('dark');
+	theme = $state<Theme>('light');
 	zoom = $state<Zoom>('in');
 	muted = $state(false);
 
@@ -48,10 +49,14 @@ export class PresentationEngine {
 	private lastFrame = 0;
 
 	// ---- setup -------------------------------------------------------------
+	constructor() {
+		const saved = this.loadSavedTheme();
+		this.theme = saved ?? 'light';
+		this.saveTheme(this.theme);
+	}
 
 	setScenario(scenario: Scenario) {
 		this.scenario = scenario;
-		this.theme = scenario.theme;
 		this.zoom = 'in';
 		this.sectionIndex = 0;
 		this.stepIndex = 0;
@@ -228,6 +233,7 @@ export class PresentationEngine {
 
 	toggleTheme() {
 		this.theme = this.theme === 'dark' ? 'light' : 'dark';
+		this.saveTheme(this.theme);
 	}
 
 	toggleZoom() {
@@ -419,5 +425,24 @@ export class PresentationEngine {
 		}
 		this.rafId = null;
 		this.audio.dispose();
+	}
+
+	private loadSavedTheme(): Theme | null {
+		if (typeof localStorage === 'undefined') return null;
+		try {
+			const saved = localStorage.getItem(THEME_STORAGE_KEY);
+			return saved === 'light' || saved === 'dark' ? saved : null;
+		} catch {
+			return null;
+		}
+	}
+
+	private saveTheme(theme: Theme) {
+		if (typeof localStorage === 'undefined') return;
+		try {
+			localStorage.setItem(THEME_STORAGE_KEY, theme);
+		} catch {
+			/* ignore storage errors */
+		}
 	}
 }

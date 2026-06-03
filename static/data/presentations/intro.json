@@ -71,7 +71,7 @@
 					"zoom": "in",
 					"body": "gesture",
 					"emotion": "neutral",
-					"lighting": { "backstage": "stage", "presentation": "on", "character": "on" }
+					"lighting": { "backstage": "allOn", "presentation": "on", "character": "on" }
 				}
 			]
 		},
@@ -92,7 +92,7 @@
 					"zoom": "out",
 					"body": "idle",
 					"emotion": "neutral",
-					"lighting": { "backstage": "presentation", "presentation": "on", "character": "on" }
+					"lighting": { "backstage": "stage", "presentation": "on", "character": "on" }
 				},
 				{
 					"id": "about-2",
@@ -177,7 +177,7 @@
 					"zoom": "in",
 					"body": "wave",
 					"emotion": "happy",
-					"sfx": ["applause"],
+					"sfx": ["applaus"],
 					"lighting": { "backstage": "allOn", "presentation": "on", "character": "on" }
 				}
 			]

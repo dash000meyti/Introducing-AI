@@ -14,6 +14,7 @@ export class AudioController {
 
 	private audio: HTMLAudioElement | null = null;
 	private currentSrc: string | null = null;
+	private activeSfx = new Set<HTMLAudioElement>();
 
 	/** Load the clip for a step. `durationMs` is the fallback/clamp length. */
 	load(src: string | undefined, durationMs: number) {
@@ -76,6 +77,7 @@ export class AudioController {
 	setMuted(muted: boolean) {
 		this.muted = muted;
 		if (this.audio) this.audio.muted = muted;
+		for (const sfx of this.activeSfx) sfx.muted = muted;
 	}
 
 	get isMuted() {
@@ -106,8 +108,28 @@ export class AudioController {
 	playSfx(name: string) {
 		if (this.muted || typeof Audio === 'undefined') return;
 		try {
-			const sfx = new Audio(`/audio/sfx/${name}.mp3`);
+			// Support both legacy `/audio/*.mp3` and the preferred `/audio/sfx/*.mp3`.
+			const sources = [`/audio/${name}.mp3`, `/audio/sfx/${name}.mp3`];
+			const sfx = new Audio(sources[0]);
 			sfx.volume = 0.6;
+			sfx.muted = this.muted;
+			this.activeSfx.add(sfx);
+			const cleanup = () => {
+				sfx.onended = null;
+				sfx.onerror = null;
+				this.activeSfx.delete(sfx);
+			};
+			sfx.onended = cleanup;
+			let i = 0;
+			sfx.onerror = () => {
+				i += 1;
+				if (i >= sources.length) {
+					cleanup();
+					return;
+				}
+				sfx.src = sources[i];
+				void sfx.play().catch(() => {});
+			};
 			void sfx.play().catch(() => {});
 		} catch {
 			/* ignore */
@@ -125,6 +147,11 @@ export class AudioController {
 
 	dispose() {
 		this.disposeAudio();
+		for (const sfx of this.activeSfx) {
+			sfx.pause();
+			sfx.src = '';
+		}
+		this.activeSfx.clear();
 		this.running = false;
 	}
 }

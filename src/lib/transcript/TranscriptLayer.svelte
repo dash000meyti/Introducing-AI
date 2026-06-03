@@ -69,18 +69,17 @@
 {#if visible}
 	<div
 		class="transcript"
-		class:light={engine.theme === 'light'}
 		transition:fade={{ duration: 320 }}
 	>
 		<div class="bar">
 			{#if words.length}
 				<div class="ticker" bind:this={viewport}>
 					<div class="track" style:transform={`translateX(${offset}px)`}>
-						{#if cue}<span class="cue">{cue}</span>{/if}{#each words as word, i (i)}<span
+						{#each words as word, i (i)}<span
 								class="word"
 								class:spoken={i <= activeIndex}
 								bind:this={wordEls[i]}>{word}</span
-							>{' '}{/each}
+							>{' '}{/each}{#if cue}<span class="cue">{cue}</span>{/if}
 					</div>
 				</div>
 			{:else if cue}
@@ -117,22 +116,14 @@
 		border-radius: 999px;
 		overflow: hidden;
 		/* Liquid glass: translucent fill + heavy blur + crisp hairline edge. */
-		background: rgba(20, 20, 24, 0.42);
+		background: var(--glass-bg);
 		backdrop-filter: var(--glass-blur);
 		-webkit-backdrop-filter: var(--glass-blur);
-		border: 1px solid rgba(255, 255, 255, 0.16);
+		border: 1px solid var(--glass-edge);
 		box-shadow:
 			0 10px 30px rgba(0, 0, 0, 0.35),
-			inset 0 1px 0 rgba(255, 255, 255, 0.22);
-		color: #fff;
-	}
-	.transcript.light .bar {
-		background: rgba(255, 255, 255, 0.5);
-		border-color: rgba(255, 255, 255, 0.6);
-		box-shadow:
-			0 10px 30px rgba(0, 0, 0, 0.14),
-			inset 0 1px 0 rgba(255, 255, 255, 0.8);
-		color: #14110a;
+			inset 0 1px 0 var(--glass-hi);
+		color: var(--glass-fg);
 	}
 
 	/* Single-line viewport; the inner track scrolls so the spoken word stays
@@ -165,29 +156,25 @@
 
 	/* Non-speech cue text scrolls inline with the line, in the accent colour. */
 	.cue {
+		font-family: var(--font-title);
 		font-size: 15px;
 		font-weight: 800;
 		color: var(--accent);
-		margin-inline-end: 0.6rem;
+		margin-inline-start: 0.6rem;
 		line-height: 44px;
 	}
 
 	/* Constant weight so highlighting never reflows (keeps centring stable);
 	   only the colour brightens word by word. */
 	.word {
+		font-family: var(--font-body);
 		font-size: 15px;
 		font-weight: 600;
 		line-height: 44px;
-		color: rgba(255, 255, 255, 0.4);
+		color: var(--text-muted);
 		transition: color 180ms ease;
 	}
 	.word.spoken {
-		color: #fff;
-	}
-	.transcript.light .word {
-		color: rgba(20, 17, 10, 0.38);
-	}
-	.transcript.light .word.spoken {
-		color: #14110a;
+		color: var(--text-primary);
 	}
 </style>
