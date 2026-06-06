@@ -6,11 +6,12 @@
 // future LLM-driven run only needs to feed in a different Scenario.
 
 import { AudioController } from './AudioController';
-import { buildTranscriptView, resolveMouthShape } from './Timeline';
+import { buildTranscriptView, MOVE_LEFT_ENTRANCE_MS, resolveMouthShape } from './Timeline';
 import type {
-	BodyAnimation,
-	Emotion,
+	Expression,
+	Gesture,
 	Lighting,
+	Locomotion,
 	MouthShape,
 	OverlayDef,
 	PresentationPhase,
@@ -23,8 +24,10 @@ import type {
 	Zoom
 } from './types';
 
-const INTRO_MS = 2200; // room darkens, first slide + title appear
-const ENTRANCE_MS = 1200; // character fades in under the spotlight
+/** Room darkens + first slide before the character appears. */
+const INTRO_MS = 2200;
+/** Walk-in duration — must match MOVE_LEFT_ENTRANCE_MS (48 frames @ 12 fps). */
+const ENTRANCE_MS = MOVE_LEFT_ENTRANCE_MS;
 const THEME_STORAGE_KEY = 'introducing-ai.theme';
 
 export class PresentationEngine {
@@ -54,6 +57,7 @@ export class PresentationEngine {
 		const saved = this.loadSavedTheme();
 		this.theme = saved ?? 'light';
 		this.saveTheme(this.theme);
+		this.syncThemeClass(this.theme);
 	}
 
 	setScenario(scenario: Scenario) {
@@ -109,17 +113,25 @@ export class PresentationEngine {
 		}
 	}
 
-	get body(): BodyAnimation {
-		if (this.phase === 'entrance') return 'walkIn';
-		if (this.phase === 'ended') return 'wave';
-		if (this.phase === 'playing' || this.phase === 'paused' || this.phase === 'interaction') {
-			return this.currentStep?.body ?? 'idle';
-		}
-		return 'idle';
+	/** Whole-character movement. The character walks in during the entrance. */
+	get locomotion(): Locomotion {
+		return this.phase === 'entrance' ? 'left' : 'none';
 	}
 
-	get emotion(): Emotion {
-		return this.currentStep?.emotion ?? 'neutral';
+	/** Standing body hand-gesture clip. */
+	get gesture(): Gesture {
+		if (this.phase === 'ended') return 'both';
+		if (this.phase === 'playing' || this.phase === 'paused' || this.phase === 'interaction') {
+			return this.currentStep?.gesture ?? 'none';
+		}
+		return 'none';
+	}
+
+	/** Standing head expression. A friendly smile while awaiting interaction. */
+	get expression(): Expression {
+		if (this.canInteract) return 'happy';
+		if (this.phase === 'ended') return 'happy';
+		return this.currentStep?.expression ?? 'normal';
 	}
 
 	get mouthShape(): MouthShape {
@@ -258,6 +270,7 @@ export class PresentationEngine {
 	toggleTheme() {
 		this.theme = this.theme === 'dark' ? 'light' : 'dark';
 		this.saveTheme(this.theme);
+		this.syncThemeClass(this.theme);
 	}
 
 	toggleZoom() {
@@ -468,5 +481,12 @@ export class PresentationEngine {
 		} catch {
 			/* ignore storage errors */
 		}
+	}
+
+	/** Theme tokens live on `html` so layout chrome outside the stage inherits them. */
+	private syncThemeClass(theme: Theme) {
+		if (typeof document === 'undefined') return;
+		document.documentElement.classList.toggle('theme-dark', theme === 'dark');
+		document.documentElement.classList.toggle('theme-light', theme === 'light');
 	}
 }

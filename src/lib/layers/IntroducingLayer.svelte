@@ -50,7 +50,7 @@
 		position: absolute;
 		inset: 0;
 		overflow: hidden;
-		background: #000;
+		background: var(--background-color);
 		/* Establish a size container so the stage can be sized in cqw/cqh units. */
 		container-type: size;
 	}

@@ -1,111 +1,191 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 :root {
-	--font-title: 'Lalezar', 'Vazirmatn', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
-	--font-body: 'Vazirmatn', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
+  --font-title:
+    "Lalezar", "Vazirmatn", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Tahoma, sans-serif;
+  --font-body:
+    "Vazirmatn", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Tahoma,
+    sans-serif;
 
-	--accent: #f4b400;
-	--accent-soft: #ffd24d;
-	--accent-contrast: #1a1407;
+  --accent: #f4b400;
+  --accent-soft: #ffd24d;
+  --accent-contrast: #1a1407;
+  --background-color: #fff;
 
-	/* Global semantic palette: light theme (default). */
-	--app-bg: #f6f4ef;
-	--text-primary: #1f1c16;
-	--text-secondary: #5a5449;
-	--text-muted: rgba(31, 28, 22, 0.4);
-	--text-contrast: #f7f5f0;
-	--overlay-backdrop: rgba(8, 8, 10, 0.45);
-	--overlay-tooltip-bg: #232326;
-	--overlay-tooltip-text: #f7f5f0;
-	--popup-surface: #ffffff;
-	--popup-text: #1c1c1c;
-	--slide-grid-cell: #e6e3dc;
+  /* Global semantic palette: light theme (default). */
+  --app-bg: #f6f4ef;
+  --text-primary: #1f1c16;
+  --text-secondary: #5a5449;
+  --text-muted: rgba(31, 28, 22, 0.4);
+  --text-contrast: #f7f5f0;
+  --overlay-backdrop: rgba(8, 8, 10, 0.45);
+  --overlay-tooltip-bg: #232326;
+  --overlay-tooltip-text: #f7f5f0;
+  --popup-surface: #ffffff;
+  --popup-text: #1c1c1c;
+  --slide-grid-cell: #e6e3dc;
 
-	/* Glass primitives consumed by multiple layers. */
-	--glass-bg: rgba(250, 249, 246, 0.5);
-	--glass-edge: rgba(255, 255, 255, 0.7);
-	--glass-hi: rgba(255, 255, 255, 0.9);
-	--glass-fg: var(--text-primary);
-	--orb-bg: rgba(255, 255, 255, 0.5);
-	--orb-edge: rgba(255, 255, 255, 0.7);
+  /* Glass primitives consumed by multiple layers. */
+  --glass-bg: rgba(250, 249, 246, 0.5);
+  --glass-edge: rgba(255, 255, 255, 0.7);
+  --glass-hi: rgba(255, 255, 255, 0.9);
+  --glass-fg: var(--text-primary);
+  --orb-bg: rgba(255, 255, 255, 0.5);
+  --orb-edge: rgba(255, 255, 255, 0.7);
 
-	/* Slide typography colors. */
-	--slide-text-primary: #1c1c1c;
-	--slide-text-secondary: #555;
-	--slide-text-heading: #222;
-	--stage-light-bg: #e9e7e2;
-	--stage-light-floor: #d7d4cd;
-	--stage-light-wall: #f1efea;
-	--stage-dark-bg: #0c0d10;
-	--stage-dark-floor: #16181d;
-	--stage-dark-wall: #1c1f26;
+  /* Slide typography colors. */
+  --slide-text-primary: #1c1c1c;
+  --slide-text-secondary: #555;
+  --slide-text-heading: #222;
+  --stage-light-bg: #e9e7e2;
+  --stage-light-floor: #d7d4cd;
+  --stage-light-wall: #f1efea;
+  --stage-dark-bg: #0c0d10;
+  --stage-dark-floor: #16181d;
+  --stage-dark-wall: #1c1f26;
 
-	/* Liquid-glass (macOS Tahoe style) blur applied to floating chrome. */
-	--glass-blur: blur(22px) saturate(185%);
+  --color-error: #ff8a8a;
+
+  /* Liquid-glass (macOS Tahoe style) blur applied to floating chrome. */
+  --glass-blur: blur(22px) saturate(185%);
 }
 
+html.theme-dark,
 .theme-dark {
-	--app-bg: #0c0d10;
-	--text-primary: #f4f2ec;
-	--text-secondary: #c3bcae;
-	--text-muted: rgba(244, 242, 236, 0.4);
-	--text-contrast: #0e0f12;
-	--overlay-backdrop: rgba(0, 0, 0, 0.55);
-	--overlay-tooltip-bg: #1c1c1f;
-	--overlay-tooltip-text: #ffffff;
-	--popup-surface: #f6f4ef;
-	--popup-text: #1c1c1c;
-	--slide-grid-cell: #2a2d34;
-	--glass-bg: rgba(22, 22, 26, 0.4);
-	--glass-edge: rgba(255, 255, 255, 0.18);
-	--glass-hi: rgba(255, 255, 255, 0.25);
-	--glass-fg: #f4f2ec;
-	--orb-bg: rgba(255, 255, 255, 0.12);
-	--orb-edge: rgba(255, 255, 255, 0.2);
-	--slide-text-primary: #f2eee5;
-	--slide-text-secondary: #d2cbbb;
-	--slide-text-heading: #fff8ea;
+  --background-color: #000;
+  --app-bg: #0c0d10;
+  --text-primary: #f4f2ec;
+  --text-secondary: #c3bcae;
+  --text-muted: rgba(244, 242, 236, 0.4);
+  --text-contrast: #0e0f12;
+  --overlay-backdrop: rgba(0, 0, 0, 0.55);
+  --overlay-tooltip-bg: #1c1c1f;
+  --overlay-tooltip-text: #ffffff;
+  --popup-surface: #f6f4ef;
+  --popup-text: #1c1c1c;
+  --slide-grid-cell: #2a2d34;
+  --glass-bg: rgba(22, 22, 26, 0.4);
+  --glass-edge: rgba(255, 255, 255, 0.18);
+  --glass-hi: rgba(255, 255, 255, 0.25);
+  --glass-fg: #f4f2ec;
+  --orb-bg: rgba(255, 255, 255, 0.12);
+  --orb-edge: rgba(255, 255, 255, 0.2);
+  --slide-text-primary: #f2eee5;
+  --slide-text-secondary: #d2cbbb;
+  --slide-text-heading: #fff8ea;
 }
 
 html,
 body {
-	margin: 0;
-	padding: 0;
-	height: 100%;
-	background: var(--app-bg);
-	color: var(--text-primary);
-	font-family: var(--font-body);
-	-webkit-font-smoothing: antialiased;
-	overscroll-behavior: none;
-	touch-action: manipulation;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--app-bg);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+  touch-action: manipulation;
 }
 
 *,
 *::before,
 *::after {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 button {
-	font-family: inherit;
-	cursor: pointer;
+  font-family: inherit;
+  cursor: pointer;
 }
-
 /* Hide scrollbars on the mobile stage while keeping scroll where needed */
 .no-scrollbar::-webkit-scrollbar {
-	display: none;
+  display: none;
 }
 .no-scrollbar {
-	-ms-overflow-style: none;
-	scrollbar-width: none;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
+/* ── Layout shell ─────────────────────────────────────────────────────────── */
+
+.app-root {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background-color);
+}
+
+/* Mobile-first: fill the screen. On larger screens, constrain to a phone frame. */
+.phone-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--background-color);
+}
+
+@media (min-width: 480px) {
+  .phone-frame {
+    width: min(440px, 100vw);
+    height: min(956px, 100vh);
+    border-radius: 40px;
+    box-shadow:
+      0 0 0 10px var(--accent-contrast),
+      0 34px 80px color-mix(in srgb, var(--accent) 55%, transparent);
+  }
+}
+
+/* ── Stage (presentation root) ────────────────────────────────────────────── */
+
+.stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--background-color);
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 28px;
+  padding-bottom: 16%;
+  text-align: center;
+  animation: screen-in 500ms ease both;
+}
+
+.landing {
+  pointer-events: none;
+}
+
+.err {
+  color: var(--color-error);
+  font-size: 14px;
+  max-width: 80%;
+}
+
+/* ── Animations ─────────────────────────────────────────────────────────────── */
+
 @keyframes pulse-glow {
-	0%,
-	100% {
-		opacity: 0.55;
-	}
-	50% {
-		opacity: 1;
-	}
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes screen-in {
+  from {
+    opacity: 0;
+  }
 }

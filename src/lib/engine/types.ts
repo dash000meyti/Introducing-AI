@@ -22,30 +22,37 @@ export interface Lighting {
 	character: CharacterLighting;
 }
 
-/** Body animation clips available on the character sprite. */
-export type BodyAnimation = 'idle' | 'walkIn' | 'walkOut' | 'gesture' | 'wave';
+// The character has two states:
+//   - stand: a head layer + a body layer drawn on top of each other.
+//   - move: a single full-body clip (head + body in one frame).
+// Every clip plays at 12 fps; see CharacterRenderer.
 
-/** Facial / emotional expression, layered on top of lip-sync. */
-export type Emotion = 'neutral' | 'happy' | 'thinking' | 'surprised';
+/** Whole-character locomotion (move state). Only "left" art is provided. */
+export type Locomotion = 'none' | 'left';
+
+/** Hand-gesture clip for the standing body layer. */
+export type Gesture = 'none' | 'both' | 'right' | 'left';
+
+/** Facial expression for the standing head layer (mutually exclusive faces). */
+export type Expression = 'normal' | 'happy' | 'angry' | 'question' | 'surprised';
 
 /**
  * A viseme keyframe. `t` is milliseconds from the start of the step's audio.
- * `shape` maps to a mouth frame in the character sprite sheet.
+ * `shape` maps to a mouth frame on the standing head layer.
  */
 export interface Viseme {
 	t: number;
 	shape: MouthShape;
 }
 
+/** Mouth shapes for lip-sync, drawn on the standing head layer. */
 export type MouthShape =
 	| 'rest'
-	| 'ah'
-	| 'ee'
-	| 'oh'
-	| 'oo'
-	| 'mbp' // closed (m / b / p)
+	| 'a'
+	| 'e'
+	| 'o'
 	| 'fv' // teeth on lip (f / v)
-	| 'l';
+	| 'mbp'; // closed (m / b / p)
 
 export type OverlayKind = 'popup' | 'tooltip' | 'highlight' | 'callout';
 
@@ -95,8 +102,10 @@ export interface Step {
 	/** Fallback / minimum duration in ms (used when there is no audio). */
 	duration: number;
 	visemes?: Viseme[];
-	body?: BodyAnimation;
-	emotion?: Emotion;
+	/** Hand-gesture clip for the standing body. Defaults to "none". */
+	gesture?: Gesture;
+	/** Facial expression for the standing head. Defaults to "normal". */
+	expression?: Expression;
 	/** Reveal.js horizontal slide index this step displays. */
 	slide?: number;
 	overlays?: OverlayDef[];

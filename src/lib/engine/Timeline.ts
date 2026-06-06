@@ -1,10 +1,13 @@
 // Pure timing helpers used by the PresentationEngine. Kept side-effect free so
 // they are trivially testable and reusable by a future LLM-driven sequencer.
 
+import { MOVE_LEFT_ENTRANCE_MS } from '../character/visemes';
 import type { MouthShape, Step, TranscriptToken, TranscriptView, Viseme } from './types';
 
+export { MOVE_LEFT_ENTRANCE_MS };
+
 // Synthetic mouth flutter cycle used when a step has no authored visemes.
-const SYNTH_VISEMES: MouthShape[] = ['ah', 'rest', 'ee', 'oh', 'rest', 'oo', 'ah', 'rest'];
+const SYNTH_VISEMES: MouthShape[] = ['a', 'rest', 'e', 'o', 'rest', 'mbp', 'fv', 'rest'];
 const SYNTH_FRAME_MS = 110;
 
 /** Resolve the active viseme for a given time (ms) within a step. */

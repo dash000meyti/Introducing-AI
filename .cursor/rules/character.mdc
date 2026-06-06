@@ -6,21 +6,30 @@ alwaysApply: false
 
 # Character Rendering
 
-`CharacterRenderer` is intentionally sprite-agnostic. Keep its public API stable:
+`CharacterRenderer` is the only owner of frame-level animation. Keep its public
+API stable:
 
 - `init(host)`, `setView(partial)`, `resize()`, `destroy()`.
-- The engine/layer feeds state via `setView`; it must not know whether the
-  character is drawn with Graphics or sprite sheets.
+- The engine/layer feeds state via `setView`; it must not know how many sprite
+  layers exist or how frames advance.
 
-When upgrading the placeholder to real sprite sheets, reimplement the private
-draw/animate methods only. Do NOT change the public API or the engine wiring.
+## Two states (all clips at 12 fps)
 
-## Visemes and lighting
+- `stand`: two layers - a 360x720 body and a 200x200 head pinned to the body's
+  top-centre. Body either holds `body-normal` or loops a hand-gesture clip
+  (`both`/`right`/`left`). Head shows a lip-sync viseme (while speaking), an
+  expression, or an automatic blink.
+- `move`: one 360x720 full-body clip (head + body baked in). `locomotion: 'left'`
+  plays start (24) -> stride loop (12) -> stop (12) once, holding the last frame.
 
-- Mouth/viseme geometry lives in `visemes.ts` (`MOUTH_SHAPES`). Add new shapes
-  there, not inline in the renderer.
+## Assets and lighting
+
+- All filename/frame-list mapping lives in `visemes.ts` (`VISEME_FILE`,
+  `EXPRESSION_FILE`, `BLINK`, `GESTURE_FRAMES`, `MOVE_LEFT_SEQUENCE`,
+  `ALL_CHARACTER_FILES`). Add new clips there, not inline in the renderer.
 - Honor lighting `character: on | off`:
   - `on` = normal palette.
-  - `off` = flat silhouette in the theme background colour (no face/mouth).
-- Body animation (`walkIn`, `idle`, `gesture`, `wave`) is driven by transforms in
-  the ticker; redraw geometry only when palette/emotion/mouth actually change.
+  - `off` = flat silhouette in the theme background colour (filter on the root
+    container, so both states are silhouetted).
+- Advance frames from accumulated `deltaMS` in the ticker; only swap a texture
+  when the resolved frame actually changes.

@@ -42,7 +42,7 @@
 		position: absolute;
 		inset: 0;
 		overflow: hidden;
-		background: #000;
+		background: var(--background-color);
 	}
 
 	.bg {

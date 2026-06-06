@@ -2,7 +2,7 @@
 	"id": "intro-mehdi",
 	"title": "مهدی گودینی",
 	"subtitle": "طراح و توسعه‌دهنده تجربه کاربر",
-	"theme": "dark",
+	"theme": "light",
 	"slides": [
 		{
 			"id": "s-title",
@@ -46,22 +46,9 @@
 					"duration": 5200,
 					"slide": 0,
 					"zoom": "in",
-					"body": "wave",
-					"emotion": "happy",
-					"lighting": { "backstage": "stage", "presentation": "on", "character": "on" },
-					"visemes": [
-						{ "t": 0, "shape": "rest" },
-						{ "t": 200, "shape": "ee" },
-						{ "t": 450, "shape": "ah" },
-						{ "t": 700, "shape": "mbp" },
-						{ "t": 1100, "shape": "oh" },
-						{ "t": 1600, "shape": "ee" },
-						{ "t": 2200, "shape": "ah" },
-						{ "t": 2800, "shape": "oo" },
-						{ "t": 3400, "shape": "ee" },
-						{ "t": 4000, "shape": "ah" },
-						{ "t": 4800, "shape": "rest" }
-					]
+					"gesture": "right",
+					"expression": "happy",
+					"lighting": { "backstage": "allOn", "presentation": "off", "character": "on" }
 				},
 				{
 					"id": "intro-2",
@@ -69,8 +56,8 @@
 					"duration": 5000,
 					"slide": 0,
 					"zoom": "in",
-					"body": "gesture",
-					"emotion": "neutral",
+					"gesture": "both",
+					"expression": "normal",
 					"lighting": { "backstage": "allOn", "presentation": "on", "character": "on" }
 				}
 			]
@@ -90,8 +77,8 @@
 					"duration": 5400,
 					"slide": 1,
 					"zoom": "out",
-					"body": "idle",
-					"emotion": "neutral",
+					"gesture": "none",
+					"expression": "normal",
 					"lighting": { "backstage": "stage", "presentation": "on", "character": "on" }
 				},
 				{
@@ -101,8 +88,8 @@
 					"duration": 4200,
 					"slide": 1,
 					"zoom": "out",
-					"body": "gesture",
-					"emotion": "happy",
+					"gesture": "both",
+					"expression": "happy",
 					"lighting": { "backstage": "presentation", "presentation": "on", "character": "on" }
 				}
 			]
@@ -117,8 +104,8 @@
 					"duration": 5600,
 					"slide": 2,
 					"zoom": "out",
-					"body": "idle",
-					"emotion": "neutral",
+					"gesture": "left",
+					"expression": "normal",
 					"lighting": { "backstage": "presentation", "presentation": "on", "character": "on" },
 					"overlays": [
 						{
@@ -158,8 +145,8 @@
 					"duration": 5800,
 					"slide": 3,
 					"zoom": "out",
-					"body": "gesture",
-					"emotion": "neutral",
+					"gesture": "right",
+					"expression": "normal",
 					"lighting": { "backstage": "presentation", "presentation": "on", "character": "on" }
 				}
 			]
@@ -175,8 +162,8 @@
 					"duration": 5600,
 					"slide": 4,
 					"zoom": "out",
-					"body": "wave",
-					"emotion": "happy",
+					"gesture": "both",
+					"expression": "happy",
 					"sfx": ["applaus"],
 					"lighting": { "backstage": "allOn", "presentation": "on", "character": "on" }
 				}
