@@ -71,14 +71,14 @@
 		<div class="panel-clip">
 			<div class="panel-card glass">
 				{#if showContact}
-					<div class="head">
-						<span class="title">راه‌های ارتباطی</span>
+					<div class="head-interact">
+						<span class="title interact-title">راه‌های ارتباطی</span>
 					</div>
 					{#if contactLinks.length > 0}
 						<div class="options">
 							{#each contactLinks as l (l.id)}
 								<a
-									class="box link"
+									class="box choice"
 									href={l.url}
 									target="_blank"
 									rel="noopener noreferrer"
@@ -88,22 +88,20 @@
 									onpointerup={hoverOff}
 									onpointercancel={hoverOff}
 								>
-									{#if l.icon}<span class="icon">{l.icon}</span>{/if}
 									<span class="label">{l.label}</span>
+									{#if l.icon}<span class="icon">{l.icon}</span>{/if}
 								</a>
 							{/each}
 						</div>
 					{/if}
 				{:else}
-					<div class="head">
-						<span class="title">{headTitle}</span>
-						<div class="tools" dir="ltr">
+					<div class="head-interact">
+						<div class="tools-labeled" dir="ltr">
 							<button
-								class="tool"
+								class="tool-pill"
 								disabled={repeatDisabled}
 								onclick={() => engine.repeatSectionForce()}
 								aria-label="تکرار ارائه این بخش"
-								title="تکرار ارائه این بخش"
 							>
 								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
 									><path
@@ -116,25 +114,35 @@
 										stroke-linejoin="round"
 									/></svg
 								>
+								<span>پخش مجدد</span>
 							</button>
 
 							<button
-								class="tool"
-								class:active={engine.zoom === 'in'}
+								class="tool-pill"
 								onclick={() => engine.toggleZoom()}
-								aria-label="نمای اسلاید"
-								title={engine.zoom === 'in' ? 'نمای کاراکتر' : 'نمای اسلاید'}
+								aria-label={engine.zoom === 'in' ? 'نما نزدیک' : 'نما دور'}
 							>
-								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-									><circle cx="11" cy="11" r="7" /><path
-										d="m21 21-4.3-4.3M11 8v6M8 11h6"
-										stroke-linecap="round"
-									/></svg
-								>
+								{#if engine.zoom === 'in'}
+									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+										><circle cx="11" cy="11" r="7" /><path
+											d="m21 21-4.3-4.3M8 11h6"
+											stroke-linecap="round"
+										/></svg
+									>
+									<span>نما دور</span>
+								{:else}
+									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+										><circle cx="11" cy="11" r="7" /><path
+											d="m21 21-4.3-4.3M11 8v6M8 11h6"
+											stroke-linecap="round"
+										/></svg
+									>
+									<span>نما نزدیک</span>
+								{/if}
 							</button>
 
 							<button
-								class="tool counter"
+								class="tool-pill counter"
 								onclick={onCounter}
 								aria-label={canInteract ? 'توقف شمارش' : 'پخش/توقف'}
 							>
@@ -144,22 +152,27 @@
 									{:else}
 										<span class="num">{interactionSeconds}</span>
 									{/if}
+									<span>زمان</span>
 								{:else if engine.isPlaying}
 									<svg viewBox="0 0 24 24" fill="currentColor"
 										><path d="M7 5h3v14H7zM14 5h3v14h-3z" /></svg
 									>
+									<span>توقف ارائه</span>
 								{:else}
 									<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+									<span>پخش ارائه</span>
 								{/if}
 							</button>
 						</div>
+
+						<span class="title interact-title">{headTitle}</span>
 					</div>
 
 					{#if canInteract}
 						<div class="options">
 							{#each answers as a (a.id)}
 								<button
-									class="box answer"
+									class="box choice"
 									onclick={() => (isRepeat ? engine.confirmRepeat() : engine.answerQuestion(a))}
 									onpointerenter={() => hoverOn(a.face)}
 									onpointerleave={hoverOff}
@@ -173,7 +186,7 @@
 
 							{#each links as l (l.id)}
 								<a
-									class="box link"
+									class="box choice"
 									href={l.url}
 									target="_blank"
 									rel="noopener noreferrer"
@@ -183,8 +196,8 @@
 									onpointerup={hoverOff}
 									onpointercancel={hoverOff}
 								>
-									{#if l.icon}<span class="icon">{l.icon}</span>{/if}
 									<span class="label">{l.label}</span>
+									{#if l.icon}<span class="icon">{l.icon}</span>{/if}
 								</a>
 							{/each}
 						</div>
@@ -339,11 +352,11 @@
 		overflow-y: auto;
 	}
 
-	.head {
+	.head-interact {
 		display: flex;
+		flex-direction: column;
 		align-items: center;
-		justify-content: space-between;
-		gap: 12px;
+		gap: 10px;
 	}
 	.title {
 		font-family: var(--font-title);
@@ -352,49 +365,65 @@
 		min-width: 0;
 		flex: 1;
 	}
+	.interact-title {
+		flex: none;
+		width: 100%;
+		text-align: center;
+		line-height: 1.4;
+	}
 
-	/* Uniform control cluster: repeat / zoom / counter. */
-	.tools {
+	/* Interactive tools: equal thirds, icon + label pinned to opposite edges. */
+	.tools-labeled {
+		display: flex;
+		align-items: stretch;
+		gap: 6px;
+		width: 100%;
+	}
+	.tool-pill {
+		flex: 1 1 0;
+		min-width: 0;
 		display: flex;
 		align-items: center;
-		gap: 8px;
-		flex: none;
-	}
-	.tool {
-		display: grid;
-		place-items: center;
-		width: 42px;
-		height: 42px;
-		border-radius: 50%;
+		justify-content: space-between;
+		gap: 4px;
+		height: 30px;
+		padding: 0 8px;
+		border-radius: 999px;
 		border: 1px solid var(--orb-edge);
 		background: var(--orb-bg);
 		color: inherit;
+		font-size: 11px;
+		font-weight: 600;
+		line-height: 1;
 		transition: transform 120ms ease;
 	}
-	.tool svg {
-		width: 20px;
-		height: 20px;
+	.tool-pill > span:last-child {
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
-	.tool:not(:disabled):active {
-		transform: scale(0.92);
+	.tool-pill svg {
+		width: 14px;
+		height: 14px;
+		flex: none;
 	}
-	.tool:disabled {
+	.tool-pill:not(:disabled):active {
+		transform: scale(0.96);
+	}
+	.tool-pill:disabled {
 		opacity: 0.4;
 		cursor: default;
 	}
-	.tool.active {
-		background: var(--accent);
-		color: var(--accent-contrast);
-		border-color: transparent;
-	}
-	.tool.counter .num,
-	.tool.counter .glyph {
+	.tool-pill.counter .num,
+	.tool-pill.counter .glyph {
+		flex: none;
 		font-weight: 800;
-		font-size: 15px;
+		font-size: 12px;
 		line-height: 1;
 	}
-	.tool.counter .glyph {
-		font-size: 20px;
+	.tool-pill.counter .glyph {
+		font-size: 14px;
 	}
 
 	/* ---- interaction / contact option boxes (full width) --------------- */
@@ -423,12 +452,22 @@
 	.box:active {
 		transform: scale(0.98);
 	}
-	.box.answer {
-		background: var(--accent);
-		color: var(--accent-contrast);
-		border-color: transparent;
+	/* Answers and links share one rounded pill look during interactions. */
+	.box.choice {
+		padding: 11px 16px;
+		border-radius: 999px;
+	}
+	.box.choice:has(.icon) {
+		justify-content: space-between;
+	}
+	.box .label {
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 	.box .icon {
+		flex: none;
 		font-size: 16px;
 		line-height: 1;
 	}
@@ -529,7 +568,7 @@
 		.orb,
 		.center,
 		.box,
-		.tool {
+		.tool-pill {
 			transition: none;
 		}
 	}
