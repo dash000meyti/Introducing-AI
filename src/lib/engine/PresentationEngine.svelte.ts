@@ -120,7 +120,7 @@ export class PresentationEngine {
 
 	/** Standing body hand-gesture clip. */
 	get gesture(): Gesture {
-		if (this.phase === 'ended') return 'both';
+		if (this.phase === 'ended') return 'none';
 		if (this.phase === 'playing' || this.phase === 'paused' || this.phase === 'interaction') {
 			return this.currentStep?.gesture ?? 'none';
 		}
@@ -129,8 +129,8 @@ export class PresentationEngine {
 
 	/** Standing head expression. A friendly smile while awaiting interaction. */
 	get expression(): Expression {
-		if (this.canInteract) return 'happy';
-		if (this.phase === 'ended') return 'happy';
+		if (this.canInteract) return 'normal';
+		if (this.phase === 'ended') return 'normal';
 		return this.currentStep?.expression ?? 'normal';
 	}
 

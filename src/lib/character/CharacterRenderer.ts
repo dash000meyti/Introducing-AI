@@ -58,7 +58,7 @@ const FRAME_MS = 1000 / FPS;
 // pre-render the backing store at the camera's max zoom so it stays crisp even
 // when the browser scales the canvas element up. Keep this in sync with the
 // largest camera `scale(...)` value in IntroducingLayer.
-const CAMERA_MAX_ZOOM = 1.88;
+const CAMERA_MAX_ZOOM = 1.4;
 
 const ENTRANCE_FADE_MS = 450;
 const BLINK_MIN_GAP = 2500;
@@ -407,5 +407,5 @@ function randomGap(): number {
 }
 
 function easeOutCubic(t: number): number {
-	return 1 - Math.pow(1 - t, 1.6);
+	return 1 - Math.pow(1 - t, 1.4);
 }

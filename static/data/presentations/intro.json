@@ -79,7 +79,7 @@
 					"zoom": "out",
 					"gesture": "none",
 					"expression": "normal",
-					"lighting": { "backstage": "stage", "presentation": "on", "character": "on" }
+					"lighting": { "backstage": "allOn", "presentation": "on", "character": "on" }
 				},
 				{
 					"id": "about-2",
@@ -90,7 +90,7 @@
 					"zoom": "out",
 					"gesture": "both",
 					"expression": "happy",
-					"lighting": { "backstage": "presentation", "presentation": "on", "character": "on" }
+					"lighting": { "backstage": "allOn", "presentation": "on", "character": "on" }
 				}
 			]
 		},
@@ -106,7 +106,7 @@
 					"zoom": "out",
 					"gesture": "left",
 					"expression": "normal",
-					"lighting": { "backstage": "presentation", "presentation": "on", "character": "on" },
+					"lighting": { "backstage": "allOn", "presentation": "on", "character": "on" },
 					"overlays": [
 						{
 							"id": "ov-highlight",
