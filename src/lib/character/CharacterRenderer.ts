@@ -407,5 +407,5 @@ function randomGap(): number {
 }
 
 function easeOutCubic(t: number): number {
-	return 1 - Math.pow(1 - t, 1.4);
+	return 1 - Math.pow(1 - t, 1.34);
 }

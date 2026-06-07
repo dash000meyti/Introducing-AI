@@ -31,7 +31,6 @@
 </script>
 
 <nav class="navigation">
-	{#if showProgress}
 		<button
 			class="progress glass"
 			type="button"
@@ -46,7 +45,6 @@
 				style:transform={`scaleX(${loading ? 1 : progress})`}
 			></span>
 		</button>
-	{/if}
 
 	{#if !isLanding}
 		<div class="panel" class:open={expanded}>
@@ -118,20 +116,14 @@
 				{engine.scenario ? 'شروع ارائه' : 'در حال آماده‌سازی…'}
 			</button>
 		{:else if isEnded}
-			<button class="center" onclick={() => engine.restart()}>شروع دوباره</button>
+			<button class="center" onclick={() => engine.restart()}>شروع از اول</button>
+
+		{:else if canInteract}
+			<button class="center" onclick={() => engine.continueInteraction()}>ادامه ارائه</button>
 		{:else}
-			<button class="center title-center" onclick={toggle} aria-expanded={expanded}>
-				<span class="center-title">{engine.sectionTitle}</span>
-				<svg
-					class="chev"
-					class:up={expanded}
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2.4"
-					><path d="m6 14 6-6 6 6" stroke-linecap="round" stroke-linejoin="round" /></svg
-				>
-			</button>
+			<div class="orb-center title-center" aria-expanded={expanded}>
+				<span>{engine.sectionTitle}</span>
+			</div>
 		{/if}
 
 		<button class="orb" class:muted={engine.muted} onclick={() => engine.toggleMute()} aria-label="mute">
@@ -347,7 +339,9 @@
 		border-radius: 50%;
 		background: var(--orb-bg);
 		color: var(--glass-fg);
-		box-shadow: inset 0 1px 0 var(--glass-hi);
+		box-shadow:
+			inset 0 1px 1px var(--orb-side),
+			inset 0 -1px 1px var(--orb-side);
 		transition: transform 120ms ease;
 	}
 	.orb svg {
@@ -361,26 +355,41 @@
 		transform: scale(0.92);
 	}
 
+	.orb-center {
+		height: 56px;
+		min-width: 0;
+		display: grid;
+		place-items: center;
+		padding: 0 22px;
+		border: 1px solid var(--orb-edge);
+		border-radius: 999px;
+		background: var(--orb-bg);
+		color: var(--glass-fg);
+		box-shadow: inset 0 1px 0 var(--glass-hi);
+		transition: transform 120ms ease;
+	}
+
 	.center {
 		height: 56px;
 		min-width: 0;
+		display: grid;
+		place-items: center;
 		padding: 0 22px;
-		border: none;
+		border: 1px solid var(--orb-edge);
 		border-radius: 999px; /* fully rounded */
-		background: var(--accent);
-		color: var(--accent-contrast);
+		background: var(--orb-accent);
+		color: var(--glass-fg);
 		font-family: var(--font-title);
-		font-size: 17px;
-		font-weight: 900;
-		white-space: nowrap;
+		font-size: 18px;
 		box-shadow:
 			0 6px 18px rgba(244, 180, 0, 0.35),
-			inset 0 1px 0 rgba(255, 255, 255, 0.45);
+			inset 0 2px 2px var(--orb-side),
+			inset 0 -2px 2px var(--orb-side);
 		transition: transform 120ms ease;
 	}
 	.center:disabled {
-		background: rgba(207, 202, 189, 0.6);
-		color: #6b6657;
+		background: var(--orb-bg);
+		color: var(--glass-fg);
 		box-shadow: none;
 	}
 	.center:not(:disabled):active {

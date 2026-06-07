@@ -10,7 +10,8 @@
 
   --accent: #f4b400;
   --accent-soft: #ffd24d;
-  --accent-contrast: #1a1407;
+  --accent-contrast: #faf9f8;
+  --accent-contrast-revers: #1a1407;
   --background-color: #fff;
 
   /* Global semantic palette: light theme (default). */
@@ -33,6 +34,8 @@
   --glass-fg: var(--text-primary);
   --orb-bg: rgba(255, 255, 255, 0.5);
   --orb-edge: rgba(255, 255, 255, 0.7);
+  --orb-side: rgba(255, 255, 255, 0.4);
+  --orb-accent: rgba(255, 187, 0, 0.72);
 
   /* Slide typography colors. */
   --slide-text-primary: #1c1c1c;
@@ -53,6 +56,8 @@
 
 html.theme-dark,
 .theme-dark {
+  --accent-contrast: #1a1407;
+  --accent-contrast-revers: #faf9f8;
   --background-color: #000;
   --app-bg: #0c0d10;
   --text-primary: #f4f2ec;
@@ -70,7 +75,8 @@ html.theme-dark,
   --glass-hi: rgba(255, 255, 255, 0.25);
   --glass-fg: #f4f2ec;
   --orb-bg: rgba(255, 255, 255, 0.12);
-  --orb-edge: rgba(255, 255, 255, 0.2);
+  --orb-edge: rgba(255, 255, 255, 0.18);
+  --orb-side: rgba(255, 255, 255, 0.12);
   --slide-text-primary: #f2eee5;
   --slide-text-secondary: #d2cbbb;
   --slide-text-heading: #fff8ea;
@@ -134,8 +140,8 @@ button {
     height: min(956px, 100vh);
     border-radius: 40px;
     box-shadow:
-      0 0 0 10px var(--accent-contrast),
-      0 34px 80px color-mix(in srgb, var(--accent) 55%, transparent);
+      0 0 0 12px var(--accent-contrast),
+      0 8px 72px color-mix(in srgb, var(--accent) 72%, transparent);
   }
 }
 
