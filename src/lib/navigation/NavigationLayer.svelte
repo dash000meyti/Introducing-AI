@@ -14,7 +14,7 @@
 	const canInteract = $derived(engine.canInteract);
 	const questions = $derived(engine.currentQuestions);
 	const interactionSeconds = $derived(Math.ceil(engine.interactionRemainingMs / 1000));
-	const progress = $derived(engine.overallProgress);
+	const progress = $derived(engine.sectionProgress);
 
 	// Progress bar shows during playback, and during landing only while loading.
 	const showProgress = $derived(!isLanding || loading);
@@ -401,28 +401,15 @@
 		justify-content: center;
 		gap: 8px;
 		direction: rtl;
-	}
-	.center-title {
 		min-width: 0;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
-		font-size: 16px;
-	}
-	.chev {
-		flex: 0 0 auto;
-		width: 20px;
-		height: 20px;
-		transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
-	}
-	.chev.up {
-		transform: rotate(180deg);
 	}
 
 	@media (prefers-reduced-motion: reduce) {
 		.panel,
 		.fill,
-		.chev,
 		.orb,
 		.center,
 		.pill {
