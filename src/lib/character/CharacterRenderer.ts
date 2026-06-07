@@ -3,7 +3,7 @@
 // The character has two states, all clips authored at 12 fps:
 //   - stand: two layers drawn on top of each other - a 360x720 body and a
 //     200x200 head pinned to the body's top-centre. The body either holds its
-//     resting pose or loops a hand-gesture clip; the head shows lip-sync
+//     idle loop or a hand-gesture clip; the head shows lip-sync
 //     visemes, an expression, or an automatic blink.
 //   - move:  a single 360x720 full-body clip (head + body in one frame) that
 //     plays start -> stride -> stop once and holds on the final standing frame.
@@ -16,7 +16,7 @@ import type { Expression, Gesture, Locomotion, MouthShape, Theme } from '../engi
 import {
 	ALL_CHARACTER_FILES,
 	BLINK,
-	BODY_NORMAL,
+	BODY_NORMAL_FRAMES,
 	EXPRESSION_FILE,
 	GESTURE_FRAMES,
 	MOVE_LEFT_SEQUENCE,
@@ -30,7 +30,7 @@ export interface CharacterView {
 	mouth: MouthShape;
 	/** Standing head: resting expression (used while not speaking). */
 	expression: Expression;
-	/** Standing body: hand-gesture loop ("none" = resting pose). */
+	/** Standing body: hand-gesture loop ("none" = idle body loop). */
 	gesture: Gesture;
 	/** True while actively speaking (drives lip-sync over the expression). */
 	speaking: boolean;
@@ -140,11 +140,11 @@ export class CharacterRenderer {
 		for (const url of ALL_CHARACTER_FILES) this.textures.set(url, Assets.get(url));
 
 		// Standing layers: body fills 360x720, head pinned to its top-centre.
-		const body = new Sprite(this.textures.get(BODY_NORMAL));
+		const body = new Sprite(this.textures.get(BODY_NORMAL_FRAMES[0]));
 		body.anchor.set(0, 0);
 		body.position.set(0, 0);
 		this.bodySprite = body;
-		this.currentBody = BODY_NORMAL;
+		this.currentBody = BODY_NORMAL_FRAMES[0];
 
 		const face = new Sprite(this.textures.get(VISEME_FILE.rest));
 		face.anchor.set(0.5, 0);
@@ -274,12 +274,7 @@ export class CharacterRenderer {
 			this.lastGesture = gesture;
 		}
 
-		if (gesture === 'none') {
-			this.setBody(BODY_NORMAL);
-			return;
-		}
-
-		const seq = GESTURE_FRAMES[gesture];
+		const seq = gesture === 'none' ? BODY_NORMAL_FRAMES : GESTURE_FRAMES[gesture];
 		this.bodyTimer += deltaMs;
 		while (this.bodyTimer >= FRAME_MS) {
 			this.bodyTimer -= FRAME_MS;

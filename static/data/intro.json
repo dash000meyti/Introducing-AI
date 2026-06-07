@@ -1,0 +1,245 @@
+```
+{
+	"id": "آی دی ارائه چون ممکنه چند تا ارائه باشه",
+	"title": "عنوان ارائه",
+	"description": "توضیحات ارائه",
+	"theme": "تم پیشفرض یا light یا dark یا تم فعلی بروزر",
+	"slides": [ // اسلاید های ارائه
+		{
+			"id": "آی دی اسلاید چون چند تا اسلاید هست",
+			"theme": "انتخاب از بین تم های موجود",
+			"title": "عنوان نمایشی اسلاید :اگر theme عنوان داشته باشد این مقدار رو وارد میکند",
+			"subtitle": "زیرعنوان نمایشی اسلاید :اگر theme عنوان داشته باشد این مقدار رو وارد میکند",
+			"body": "محتوای اسلاید :اگر theme عنوان داشته باشد این مقدار رو وارد میکند",
+			"bullets": [
+				"لیست موارد اسلاید :اگر theme عنوان داشته باشد این مقدار رو وارد میکند"
+			],
+			"image": "آدرس تصویر اسلاید :اگر theme عنوان داشته باشد این مقدار رو وارد میکند",
+			"images": [
+				"آدرس تصویر اسلاید :اگر theme عنوان داشته باشد این مقدار رو وارد میکند"
+			],
+			"video": "آدرس ویدیو اسلاید :اگر theme عنوان داشته باشد این مقدار رو وارد میکند",
+			"duration": "مدت زمان نمایش اسلاید :اگر theme عنوان داشته باشد این مقدار رو وارد میکند",
+		}
+	],
+	"start": { // بخش شروع ارائه که دقیقا مثل یکی از بخش های ارائه است بدون id
+		"title": "عنوان بخش",
+		"steps": [ // هر بخش میتواند شامل چند متن باشد
+			{
+				"id": "آی دی مرحله چون چند تا مرحله هست",
+				"duration": "مدت زمان مرحله به میلی ثانیه",
+				"text": "متنی که نمایش داده میشه",
+				"voice": "فایل صدای پخش شده در این مرحله",
+				"change": [
+					{
+						"time": "زمان تغییر بر اساس میلی ثانیه", //زمانی از duration است که قرار است تغییرات در آن اعمال شود
+						"changes": {
+							"slide": "آی دی اسلاید", // همان slide قدیم که بجای شماره آرایه از id اسلاید استفاده میشود
+							"character": {
+								"face": "حالت صورت کاراکتر", // همان expression قدیم که ۱۲ فریم میماند و به حالت پیشفرض برمیگردد
+								"body": "normal", // همان gesture قدیم
+								"move": "none"
+							},
+							"camera": {
+								"zoom": "out"
+							},
+							"lighting": {
+								"backstage": "allOn",
+								"presentation": "on",
+								"character": "on"
+							}
+						}
+					}
+				]
+			}
+		]
+	},
+	"sections": [ // بخش های ارائه
+		{
+			"id": "آی دی بخش چون چند تا بخش هست",
+			"title": "عنوان بخش",
+			"steps": [
+				{
+					"id": "آی دی مرحله چون چند تا مرحله هست",
+					"duration": "مدت زمان مرحله به میلی ثانیه",
+					"text": "متنی که نمایش داده میشه",
+					"voice": "فایل صدای پخش شده در این مرحله",
+					"change": [
+						{
+							"time": "زمان تغییر بر اساس میلی ثانیه",
+							"changes": {
+								"slide": "آی دی اسلاید",
+								"character": {
+									"face": "none",
+									"body": "normal",
+									"move": "none"
+								},
+								"camera": {
+									"zoom": "out"
+								},
+								"lighting": {
+									"backstage": "allOn",
+									"presentation": "on",
+									"character": "on"
+								}
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "about",
+			"title": "درباره من",
+			"interactionPause": 8000,
+			"questions": [
+				{
+					"id": "q-portfolio",
+					"label": "نمونه کارهایت را نشان بده",
+					"gotoSectionId": "portfolio"
+				},
+				{
+					"id": "q-skills",
+					"label": "چه مهارت‌هایی داری؟",
+					"gotoSectionId": "skills"
+				}
+			],
+			"steps": [
+				{
+					"id": "about-1",
+					"text": "من تجربه‌های دیجیتال تعاملی می‌سازم؛ جایی که طراحی و مهندسی به هم می‌رسند.",
+					"duration": 5400,
+					"slide": 1,
+				},
+				{
+					"id": "about-2",
+					"text": "حالا می‌توانید مسیر ادامهٔ ارائه را خودتان انتخاب کنید.",
+					"cue": "[منتظر انتخاب شما]",
+					"duration": 4200,
+					"slide": 1,
+					"zoom": "out",
+					"gesture": "both",
+					"expression": "happy",
+					"lighting": {
+						"backstage": "allOn",
+						"presentation": "on",
+						"character": "on"
+					}
+				}
+			]
+		},
+		{
+			"id": "portfolio",
+			"title": "نمونه کارها",
+			"steps": [
+				{
+					"id": "portfolio-1",
+					"text": "این‌ها بخشی از پروژه‌هایی است که روی آن‌ها کار کرده‌ام.",
+					"duration": 5600,
+					"slide": 2,
+					"zoom": "out",
+					"gesture": "left",
+					"expression": "normal",
+					"lighting": {
+						"backstage": "allOn",
+						"presentation": "on",
+						"character": "on"
+					},
+					"overlays": [
+						{
+							"id": "ov-highlight",
+							"kind": "highlight",
+							"x": 50,
+							"y": 26,
+							"w": 42,
+							"h": 16,
+							"at": 1200,
+							"until": 4500
+						},
+						{
+							"id": "ov-callout",
+							"kind": "callout",
+							"text": "پروژهٔ منتخب",
+							"x": 32,
+							"y": 26,
+							"at": 1600,
+							"until": 4500
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "skills",
+			"title": "مهارت‌ها",
+			"interactionPause": 8000,
+			"questions": [
+				{
+					"id": "q-back-portfolio",
+					"label": "نمونه کارها",
+					"gotoSectionId": "portfolio"
+				}
+			],
+			"steps": [
+				{
+					"id": "skills-1",
+					"text": "از طراحی تجربهٔ کاربری تا توسعهٔ فرانت‌اند و انیمیشن، تمام مسیر را پوشش می‌دهم.",
+					"duration": 5800,
+					"slide": 3,
+					"zoom": "out",
+					"gesture": "right",
+					"expression": "normal",
+					"lighting": {
+						"backstage": "presentation",
+						"presentation": "on",
+						"character": "on"
+					}
+				}
+			]
+		},
+		{
+			"id": "closing",
+			"title": "پایان",
+			"steps": [
+				{
+					"id": "closing-1",
+					"text": "از اینکه تا اینجا همراهم بودید سپاسگزارم. امیدوارم به‌زودی با هم کار کنیم!",
+					"cue": "[صدای دست زدن]",
+					"duration": 5600,
+					"slide": 4,
+					"zoom": "out",
+					"gesture": "both",
+					"expression": "happy",
+					"sfx": [
+						"applaus"
+					],
+					"lighting": {
+						"backstage": "allOn",
+						"presentation": "on",
+						"character": "on"
+					}
+				}
+			]
+		}
+	],
+	"end": { // بخش پایان ارائه که دقیقا مثل یکی از بخش های ارائه است بدون id
+		"title": "عنوان بخش",
+		"steps": [
+			{
+				"id": "آی دی مرحله چون چند تا مرحله هست",
+				"text": "متن مرحله",
+				"duration": "مدت زمان مرحله به میلی ثانیه",
+				"slide": "آی دی اسلاید",
+				"zoom": "in",
+				"gesture": "right",
+				"expression": "normal",
+				"lighting": {
+					"backstage": "allOn",
+					"presentation": "off",
+					"character": "on"
+				}
+			}
+		]
+	},
+}
+```

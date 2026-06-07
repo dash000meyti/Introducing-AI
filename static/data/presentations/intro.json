@@ -162,7 +162,7 @@
 					"duration": 5600,
 					"slide": 4,
 					"zoom": "out",
-					"gesture": "both",
+					"gesture": "none",
 					"expression": "happy",
 					"sfx": ["applaus"],
 					"lighting": { "backstage": "allOn", "presentation": "on", "character": "on" }

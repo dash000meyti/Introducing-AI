@@ -4,8 +4,8 @@
 //   - stand: a 360x720 body layer + a 200x200 head layer (top-centre overlay).
 //   - move:  a single 360x720 full-body clip (head + body baked into one frame).
 //
-// Every clip is authored at 12 fps. Faces and the resting body are single
-// frames; gestures and the move sequence are ordered frame lists.
+// Every clip is authored at 12 fps. Faces are single frames; the resting body,
+// gestures, and the move sequence are ordered frame lists.
 
 import type { Expression, Gesture, MouthShape } from '../engine/types';
 
@@ -63,8 +63,8 @@ export const BLINK = {
 
 // ---- standing body (360x720) -------------------------------------------------
 
-/** Default standing body (no gesture). */
-export const BODY_NORMAL = `${BASE}/stand/body/body-normal.png`;
+/** 12-frame idle loop for the standing body (no gesture). */
+export const BODY_NORMAL_FRAMES = frames('stand/body', 'body-normal-frame', '-', 12);
 
 /** 12-frame gesture loops for the standing body. */
 export const GESTURE_FRAMES: Record<Exclude<Gesture, 'none'>, string[]> = {
@@ -103,7 +103,7 @@ export const ALL_CHARACTER_FILES: string[] = [
 		...Object.values(EXPRESSION_FILE),
 		BLINK.half,
 		BLINK.closed,
-		BODY_NORMAL,
+		...BODY_NORMAL_FRAMES,
 		...GESTURE_FRAMES.both,
 		...GESTURE_FRAMES.right,
 		...GESTURE_FRAMES.left,
