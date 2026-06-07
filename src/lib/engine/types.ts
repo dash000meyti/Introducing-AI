@@ -1,14 +1,23 @@
 // Core data model for the Interactive AI Presentation Platform.
 // A Scenario is the single contract every layer consumes. In the MVP it is
 // authored by hand (static JSON); in future it can be emitted by an LLM.
+//
+// v2 shape: Scenario -> slides[] + startSection + sections[] + endSection.
+// Every section (start / end / each entry of sections) shares the same shape;
+// start and end have no id. A Step choreographs the stage purely through timed
+// `change[]` events, so the entrance, lighting-up, and exit are authored in JSON
+// instead of being hardcoded in the engine.
 
+/** Resolved, applied theme. */
 export type Theme = 'light' | 'dark';
+/** Authoring-time theme preference. `auto` follows the browser. */
+export type ThemeSetting = 'light' | 'dark' | 'auto';
 
 /** Camera focus. `in` = close-up on the character, `out` = wide on the slide. */
 export type Zoom = 'in' | 'out';
 
 /** Backstage lighting presets, one image (or CSS preset) per value, per theme. */
-export type BackstageLighting = 'allOff' | 'allOn' | 'stage' | 'presentation';
+export type BackstageLighting = 'on' | 'off' | 'character' | 'presentation';
 
 /** Presentation lighting: `off` => 10% opacity, `on` => 100% opacity. */
 export type PresentationLighting = 'off' | 'on';
@@ -27,13 +36,17 @@ export interface Lighting {
 //   - move: a single full-body clip (head + body in one frame).
 // Every clip plays at 12 fps; see CharacterRenderer.
 
-/** Whole-character locomotion (move state). Only "left" art is provided. */
-export type Locomotion = 'none' | 'left';
+/**
+ * Whole-character locomotion (move state). `in` walks the character onto the
+ * stage from the right; `out` walks it off to the left. Only used in
+ * startSection / endSection so the entrance/exit are not hardcoded.
+ */
+export type Locomotion = 'none' | 'in' | 'out';
 
-/** Hand-gesture clip for the standing body layer. */
+/** Hand-gesture clip for the standing body layer (one-shot, returns to idle). */
 export type Gesture = 'none' | 'both' | 'right' | 'left';
 
-/** Facial expression for the standing head layer (mutually exclusive faces). */
+/** Facial expression for the standing head layer (one-shot, returns to default). */
 export type Expression = 'normal' | 'happy' | 'angry' | 'question' | 'surprised';
 
 /**
@@ -90,79 +103,162 @@ export interface TranscriptView {
 	activeFraction: number;
 }
 
+/** A timed ambient sound effect within a step. */
+export interface SfxCue {
+	/** ms from step start to fire. */
+	time: number;
+	/** Sound name, e.g. "applause" | "laughter". */
+	sound: string;
+}
+
+/** Character mutations carried by a change event. Omitted fields are unchanged. */
+export interface CharacterChange {
+	/** One-shot facial expression; holds 12 frames then returns to default. */
+	face?: Expression;
+	/** One-shot body gesture; plays 12 frames then returns to idle. */
+	body?: Gesture;
+	/** Locomotion (entrance/exit). Only meaningful in start/end sections. */
+	move?: Locomotion;
+}
+
+export interface CameraChange {
+	zoom?: Zoom;
+}
+
+/**
+ * A timed change applied while a step plays. As the step clock crosses `time`
+ * the listed fields are merged into the live stage state; anything omitted keeps
+ * its previous value.
+ */
+export interface ChangeEvent {
+	/** ms from step start at which to apply the change. */
+	time: number;
+	changes: {
+		/** Slide id to display (resolved to an index into slides[]). */
+		slide?: string;
+		character?: CharacterChange;
+		camera?: CameraChange;
+		lighting?: Partial<Lighting>;
+	};
+}
+
+/** A preset, branchable answer offered during an interaction. */
+export interface Answer {
+	id: string;
+	label: string;
+	/** Section id to jump to when chosen (or "end" for the end section). */
+	gotoSectionId?: string;
+	/**
+	 * When true, the current run is persisted to path memory and a fresh run is
+	 * started before navigating. Defaults to false. Lets an ending offer a clean
+	 * "restart" without conflating it with the end section, so a scenario can mix
+	 * different endings.
+	 */
+	restart?: boolean;
+	/** Optional face shown while the answer is hovered / touch-held. */
+	face?: Expression;
+}
+
+/** An external link offered during an interaction. */
+export interface LinkDef {
+	id: string;
+	label: string;
+	url: string;
+	/** Optional icon name for the link. */
+	icon?: string;
+	/** Optional face shown while the link is hovered / touch-held. */
+	face?: Expression;
+}
+
+/** An interaction prompt shown at a step: a question with answers and/or links. */
+export interface Question {
+	title: string;
+	answers?: Answer[];
+	links?: LinkDef[];
+	/** Auto-advance countdown in ms. Falls back to the engine default. */
+	pause?: number;
+}
+
 /** A single beat of the presentation. */
 export interface Step {
 	id: string;
 	/** Spoken transcript text shown in the Transcript layer. */
 	text: string;
-	/** Optional non-speech cue shown in the transcript, e.g. "[applause]". */
-	cue?: string;
-	/** Audio file URL. When absent the step runs on `duration` alone. */
-	audio?: string;
 	/** Fallback / minimum duration in ms (used when there is no audio). */
 	duration: number;
-	visemes?: Viseme[];
-	/** Hand-gesture clip for the standing body. Defaults to "none". */
-	gesture?: Gesture;
-	/** Facial expression for the standing head. Defaults to "normal". */
-	expression?: Expression;
-	/** Reveal.js horizontal slide index this step displays. */
-	slide?: number;
+	/** Audio file URL. When absent the step runs on `duration` alone. */
+	voice?: string;
+	/** Non-speech note shown before the spoken text (not read aloud). */
+	startCue?: string;
+	/** Non-speech note shown after the spoken text (not read aloud). */
+	endCue?: string;
+	/** Timed sound effects. */
+	sfx?: SfxCue[];
+	/** Timed stage changes (slide / character / camera / lighting). */
+	change?: ChangeEvent[];
+	/** Interaction prompt shown when the step completes. */
+	question?: Question;
 	overlays?: OverlayDef[];
-	lighting: Lighting;
-	zoom: Zoom;
-	/** Ambient sound effects to trigger, e.g. ["applause"]. */
-	sfx?: string[];
+	visemes?: Viseme[];
 }
 
-/** A preset, branchable question offered during an interaction pause. */
-export interface PresetQuestion {
-	id: string;
-	label: string;
-	/** Section id to jump to when chosen. Omit to simply continue. */
-	gotoSectionId?: string;
-}
-
-export interface Section {
-	id: string;
+/** Shared section shape. startSection / endSection use this (no id). */
+export interface SectionTemplate {
 	title: string;
 	steps: Step[];
-	/** ms to wait at the end of the section for interaction (0 = none). */
-	interactionPause?: number;
-	questions?: PresetQuestion[];
+	/** Default branch to this section id after the last step (or "end"). */
+	nextSectionId?: string;
 }
+
+/** A regular, addressable section of the presentation. */
+export interface Section extends SectionTemplate {
+	id: string;
+}
+
+/** Slide layout template (was `kind`). */
+export type SlideTemplate = 'title' | 'text' | 'image' | 'grid' | 'video';
 
 /** A presentation slide rendered by the Presentation (Reveal.js) layer. */
 export interface SlideDef {
 	id: string;
-	kind?: 'title' | 'text' | 'image' | 'grid';
+	/** Layout template selecting which fields render. */
+	theme?: SlideTemplate;
 	title?: string;
 	subtitle?: string;
 	body?: string;
 	bullets?: string[];
-	/** Single image URL (kind: 'image'). */
+	/** Single image URL (template: 'image'). */
 	image?: string;
-	/** Image URLs for a grid (kind: 'grid'). */
+	/** Image URLs for a grid (template: 'grid'). */
 	images?: string[];
+	/** Video URL (template: 'video'). */
+	video?: string;
+	/** Optional display duration hint (ms). */
+	duration?: number;
 }
 
 export interface Scenario {
 	id: string;
 	title: string;
-	subtitle?: string;
-	/** Starting theme. */
-	theme: Theme;
-	/** Slide deck, referenced by `Step.slide` (index into this array). */
+	description?: string;
+	/** Starting theme preference. */
+	theme: ThemeSetting;
+	/** Background music URL; plays from startSection start to endSection end. */
+	music?: string;
+	/** Slide deck, referenced by `ChangeEvent.changes.slide` (by id). */
 	slides: SlideDef[];
+	/** Intro section: choreographs the entrance / lighting-up via change[]. */
+	startSection: SectionTemplate;
+	/** The branchable body of the presentation. */
 	sections: Section[];
+	/** Outro section: choreographs the exit and reveals contact links. */
+	endSection: SectionTemplate;
 }
 
 /** High-level lifecycle of a presentation run. */
 export type PresentationPhase =
 	| 'landing'
-	| 'intro' // darken + first slide + title
-	| 'entrance' // character walks in
 	| 'playing'
 	| 'paused'
-	| 'interaction' // waiting at end of a section
+	| 'interaction' // waiting at a question
 	| 'ended';

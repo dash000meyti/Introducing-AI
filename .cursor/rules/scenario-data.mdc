@@ -7,10 +7,12 @@ alwaysApply: false
 # Scenario Contract
 
 All presentation content is data-driven through the `Scenario` type. The shape is
-`Scenario -> slides[] + sections[] -> steps[]`.
+`Scenario -> slides[] + startSection + sections[] + endSection -> steps[]`.
 
-- Never hardcode copy, slide content, timing, lighting, or zoom inside a layer or
-  the engine. It belongs in the scenario JSON.
+- Never hardcode copy, slide content, timing, lighting, zoom, the entrance, or
+  the exit inside a layer or the engine. It belongs in the scenario JSON. The
+  intro lighting-up and character `move` (in/out) are authored in `startSection`
+  / `endSection` so nothing after "شروع ارائه" is hardcoded.
 - Keep this the clean seam for future LLM generation: an LLM only needs to emit
   this same JSON shape.
 
@@ -26,7 +28,17 @@ Do not skip step 1 or 2 by reading raw fields directly in a component.
 
 - New files live in `static/data/presentations/<id>.json` and load via
   `loadScenario(id)` in `src/lib/data/loadScenario.ts`.
-- Keep the JSON consistent with the types; every `Step` needs `duration`,
-  `lighting`, and `zoom`. Reference slides by index into `slides[]`.
-- `audio` and `visemes` are optional; without them the engine uses the manual
-  clock and synthetic lip-sync.
+- `startSection`, each `sections[]` entry, and `endSection` share the same shape;
+  start/end have no `id`. The engine normalises them into one ordered list with
+  reserved ids `__start` / `__end`.
+- A `Step` needs `duration` + `text`. Stage state (slide / camera.zoom /
+  lighting / character face·body·move) is driven by timed `change[]` events,
+  merged as the step clock crosses each `change.time`; omitted fields persist.
+- Reference a slide by its `id` via `change.changes.slide`. `slide.theme` is the
+  layout template (`title|text|image|grid|video`).
+- Flow: a section's `nextSectionId` (or `"end"`) branches after its last step; a
+  step's `question` pauses for interaction with `answers` (branch via
+  `gotoSectionId`) and `links`. A missing `nextSectionId` on the last section
+  means it is the final one.
+- `voice` and `visemes` are optional; without them the engine uses the manual
+  clock and synthetic lip-sync. `music` loops from startSection to endSection.

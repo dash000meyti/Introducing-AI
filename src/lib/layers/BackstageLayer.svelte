@@ -5,19 +5,19 @@
 	const engine = getEngine();
 
 	// Lighting state -> provided artwork filename.
-	//   off    = all lights off
-	//   stage  = all lights on
-	//   slide  = only the presentation light on
-	//   person = only the character light on
+	//   off          = all lights off
+	//   on           = all lights on
+	//   presentation = only the presentation light on
+	//   character    = only the character light on
 	const STATE_FILE: Record<BackstageLighting, string> = {
-		allOff: 'off',
-		allOn: 'stage',
+		off: 'off',
+		on: 'stage',
 		presentation: 'slide',
-		stage: 'person'
+		character: 'person'
 	};
 
 	const themes: Theme[] = ['dark', 'light'];
-	const states: BackstageLighting[] = ['allOff', 'allOn', 'presentation', 'stage'];
+	const states: BackstageLighting[] = ['off', 'on', 'presentation', 'character'];
 </script>
 
 <!--

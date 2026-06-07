@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getEngine } from '$lib/engine/context';
-	import ProgressTimeline from './ProgressTimeline.svelte';
+	import type { Expression } from '$lib/engine/types';
 
 	const engine = getEngine();
 
@@ -12,88 +12,187 @@
 	const isEnded = $derived(engine.phase === 'ended');
 	const loading = $derived(isLanding && !engine.scenario);
 	const canInteract = $derived(engine.canInteract);
-	const questions = $derived(engine.currentQuestions);
+	const isRepeat = $derived(engine.isRepeatPrompt);
+	const continuesToEnd = $derived(engine.continuesToEnd);
+	const question = $derived(engine.activeQuestion);
+	const answers = $derived(engine.answers);
+	const links = $derived(engine.links);
+	const contactLinks = $derived(engine.contactLinks);
 	const interactionSeconds = $derived(Math.ceil(engine.interactionRemainingMs / 1000));
 	const progress = $derived(engine.sectionProgress);
 
-	// Progress bar shows during playback, and during landing only while loading.
-	const showProgress = $derived(!isLanding || loading);
+	// Contact info only surfaces on the landing (intro) and ended screens; the
+	// presentation body (playback / questions) shows the controls header instead.
+	const showContact = $derived(isLanding || isEnded);
+	const headTitle = $derived(canInteract ? (question?.title ?? engine.sectionTitle) : engine.sectionTitle);
+	const repeatDisabled = $derived(engine.realSectionIndex < 0);
 
 	$effect(() => {
-		// Auto-reveal the panel for questions while paused; tuck away afterwards.
-		expanded = canInteract;
+		// Auto-reveal the panel for questions and at the end; closed otherwise
+		// (including landing, where it opens only on a progress-bar click).
+		expanded = canInteract || isEnded;
 	});
 
 	function toggle() {
-		if (isLanding) return;
+		if (loading) return;
 		expanded = !expanded;
+	}
+
+	function onCounter() {
+		if (canInteract) engine.stopInteractionTimer();
+		else engine.togglePlay();
+	}
+
+	function hoverOn(face?: Expression | null) {
+		if (face) engine.setHoverFace(face);
+	}
+	function hoverOff() {
+		engine.setHoverFace(null);
 	}
 </script>
 
 <nav class="navigation">
-		<button
-			class="progress glass"
-			type="button"
-			disabled={isLanding}
-			onclick={toggle}
-			aria-expanded={expanded}
-			aria-label={expanded ? 'بستن جزئیات' : 'باز کردن جزئیات'}
-		>
-			<span
-				class="fill"
-				class:indeterminate={loading}
-				style:transform={`scaleX(${loading ? 1 : progress})`}
-			></span>
-		</button>
+	<button
+		class="progress glass"
+		type="button"
+		disabled={loading}
+		onclick={toggle}
+		aria-expanded={expanded}
+		aria-label={expanded ? 'بستن جزئیات' : 'باز کردن جزئیات'}
+	>
+		<span
+			class="fill"
+			class:indeterminate={loading}
+			style:transform={`scaleX(${loading ? 1 : progress})`}
+		></span>
+	</button>
 
-	{#if !isLanding}
-		<div class="panel" class:open={expanded}>
-			<div class="panel-clip">
-				<div class="panel-card glass">
-					<div class="status">
-						<span class="title">{engine.sectionTitle}</span>
-						<span class="count" dir="ltr">{engine.sectionIndex + 1} / {engine.totalSections}</span>
+	<div class="panel" class:open={expanded}>
+		<div class="panel-clip">
+			<div class="panel-card glass">
+				{#if showContact}
+					<div class="head">
+						<span class="title">راه‌های ارتباطی</span>
 					</div>
-
-					<ProgressTimeline />
-
-					{#if canInteract}
-						<div class="interaction">
-							<div class="ask-row">
-								<span class="ask">سوالی دارید؟</span>
-								{#if interactionSeconds > 0}
-									<span class="countdown" dir="ltr">{interactionSeconds}</span>
-								{/if}
-							</div>
-							<div class="questions">
-								{#each questions as q (q.id)}
-									<button class="pill" onclick={() => engine.answerQuestion(q)}>{q.label}</button>
-								{/each}
-								<button class="pill continue" onclick={() => engine.continueInteraction()}>
-									ادامه ارائه
-								</button>
-							</div>
+					{#if contactLinks.length > 0}
+						<div class="options">
+							{#each contactLinks as l (l.id)}
+								<a
+									class="box link"
+									href={l.url}
+									target="_blank"
+									rel="noopener noreferrer"
+									onpointerenter={() => hoverOn(l.face)}
+									onpointerleave={hoverOff}
+									onpointerdown={() => hoverOn(l.face)}
+									onpointerup={hoverOff}
+									onpointercancel={hoverOff}
+								>
+									{#if l.icon}<span class="icon">{l.icon}</span>{/if}
+									<span class="label">{l.label}</span>
+								</a>
+							{/each}
 						</div>
 					{/if}
+				{:else}
+					<div class="head">
+						<span class="title">{headTitle}</span>
+						<div class="tools" dir="ltr">
+							<button
+								class="tool"
+								disabled={repeatDisabled}
+								onclick={() => engine.repeatSectionForce()}
+								aria-label="تکرار ارائه این بخش"
+								title="تکرار ارائه این بخش"
+							>
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+									><path
+										d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+									/><path
+										d="M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+									/></svg
+								>
+							</button>
 
-					<button
-						class="pill zoom"
-						class:active={engine.zoom === 'in'}
-						onclick={() => engine.toggleZoom()}
-						aria-label="zoom"
-					>
-						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-							><circle cx="11" cy="11" r="7" /><path
-								d="m21 21-4.3-4.3M11 8v6M8 11h6"
-								stroke-linecap="round"
-							/></svg
-						>
-						<span>{engine.zoom === 'in' ? 'نمای کاراکتر' : 'نمای اسلاید'}</span>
-					</button>
-				</div>
+							<button
+								class="tool"
+								class:active={engine.zoom === 'in'}
+								onclick={() => engine.toggleZoom()}
+								aria-label="نمای اسلاید"
+								title={engine.zoom === 'in' ? 'نمای کاراکتر' : 'نمای اسلاید'}
+							>
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+									><circle cx="11" cy="11" r="7" /><path
+										d="m21 21-4.3-4.3M11 8v6M8 11h6"
+										stroke-linecap="round"
+									/></svg
+								>
+							</button>
+
+							<button
+								class="tool counter"
+								onclick={onCounter}
+								aria-label={canInteract ? 'توقف شمارش' : 'پخش/توقف'}
+							>
+								{#if canInteract}
+									{#if engine.interactionTimerStopped}
+										<span class="glyph">∞</span>
+									{:else}
+										<span class="num">{interactionSeconds}</span>
+									{/if}
+								{:else if engine.isPlaying}
+									<svg viewBox="0 0 24 24" fill="currentColor"
+										><path d="M7 5h3v14H7zM14 5h3v14h-3z" /></svg
+									>
+								{:else}
+									<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+								{/if}
+							</button>
+						</div>
+					</div>
+
+					{#if canInteract}
+						<div class="options">
+							{#each answers as a (a.id)}
+								<button
+									class="box answer"
+									onclick={() => (isRepeat ? engine.confirmRepeat() : engine.answerQuestion(a))}
+									onpointerenter={() => hoverOn(a.face)}
+									onpointerleave={hoverOff}
+									onpointerdown={() => hoverOn(a.face)}
+									onpointerup={hoverOff}
+									onpointercancel={hoverOff}
+								>
+									<span class="label">{a.label}</span>
+								</button>
+							{/each}
+
+							{#each links as l (l.id)}
+								<a
+									class="box link"
+									href={l.url}
+									target="_blank"
+									rel="noopener noreferrer"
+									onpointerenter={() => hoverOn(l.face)}
+									onpointerleave={hoverOff}
+									onpointerdown={() => hoverOn(l.face)}
+									onpointerup={hoverOff}
+									onpointercancel={hoverOff}
+								>
+									{#if l.icon}<span class="icon">{l.icon}</span>{/if}
+									<span class="label">{l.label}</span>
+								</a>
+							{/each}
+						</div>
+					{/if}
+				{/if}
 			</div>
 		</div>
-	{/if}
+	</div>
 
 	<div class="tray glass" dir="ltr">
 		<button class="orb" onclick={() => engine.toggleTheme()} aria-label="theme">
@@ -116,17 +215,23 @@
 				{engine.scenario ? 'شروع ارائه' : 'در حال آماده‌سازی…'}
 			</button>
 		{:else if isEnded}
-			<button class="center" onclick={() => engine.restart()}>شروع از اول</button>
-
+			<button class="center" onclick={() => engine.start()}>شروع ارائه</button>
 		{:else if canInteract}
-			<button class="center" onclick={() => engine.continueInteraction()}>ادامه ارائه</button>
+			<button class="center" onclick={() => engine.continueInteraction()}>
+				{isRepeat ? 'برو مرحله بعد' : continuesToEnd ? 'پایان ارائه' : 'ادامه ارائه'}
+			</button>
 		{:else}
 			<div class="orb-center title-center" aria-expanded={expanded}>
 				<span>{engine.sectionTitle}</span>
 			</div>
 		{/if}
 
-		<button class="orb" class:muted={engine.muted} onclick={() => engine.toggleMute()} aria-label="mute">
+		<button
+			class="orb"
+			class:muted={engine.muted}
+			onclick={() => engine.toggleMute()}
+			aria-label="mute"
+		>
 			{#if engine.muted}
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
 					><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" stroke="none" /><path
@@ -178,7 +283,7 @@
 		position: relative;
 		height: 12px;
 		padding: 0;
-		margin: 0 40px -1px 40px ;
+		margin: 0 40px -1px 40px;
 		border-radius: 999px 999px 0 0;
 		overflow: hidden;
 	}
@@ -214,7 +319,7 @@
 	.panel {
 		pointer-events: auto;
 		display: grid;
-		margin: -1px 40px -1px 40px ;
+		margin: -1px 40px -1px 40px;
 		grid-template-rows: 0fr; /* collapsed: zero height, space stays hidden */
 		transition: grid-template-rows 280ms cubic-bezier(0.22, 1, 0.36, 1);
 	}
@@ -234,88 +339,98 @@
 		overflow-y: auto;
 	}
 
-	.status {
+	.head {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		font-size: 14px;
+		gap: 12px;
 	}
 	.title {
 		font-family: var(--font-title);
 		font-weight: 800;
-	}
-	.count {
-		opacity: 0.6;
-		font-size: 12px;
+		font-size: 15px;
+		min-width: 0;
+		flex: 1;
 	}
 
-	.interaction {
-		display: flex;
-		flex-direction: column;
-		gap: 10px;
-	}
-	.ask-row {
+	/* Uniform control cluster: repeat / zoom / counter. */
+	.tools {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
+		gap: 8px;
+		flex: none;
 	}
-	.ask {
-		font-size: 13px;
-		font-weight: 700;
-	}
-	.countdown {
+	.tool {
 		display: grid;
 		place-items: center;
-		min-width: 26px;
-		height: 26px;
-		padding: 0 8px;
-		border-radius: 999px;
-		background: var(--accent);
-		color: var(--accent-contrast);
-		font-size: 12px;
-		font-weight: 800;
-	}
-	.questions {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 8px;
-	}
-
-	/* Fully rounded pill controls inside the panel. */
-	.pill {
-		display: inline-flex;
-		align-items: center;
-		gap: 6px;
-		padding: 10px 16px;
-		border-radius: 999px;
+		width: 42px;
+		height: 42px;
+		border-radius: 50%;
 		border: 1px solid var(--orb-edge);
 		background: var(--orb-bg);
 		color: inherit;
-		font-size: 13px;
-		font-weight: 600;
 		transition: transform 120ms ease;
 	}
-	.pill:active {
-		transform: scale(0.96);
+	.tool svg {
+		width: 20px;
+		height: 20px;
 	}
-	.pill svg {
-		width: 18px;
-		height: 18px;
+	.tool:not(:disabled):active {
+		transform: scale(0.92);
 	}
-	.pill.continue {
+	.tool:disabled {
+		opacity: 0.4;
+		cursor: default;
+	}
+	.tool.active {
 		background: var(--accent);
 		color: var(--accent-contrast);
 		border-color: transparent;
 	}
-	.pill.zoom {
-		align-self: flex-start;
-		font-size: 12px;
-		font-weight: 700;
+	.tool.counter .num,
+	.tool.counter .glyph {
+		font-weight: 800;
+		font-size: 15px;
+		line-height: 1;
 	}
-	.pill.zoom.active {
+	.tool.counter .glyph {
+		font-size: 20px;
+	}
+
+	/* ---- interaction / contact option boxes (full width) --------------- */
+	.options {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+	.box {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		width: 100%;
+		padding: 13px 16px;
+		border-radius: 14px;
+		border: 1px solid var(--orb-edge);
+		background: var(--orb-bg);
+		color: inherit;
+		font-size: 14px;
+		font-weight: 600;
+		text-align: center;
+		text-decoration: none;
+		transition: transform 120ms ease;
+	}
+	.box:active {
+		transform: scale(0.98);
+	}
+	.box.answer {
 		background: var(--accent);
 		color: var(--accent-contrast);
 		border-color: transparent;
+	}
+	.box .icon {
+		font-size: 16px;
+		line-height: 1;
 	}
 
 	/* ---- navigation tray (bottom) — glass pill ------------------------- */
@@ -412,7 +527,8 @@
 		.fill,
 		.orb,
 		.center,
-		.pill {
+		.box,
+		.tool {
 			transition: none;
 		}
 	}

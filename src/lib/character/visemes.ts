@@ -75,24 +75,25 @@ export const GESTURE_FRAMES: Record<Exclude<Gesture, 'none'>, string[]> = {
 
 // ---- moving full body (360x720) ----------------------------------------------
 
-/** Move-left clip: accelerate (24) -> stride loop (12) -> decelerate (12). */
+/** Raw move-left clips: accelerate (24), stride loop (12), decelerate (12). */
 export const MOVE_LEFT = {
 	start: frames('move/once', 'start-moving-left-frame', '_', 24),
 	loop: frames('move/loop', 'continue-moving-left-frame', '_', 12),
 	end: frames('move/once', 'end-moving-left-frame', '_', 12)
 } as const;
 
-/** A single walk-in pass: start -> one loop cycle -> end (48 frames @ 12 fps). */
-export const MOVE_LEFT_SEQUENCE: string[] = [
-	...MOVE_LEFT.loop,
-	...MOVE_LEFT.end
-];
+/** Entrance pass (move "in"): stride loop -> decelerate, sliding in from the right. */
+export const MOVE_IN_SEQUENCE: string[] = [...MOVE_LEFT.loop, ...MOVE_LEFT.end];
+
+/** Exit pass (move "out"): accelerate from rest, sliding off to the left. */
+export const MOVE_OUT_SEQUENCE: string[] = [...MOVE_LEFT.start];
 
 /** All character clips are authored at this frame rate. */
 export const CHARACTER_FPS = 12;
 
-/** Wall-clock duration of one full walk-in pass (keep ENTRANCE_MS in sync). */
-export const MOVE_LEFT_ENTRANCE_MS = MOVE_LEFT_SEQUENCE.length * (1000 / CHARACTER_FPS);
+/** Wall-clock durations of the entrance / exit passes. */
+export const MOVE_IN_MS = MOVE_IN_SEQUENCE.length * (1000 / CHARACTER_FPS);
+export const MOVE_OUT_MS = MOVE_OUT_SEQUENCE.length * (1000 / CHARACTER_FPS);
 
 // ---- preload manifest --------------------------------------------------------
 
@@ -107,6 +108,7 @@ export const ALL_CHARACTER_FILES: string[] = [
 		...GESTURE_FRAMES.both,
 		...GESTURE_FRAMES.right,
 		...GESTURE_FRAMES.left,
-		...MOVE_LEFT_SEQUENCE
+		...MOVE_IN_SEQUENCE,
+		...MOVE_OUT_SEQUENCE
 	])
 ];

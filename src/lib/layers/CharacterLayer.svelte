@@ -20,9 +20,14 @@
 	function syncView() {
 		renderer?.setView({
 			locomotion: engine.locomotion,
+			moveNonce: engine.moveNonce,
 			mouth: engine.mouthShape,
 			expression: engine.expression,
-			gesture: engine.gesture,
+			faceShot: engine.faceShot,
+			faceNonce: engine.faceNonce,
+			hoverFace: engine.hoverFace,
+			gesture: engine.bodyGesture,
+			bodyNonce: engine.bodyNonce,
 			lit: engine.lighting.character === 'on',
 			theme: engine.theme,
 			visible: engine.characterVisible,
@@ -34,9 +39,14 @@
 	$effect(() => {
 		// Touch the reactive sources so this effect re-runs when they change.
 		void engine.locomotion;
+		void engine.moveNonce;
 		void engine.mouthShape;
 		void engine.expression;
-		void engine.gesture;
+		void engine.faceShot;
+		void engine.faceNonce;
+		void engine.hoverFace;
+		void engine.bodyGesture;
+		void engine.bodyNonce;
 		void engine.lighting.character;
 		void engine.theme;
 		void engine.characterVisible;

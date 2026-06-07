@@ -1,78 +1,171 @@
 // PresentationEngine: the single source of truth that orchestrates every layer.
 //
 // One requestAnimationFrame loop advances the master clock (AudioController),
-// drives lip-sync visemes, transcript, overlays, and step/section transitions.
-// Every layer is a pure consumer of the reactive state exposed here, so a
-// future LLM-driven run only needs to feed in a different Scenario.
+// drives lip-sync visemes, transcript, overlays, timed `change[]` events, and
+// section transitions. Every layer is a pure consumer of the reactive state
+// exposed here.
+//
+// v2 is fully data-driven after the "start" button: the entrance, lighting-up,
+// and exit are authored as timed change[] events inside startSection /
+// endSection, so nothing is hardcoded here. The engine normalises
+// startSection + sections[] + endSection into one ordered list with reserved
+// ids `__start` and `__end`.
 
 import { AudioController } from './AudioController';
-import { buildTranscriptView, MOVE_LEFT_ENTRANCE_MS, resolveMouthShape } from './Timeline';
+import { MusicController } from './MusicController';
+import { PathMemory } from './PathMemory';
+import { buildTranscriptView, resolveMouthShape } from './Timeline';
 import type {
+	Answer,
+	ChangeEvent,
 	Expression,
 	Gesture,
+	LinkDef,
 	Lighting,
 	Locomotion,
 	MouthShape,
 	OverlayDef,
 	PresentationPhase,
-	PresetQuestion,
+	Question,
 	Scenario,
-	Section,
 	Step,
 	Theme,
+	ThemeSetting,
 	TranscriptView,
 	Zoom
 } from './types';
 
-/** Room darkens + first slide before the character appears. */
-const INTRO_MS = 2200;
-/** Walk-in duration — must match MOVE_LEFT_ENTRANCE_MS (48 frames @ 12 fps). */
-const ENTRANCE_MS = MOVE_LEFT_ENTRANCE_MS;
 const THEME_STORAGE_KEY = 'introducing-ai.theme';
+/** Default auto-advance countdown for an interaction, in ms. */
+const DEFAULT_INTERACTION_MS = 15000;
+
+const START_ID = '__start';
+const END_ID = '__end';
+
+interface RuntimeSection {
+	id: string;
+	title: string;
+	steps: Step[];
+	/** Default next section id after the last step (or "end"); branches the flow. */
+	nextSectionId?: string;
+}
+
+const REPEAT_QUESTION: Question = {
+	title: 'این بخش را یک بار توضیح داده‌ام، می‌خواهی دوباره تکرار کنم؟',
+	answers: [{ id: 'repeat-yes', label: 'دوباره تکرار کن' }]
+};
 
 export class PresentationEngine {
 	scenario = $state<Scenario | null>(null);
 	phase = $state<PresentationPhase>('landing');
-	sectionIndex = $state(0);
+	sectionIndex = $state(0); // index into runtimeSections
 	stepIndex = $state(0);
 
 	// User-controllable state.
 	theme = $state<Theme>('light');
-	zoom = $state<Zoom>('in');
 	muted = $state(false);
+
+	// Live stage state, mutated by timed change[] events (not per-step getters).
+	zoom = $state<Zoom>('in');
+	lighting = $state<Lighting>({ backstage: 'on', presentation: 'off', character: 'off' });
+	currentSlide = $state(0);
 
 	// Live clock state.
 	stepTimeMs = $state(0);
 	stepDurationMs = $state(0);
-	currentSlide = $state(0);
 	interactionRemainingMs = $state(0);
+	interactionTimerStopped = $state(false);
 
-	private phaseElapsed = 0;
+	// Character state. face/body are one-shot: the nonce changes to (re)trigger a
+	// 12-frame play that returns to the default afterwards.
+	characterPresent = $state(false);
+	faceShot = $state<Expression>('normal');
+	faceNonce = $state(0);
+	bodyGesture = $state<Gesture>('none');
+	bodyNonce = $state(0);
+	locomotion = $state<Locomotion>('none');
+	moveNonce = $state(0);
+	hoverFace = $state<Expression | null>(null);
+
+	// Interaction state.
+	interactionQuestion = $state<Question | null>(null);
+	pendingRepeat = $state(false);
+	private pendingRepeatIndex = -1;
+
+	private hasSavedTheme = false;
 	private audio = new AudioController();
+	private music = new MusicController();
+	private path = new PathMemory();
 	private rafId: number | null = null;
 	private lastFrame = 0;
+
+	// Per-step timed cursors.
+	private stepChanges: ChangeEvent[] = [];
+	private stepChangeCursor = 0;
+	private stepSfx: { time: number; sound: string }[] = [];
+	private stepSfxCursor = 0;
 
 	// ---- setup -------------------------------------------------------------
 	constructor() {
 		const saved = this.loadSavedTheme();
+		this.hasSavedTheme = saved !== null;
 		this.theme = saved ?? 'light';
-		this.saveTheme(this.theme);
 		this.syncThemeClass(this.theme);
 	}
 
 	setScenario(scenario: Scenario) {
 		this.scenario = scenario;
-		this.zoom = 'in';
 		this.sectionIndex = 0;
 		this.stepIndex = 0;
 		this.currentSlide = 0;
+		this.zoom = 'in';
+		this.lighting = { backstage: 'on', presentation: 'off', character: 'off' };
+		this.characterPresent = false;
 		this.phase = 'landing';
+		this.music.load(scenario.music);
+		this.music.setMuted(this.muted);
+		// Honor the scenario theme unless the viewer has an explicit saved choice.
+		if (!this.hasSavedTheme) {
+			this.theme = resolveTheme(scenario.theme);
+			this.syncThemeClass(this.theme);
+		}
+	}
+
+	// ---- runtime section model --------------------------------------------
+
+	private get runtimeSections(): RuntimeSection[] {
+		const s = this.scenario;
+		if (!s) return [];
+		return [
+			{
+				id: START_ID,
+				title: s.startSection.title,
+				steps: s.startSection.steps,
+				nextSectionId: s.startSection.nextSectionId
+			},
+			...s.sections,
+			{
+				id: END_ID,
+				title: s.endSection.title,
+				steps: s.endSection.steps,
+				nextSectionId: s.endSection.nextSectionId
+			}
+		];
+	}
+
+	private indexOfSectionId(id: string): number {
+		const target = id === 'end' ? END_ID : id;
+		return this.runtimeSections.findIndex((s) => s.id === target);
+	}
+
+	private isRealSection(section: RuntimeSection | undefined): boolean {
+		return !!section && section.id !== START_ID && section.id !== END_ID;
 	}
 
 	// ---- derived view (consumed by layers) ---------------------------------
 
-	get currentSection(): Section | null {
-		return this.scenario?.sections[this.sectionIndex] ?? null;
+	get currentSection(): RuntimeSection | null {
+		return this.runtimeSections[this.sectionIndex] ?? null;
 	}
 
 	get currentStep(): Step | null {
@@ -85,53 +178,19 @@ export class PresentationEngine {
 
 	get sectionTitle(): string {
 		if (this.phase === 'landing') return this.scenario?.title ?? '';
+		if (this.pendingRepeat) {
+			return this.runtimeSections[this.pendingRepeatIndex]?.title ?? '';
+		}
 		return this.currentSection?.title ?? '';
 	}
 
 	get characterVisible(): boolean {
-		return this.phase !== 'landing' && this.phase !== 'intro';
+		return this.phase !== 'landing' && this.characterPresent;
 	}
 
-	get lighting(): Lighting {
-		switch (this.phase) {
-			case 'landing':
-				return { backstage: 'allOn', presentation: 'off', character: 'off' };
-			case 'intro':
-				return { backstage: 'presentation', presentation: 'on', character: 'off' };
-			case 'entrance':
-				return { backstage: 'stage', presentation: 'on', character: 'on' };
-			case 'ended':
-				return { backstage: 'allOn', presentation: 'on', character: 'on' };
-			default:
-				return (
-					this.currentStep?.lighting ?? {
-						backstage: 'stage',
-						presentation: 'on',
-						character: 'on'
-					}
-				);
-		}
-	}
-
-	/** Whole-character movement. The character walks in during the entrance. */
-	get locomotion(): Locomotion {
-		return this.phase === 'entrance' ? 'left' : 'none';
-	}
-
-	/** Standing body hand-gesture clip. */
-	get gesture(): Gesture {
-		if (this.phase === 'ended') return 'none';
-		if (this.phase === 'playing' || this.phase === 'paused' || this.phase === 'interaction') {
-			return this.currentStep?.gesture ?? 'none';
-		}
-		return 'none';
-	}
-
-	/** Standing head expression. A friendly smile while awaiting interaction. */
+	/** Resting facial expression (the one-shot face is delivered via faceShot). */
 	get expression(): Expression {
-		if (this.canInteract) return 'normal';
-		if (this.phase === 'ended') return 'normal';
-		return this.currentStep?.expression ?? 'normal';
+		return 'normal';
 	}
 
 	get mouthShape(): MouthShape {
@@ -154,13 +213,7 @@ export class PresentationEngine {
 		if (this.phase === 'playing' || this.phase === 'paused' || this.phase === 'interaction') {
 			return this.currentStep?.text ?? '';
 		}
-		if (this.phase === 'ended') return this.scenario?.subtitle ?? '';
 		return '';
-	}
-
-	get transcriptCue(): string | undefined {
-		if (this.phase === 'playing' || this.phase === 'interaction') return this.currentStep?.cue;
-		return undefined;
 	}
 
 	/** Continuous section transcript for the ticker (all steps on one line). */
@@ -172,17 +225,6 @@ export class PresentationEngine {
 			}
 			return buildTranscriptView(steps, this.stepIndex, this.stepProgress);
 		}
-		if (this.phase === 'ended') {
-			const sections = this.scenario?.sections ?? [];
-			const lastSection = sections[sections.length - 1];
-			if (lastSection?.steps.length) {
-				return buildTranscriptView(
-					lastSection.steps,
-					lastSection.steps.length - 1,
-					1
-				);
-			}
-		}
 		return { tokens: [], activeWordIndex: 0, activeFraction: 0 };
 	}
 
@@ -190,12 +232,67 @@ export class PresentationEngine {
 		return this.phase === 'interaction';
 	}
 
-	get currentQuestions(): PresetQuestion[] {
-		return this.canInteract ? (this.currentSection?.questions ?? []) : [];
+	get activeQuestion(): Question | null {
+		return this.canInteract ? this.interactionQuestion : null;
+	}
+
+	get answers(): Answer[] {
+		return this.activeQuestion?.answers ?? [];
+	}
+
+	get links(): LinkDef[] {
+		return this.activeQuestion?.links ?? [];
+	}
+
+	get isRepeatPrompt(): boolean {
+		return this.pendingRepeat;
+	}
+
+	/**
+	 * During an interaction, whether the center "continue" action proceeds into
+	 * the end section. The final slide's nav button reads "پایان ارائه" instead
+	 * of "ادامه ارائه".
+	 */
+	get continuesToEnd(): boolean {
+		if (this.phase !== 'interaction' || this.pendingRepeat) return false;
+		const endIndex = this.indexOfSectionId(END_ID);
+		return endIndex >= 0 && this.continueTargetIndex === endIndex;
+	}
+
+	/** Runtime section index continueInteraction() would move into (mirrors its resolution). */
+	private get continueTargetIndex(): number {
+		const section = this.currentSection;
+		if (!section) return this.indexOfSectionId(END_ID);
+		if (this.stepIndex + 1 < section.steps.length) return this.sectionIndex;
+		if (section.id !== END_ID && section.nextSectionId) {
+			return this.indexOfSectionId(section.nextSectionId);
+		}
+		// END section, or a section with no explicit next → presentation ends.
+		return this.indexOfSectionId(END_ID);
+	}
+
+	/** Contact links live on the endSection's question(s). */
+	get contactLinks(): LinkDef[] {
+		const end = this.scenario?.endSection;
+		if (!end) return [];
+		const out: LinkDef[] = [];
+		for (const step of end.steps) {
+			if (step.question?.links) out.push(...step.question.links);
+		}
+		return out;
 	}
 
 	get totalSections(): number {
 		return this.scenario?.sections.length ?? 0;
+	}
+
+	/** Index into scenario.sections of the current section, or -1 before / N after. */
+	get realSectionIndex(): number {
+		const section = this.currentSection;
+		if (!section) return -1;
+		if (section.id === START_ID) return -1;
+		if (section.id === END_ID) return this.totalSections;
+		return this.scenario?.sections.findIndex((s) => s.id === section.id) ?? -1;
 	}
 
 	/** Progress through the current step's clock, 0..1. */
@@ -211,35 +308,16 @@ export class PresentationEngine {
 		return Math.min(1, (this.stepIndex + stepFraction) / steps);
 	}
 
-	/** Progress across the whole presentation, 0..1. */
-	get overallProgress(): number {
-		if (!this.scenario) return 0;
-		let total = 0;
-		let done = 0;
-		this.scenario.sections.forEach((section, si) => {
-			section.steps.forEach((_, sti) => {
-				total += 1;
-				if (si < this.sectionIndex || (si === this.sectionIndex && sti < this.stepIndex)) {
-					done += 1;
-				} else if (si === this.sectionIndex && sti === this.stepIndex) {
-					done += this.stepDurationMs > 0 ? this.stepTimeMs / this.stepDurationMs : 0;
-				}
-			});
-		});
-		return total > 0 ? done / total : 0;
-	}
-
 	// ---- controls ----------------------------------------------------------
 
 	start() {
 		if (!this.scenario) return;
-		this.sectionIndex = 0;
-		this.stepIndex = 0;
-		this.currentSlide = 0;
-		this.phaseElapsed = 0;
-		this.zoom = 'in';
-		this.phase = 'intro';
-		this.startLoop();
+		this.path.reset();
+		this.resetLiveState({ backstage: 'off', presentation: 'off', character: 'off' });
+		this.characterPresent = false;
+		this.startMusic();
+		const idx = this.indexOfSectionId(START_ID);
+		this.applyStep(idx, 0);
 	}
 
 	togglePlay() {
@@ -265,16 +343,23 @@ export class PresentationEngine {
 	toggleMute() {
 		this.muted = !this.muted;
 		this.audio.setMuted(this.muted);
+		this.music.setMuted(this.muted);
 	}
 
 	toggleTheme() {
 		this.theme = this.theme === 'dark' ? 'light' : 'dark';
+		this.hasSavedTheme = true;
 		this.saveTheme(this.theme);
 		this.syncThemeClass(this.theme);
 	}
 
 	toggleZoom() {
 		this.zoom = this.zoom === 'in' ? 'out' : 'in';
+	}
+
+	/** Hover/touch on an answer or link can momentarily change the face. */
+	setHoverFace(face: Expression | null) {
+		this.hoverFace = face;
 	}
 
 	nextStep() {
@@ -287,57 +372,245 @@ export class PresentationEngine {
 
 	prevStep() {
 		if (!this.currentSection) return;
-		if (this.stepIndex > 0) {
-			this.applyStep(this.sectionIndex, this.stepIndex - 1);
-		} else if (this.sectionIndex > 0) {
-			const prevSection = this.scenario!.sections[this.sectionIndex - 1];
-			this.applyStep(this.sectionIndex - 1, prevSection.steps.length - 1);
+		if (this.stepIndex > 0) this.applyStep(this.sectionIndex, this.stepIndex - 1);
+	}
+
+	answerQuestion(answer: Answer) {
+		if (!this.scenario) return;
+		// A "restart" answer closes the current run (persist + reset) so the next
+		// section begins a fresh path with no repeat prompts.
+		if (answer.restart) {
+			this.path.persist(this.scenario.id);
+			this.path.reset();
 		}
-	}
-
-	/** Replay the current section from its first step. */
-	repeatSection() {
-		this.applyStep(this.sectionIndex, 0);
-	}
-
-	/** Jump to the start of a section by index (used by the progress timeline). */
-	goToSection(index: number) {
-		if (!this.scenario) return;
-		if (index < 0 || index >= this.scenario.sections.length) return;
-		this.applyStep(index, 0);
-	}
-
-	answerQuestion(q: PresetQuestion) {
-		if (!this.scenario) return;
-		if (q.gotoSectionId) {
-			const target = this.scenario.sections.findIndex((s) => s.id === q.gotoSectionId);
-			if (target >= 0) {
-				this.applyStep(target, 0);
-				return;
-			}
+		if (answer.gotoSectionId) {
+			this.goToSectionById(answer.gotoSectionId);
+			return;
 		}
 		this.continueInteraction();
 	}
 
+	/** Center nav button while interacting: proceed past the current question. */
 	continueInteraction() {
-		const nextSection = this.sectionIndex + 1;
-		if (nextSection < (this.scenario?.sections.length ?? 0)) {
-			this.applyStep(nextSection, 0);
-		} else {
-			this.end();
+		if (this.pendingRepeat) {
+			this.skipRepeat();
+			return;
+		}
+		const section = this.currentSection;
+		if (section && this.stepIndex + 1 < section.steps.length) {
+			this.applyStep(this.sectionIndex, this.stepIndex + 1);
+			return;
+		}
+		this.onSectionEndDefault(section);
+	}
+
+	/** Repeat-detection prompt: confirm replay of the already-seen section. */
+	confirmRepeat() {
+		if (!this.pendingRepeat) return;
+		this.presentSection(this.pendingRepeatIndex);
+	}
+
+	/** Repeat-detection prompt: skip ("برو مرحله بعد") without re-presenting. */
+	skipRepeat() {
+		if (!this.pendingRepeat) return;
+		const section = this.runtimeSections[this.pendingRepeatIndex];
+		this.pendingRepeat = false;
+		this.interactionQuestion = null;
+		this.onSectionEndDefault(section ?? null);
+	}
+
+	/** "تکرار ارائه این بخش" — replay the current section, counting the repeat. */
+	repeatSectionForce() {
+		const section = this.currentSection;
+		if (!this.isRealSection(section ?? undefined)) return;
+		this.presentSection(this.sectionIndex);
+	}
+
+	/** Stop the interaction auto-advance countdown (gives more decision time). */
+	stopInteractionTimer() {
+		this.interactionTimerStopped = true;
+	}
+
+	// ---- navigation internals ----------------------------------------------
+
+	private goToSectionById(id: string) {
+		const idx = this.indexOfSectionId(id);
+		if (idx < 0) return;
+		const section = this.runtimeSections[idx];
+		if (this.isRealSection(section) && this.path.count(section.id) >= 1) {
+			this.openRepeatPrompt(idx);
+			return;
+		}
+		this.presentSection(idx);
+	}
+
+	private presentSection(idx: number) {
+		const section = this.runtimeSections[idx];
+		if (!section) return;
+		if (this.isRealSection(section)) this.path.record(section.id);
+		this.pendingRepeat = false;
+		this.interactionQuestion = null;
+		this.applyStep(idx, 0);
+	}
+
+	private openRepeatPrompt(idx: number) {
+		this.audio.pause();
+		this.pendingRepeatIndex = idx;
+		this.pendingRepeat = true;
+		this.interactionQuestion = REPEAT_QUESTION;
+		this.interactionRemainingMs = DEFAULT_INTERACTION_MS;
+		this.interactionTimerStopped = false;
+		this.phase = 'interaction';
+		this.startLoop();
+	}
+
+	private advanceStep() {
+		const step = this.currentStep;
+		const section = this.currentSection;
+		if (!step || !section) return;
+
+		// The end section's question only carries contact links; it never pauses.
+		if (step.question && section.id !== END_ID) {
+			this.enterInteraction(step.question);
+			return;
+		}
+		if (this.stepIndex + 1 < section.steps.length) {
+			this.applyStep(this.sectionIndex, this.stepIndex + 1);
+			return;
+		}
+		this.onSectionEndDefault(section);
+	}
+
+	/** After a section's last step, branch to its nextSectionId or end. */
+	private onSectionEndDefault(section: RuntimeSection | null) {
+		if (section && section.id !== END_ID && section.nextSectionId) {
+			this.goToSectionById(section.nextSectionId);
+			return;
+		}
+		this.end();
+	}
+
+	private enterInteraction(question: Question) {
+		this.audio.pause();
+		this.pendingRepeat = false;
+		this.interactionQuestion = question;
+		this.interactionRemainingMs = question.pause ?? DEFAULT_INTERACTION_MS;
+		this.interactionTimerStopped = false;
+		this.zoom = 'in';
+		this.phase = 'interaction';
+		this.startLoop();
+	}
+
+	/** Load a specific step and begin playing it. */
+	private applyStep(sectionIndex: number, stepIndex: number) {
+		const section = this.runtimeSections[sectionIndex];
+		const step = section?.steps[stepIndex];
+		if (!section || !step) return;
+
+		this.sectionIndex = sectionIndex;
+		this.stepIndex = stepIndex;
+		this.pendingRepeat = false;
+		this.interactionQuestion = null;
+		this.hoverFace = null;
+
+		this.stepTimeMs = 0;
+		this.stepDurationMs = step.duration;
+
+		this.stepChanges = [...(step.change ?? [])].sort((a, b) => a.time - b.time);
+		this.stepChangeCursor = 0;
+		this.stepSfx = [...(step.sfx ?? [])].sort((a, b) => a.time - b.time);
+		this.stepSfxCursor = 0;
+
+		// Apply anything scheduled at time 0 before the first frame paints.
+		this.applyDueChanges(0);
+
+		this.audio.load(step.voice, step.duration);
+		this.audio.setMuted(this.muted);
+		this.audio.play();
+		this.applyDueSfx(0);
+
+		this.phase = 'playing';
+		this.startLoop();
+	}
+
+	private applyDueChanges(timeMs: number) {
+		while (
+			this.stepChangeCursor < this.stepChanges.length &&
+			this.stepChanges[this.stepChangeCursor].time <= timeMs
+		) {
+			this.applyChange(this.stepChanges[this.stepChangeCursor].changes);
+			this.stepChangeCursor += 1;
 		}
 	}
 
-	restart() {
-		this.audio.dispose();
-		this.audio = new AudioController();
-		this.audio.setMuted(this.muted);
-		this.stepTimeMs = 0;
-		this.stepDurationMs = 0;
-		this.start();
+	private applyDueSfx(timeMs: number) {
+		while (
+			this.stepSfxCursor < this.stepSfx.length &&
+			this.stepSfx[this.stepSfxCursor].time <= timeMs
+		) {
+			this.audio.playSfx(this.stepSfx[this.stepSfxCursor].sound);
+			this.stepSfxCursor += 1;
+		}
 	}
 
-	// ---- internals ---------------------------------------------------------
+	private applyChange(changes: ChangeEvent['changes']) {
+		if (changes.slide !== undefined) {
+			const idx = this.scenario?.slides.findIndex((s) => s.id === changes.slide) ?? -1;
+			if (idx >= 0) this.currentSlide = idx;
+		}
+		if (changes.camera?.zoom) this.zoom = changes.camera.zoom;
+		if (changes.lighting) this.lighting = { ...this.lighting, ...changes.lighting };
+		if (changes.character) {
+			const ch = changes.character;
+			if (ch.face) {
+				this.faceShot = ch.face;
+				this.faceNonce += 1;
+			}
+			if (ch.body) {
+				this.bodyGesture = ch.body;
+				this.bodyNonce += 1;
+			}
+			if (ch.move) {
+				this.locomotion = ch.move;
+				this.moveNonce += 1;
+				if (ch.move === 'in') this.characterPresent = true;
+			}
+		}
+	}
+
+	private end() {
+		this.audio.pause();
+		this.stopMusic();
+		this.phase = 'ended';
+		this.pendingRepeat = false;
+		this.interactionQuestion = null;
+		this.path.persist(this.scenario?.id ?? 'unknown');
+	}
+
+	// ---- live state helpers ------------------------------------------------
+
+	private resetLiveState(lighting: Lighting) {
+		this.zoom = 'in';
+		this.currentSlide = 0;
+		this.lighting = lighting;
+		this.faceShot = 'normal';
+		this.bodyGesture = 'none';
+		this.locomotion = 'none';
+		this.hoverFace = null;
+		this.interactionQuestion = null;
+		this.pendingRepeat = false;
+	}
+
+	private startMusic() {
+		this.music.setMuted(this.muted);
+		this.music.play();
+	}
+
+	private stopMusic() {
+		this.music.stop();
+	}
+
+	// ---- loop --------------------------------------------------------------
 
 	private startLoop() {
 		if (typeof requestAnimationFrame === 'undefined') return;
@@ -359,101 +632,27 @@ export class PresentationEngine {
 	}
 
 	private needsLoop() {
-		return (
-			this.phase === 'intro' ||
-			this.phase === 'entrance' ||
-			this.phase === 'playing' ||
-			this.phase === 'interaction'
-		);
+		return this.phase === 'playing' || this.phase === 'interaction';
 	}
 
 	private tick(delta: number) {
 		switch (this.phase) {
-			case 'intro':
-				this.phaseElapsed += delta;
-				if (this.phaseElapsed >= INTRO_MS) this.enterEntrance();
-				break;
-			case 'entrance':
-				this.phaseElapsed += delta;
-				if (this.phaseElapsed >= ENTRANCE_MS) this.beginPlayback();
-				break;
 			case 'playing':
 				this.audio.tick(delta);
 				this.stepTimeMs = this.audio.timeMs;
+				this.applyDueChanges(this.stepTimeMs);
+				this.applyDueSfx(this.stepTimeMs);
 				if (this.audio.isFinished) this.advanceStep();
 				break;
 			case 'interaction':
-				this.interactionRemainingMs = Math.max(0, this.interactionRemainingMs - delta);
-				if (this.interactionRemainingMs <= 0) this.continueInteraction();
+				if (!this.interactionTimerStopped) {
+					this.interactionRemainingMs = Math.max(0, this.interactionRemainingMs - delta);
+					if (this.interactionRemainingMs <= 0) this.continueInteraction();
+				}
 				break;
 			default:
 				break;
 		}
-	}
-
-	private enterEntrance() {
-		this.phaseElapsed = 0;
-		this.phase = 'entrance';
-		this.zoom = 'in';
-	}
-
-	private beginPlayback() {
-		this.applyStep(0, 0);
-	}
-
-	/** Load a specific step and begin playing it. */
-	private applyStep(sectionIndex: number, stepIndex: number) {
-		const section = this.scenario?.sections[sectionIndex];
-		const step = section?.steps[stepIndex];
-		if (!section || !step) return;
-
-		this.sectionIndex = sectionIndex;
-		this.stepIndex = stepIndex;
-		if (typeof step.slide === 'number') this.currentSlide = step.slide;
-		this.zoom = step.zoom;
-
-		this.stepTimeMs = 0;
-		this.stepDurationMs = step.duration;
-		this.audio.load(step.audio, step.duration);
-		this.audio.setMuted(this.muted);
-		this.audio.play();
-
-		if (step.sfx) for (const name of step.sfx) this.audio.playSfx(name);
-
-		this.phase = 'playing';
-		this.startLoop();
-	}
-
-	private advanceStep() {
-		const section = this.currentSection;
-		if (!section) return;
-
-		if (this.stepIndex + 1 < section.steps.length) {
-			this.applyStep(this.sectionIndex, this.stepIndex + 1);
-			return;
-		}
-
-		// End of section: pause for interaction if configured.
-		if (section.interactionPause && section.interactionPause > 0) {
-			this.enterInteraction(section.interactionPause);
-			return;
-		}
-		this.continueInteraction();
-	}
-
-	private enterInteraction(pauseMs: number) {
-		this.audio.pause();
-		this.interactionRemainingMs = pauseMs;
-		// Pull back to the character close-up so the question prompt has focus.
-		this.zoom = 'in';
-		this.phase = 'interaction';
-		this.startLoop();
-	}
-
-	private end() {
-		this.audio.pause();
-		this.phase = 'ended';
-		this.zoom = 'in';
 	}
 
 	dispose() {
@@ -462,7 +661,10 @@ export class PresentationEngine {
 		}
 		this.rafId = null;
 		this.audio.dispose();
+		this.music.dispose();
 	}
+
+	// ---- theme persistence -------------------------------------------------
 
 	private loadSavedTheme(): Theme | null {
 		if (typeof localStorage === 'undefined') return null;
@@ -489,4 +691,14 @@ export class PresentationEngine {
 		document.documentElement.classList.toggle('theme-dark', theme === 'dark');
 		document.documentElement.classList.toggle('theme-light', theme === 'light');
 	}
+}
+
+function resolveTheme(setting: ThemeSetting): Theme {
+	if (setting === 'auto') {
+		if (typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches) {
+			return 'dark';
+		}
+		return 'light';
+	}
+	return setting;
 }

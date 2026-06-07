@@ -1,98 +1,155 @@
 {
 	"id": "intro-mehdi",
 	"title": "مهدی گودینی",
-	"subtitle": "طراح و توسعه‌دهنده تجربه کاربر",
+	"description": "ارائهٔ تعاملی معرفی؛ طراح و توسعه‌دهنده تجربه کاربر.",
 	"theme": "light",
+	"music": "/audio/music/ambient.mp3",
 	"slides": [
 		{
 			"id": "s-title",
-			"kind": "title",
+			"theme": "title",
 			"title": "مهدی گودینی",
 			"subtitle": "طراح و توسعه‌دهنده تجربه کاربر"
 		},
 		{
 			"id": "s-about",
-			"kind": "text",
+			"theme": "text",
 			"title": "درباره من",
 			"body": "سازندهٔ تجربه‌های دیجیتال تعاملی، با تمرکز بر طراحی محصول و رابط کاربری."
 		},
 		{
 			"id": "s-portfolio",
-			"kind": "grid",
+			"theme": "grid",
 			"title": "نمونه کارها",
-			"images": ["", "", "", "", "", ""]
+			"images": [
+				"",
+				"",
+				"",
+				"",
+				"",
+				""
+			]
 		},
 		{
 			"id": "s-skills",
-			"kind": "text",
+			"theme": "text",
 			"title": "مهارت‌ها",
-			"bullets": ["طراحی تجربه و رابط کاربری", "توسعهٔ فرانت‌اند", "انیمیشن و تعامل", "روایت محصول"]
+			"bullets": [
+				"طراحی تجربه و رابط کاربری",
+				"توسعهٔ فرانت‌اند",
+				"انیمیشن و تعامل",
+				"روایت محصول"
+			]
 		},
 		{
 			"id": "s-end",
-			"kind": "title",
+			"theme": "title",
 			"title": "سپاس از همراهی شما",
 			"subtitle": "بیایید با هم چیزی بسازیم"
 		}
 	],
+	"startSection": {
+		"title": "شروع",
+		"steps": [
+			{
+				"id": "start-1",
+				"text": "",
+				"startCue": "[ورود مهدی گودینی]",
+				"duration": 2000,
+				"change": [
+					{
+						"time": 0,
+						"changes": {
+							"slide": "s-title",
+							"camera": {
+								"zoom": "in"
+							},
+							"character": {
+								"move": "in",
+								"face": "normal"
+							},
+							"lighting": {
+								"backstage": "on",
+								"character": "on"
+							}
+						}
+					}
+				]
+			},
+			{
+				"id": "start-2",
+				"text": "سلام! من مهدی هستم. خوشحالم که اینجا کنار شما روی این استیج ایستاده‌ام.",
+				"startCue": "[چراغ‌ها روشن می‌شوند]",
+				"duration": 5000
+			}
+		],
+		"nextSectionId": "about"
+	},
 	"sections": [
-		{
-			"id": "intro",
-			"title": "معرفی",
-			"steps": [
-				{
-					"id": "intro-1",
-					"text": "سلام! من مهدی هستم. خوشحالم که اینجا کنار شما روی این استیج ایستاده‌ام.",
-					"duration": 5200,
-					"slide": 0,
-					"zoom": "in",
-					"gesture": "right",
-					"expression": "happy",
-					"lighting": { "backstage": "allOn", "presentation": "off", "character": "on" }
-				},
-				{
-					"id": "intro-2",
-					"text": "در چند دقیقهٔ بعد، کمی دربارهٔ کارم و چیزهایی که می‌سازم صحبت می‌کنم.",
-					"duration": 5000,
-					"slide": 0,
-					"zoom": "in",
-					"gesture": "both",
-					"expression": "normal",
-					"lighting": { "backstage": "allOn", "presentation": "on", "character": "on" }
-				}
-			]
-		},
 		{
 			"id": "about",
 			"title": "درباره من",
-			"interactionPause": 8000,
-			"questions": [
-				{ "id": "q-portfolio", "label": "نمونه کارهایت را نشان بده", "gotoSectionId": "portfolio" },
-				{ "id": "q-skills", "label": "چه مهارت‌هایی داری؟", "gotoSectionId": "skills" }
-			],
 			"steps": [
 				{
 					"id": "about-1",
 					"text": "من تجربه‌های دیجیتال تعاملی می‌سازم؛ جایی که طراحی و مهندسی به هم می‌رسند.",
 					"duration": 5400,
-					"slide": 1,
-					"zoom": "out",
-					"gesture": "none",
-					"expression": "normal",
-					"lighting": { "backstage": "allOn", "presentation": "on", "character": "on" }
+					"change": [
+						{
+							"time": 0,
+							"changes": {
+								"slide": "s-about",
+								"camera": {
+									"zoom": "out"
+								},
+								"character": {
+									"body": "both"
+								},
+								"lighting": {
+									"backstage": "on",
+									"presentation": "on",
+									"character": "on"
+								}
+							}
+						}
+					]
 				},
 				{
 					"id": "about-2",
 					"text": "حالا می‌توانید مسیر ادامهٔ ارائه را خودتان انتخاب کنید.",
-					"cue": "[منتظر انتخاب شما]",
+					"endCue": "[منتظر انتخاب شما]",
 					"duration": 4200,
-					"slide": 1,
-					"zoom": "out",
-					"gesture": "both",
-					"expression": "happy",
-					"lighting": { "backstage": "allOn", "presentation": "on", "character": "on" }
+					"change": [
+						{
+							"time": 0,
+							"changes": {
+								"character": {
+									"face": "question"
+								}
+							}
+						}
+					],
+					"question": {
+						"title": "دوست داری کدام بخش را ببینی؟",
+						"pause": 15000,
+						"answers": [
+							{
+								"id": "q-portfolio",
+								"label": "نمونه کارهایت را نشان بده",
+								"gotoSectionId": "portfolio",
+								"face": "happy"
+							},
+							{
+								"id": "q-skills",
+								"label": "چه مهارت‌هایی داری؟",
+								"gotoSectionId": "skills",
+								"face": "question"
+							}
+						]
+					}
 				}
-			]
+			],
+			"nextSectionId": "portfolio"
 		},
 		{
 			"id": "portfolio",
@@ -102,11 +159,25 @@
 					"id": "portfolio-1",
 					"text": "این‌ها بخشی از پروژه‌هایی است که روی آن‌ها کار کرده‌ام.",
 					"duration": 5600,
-					"slide": 2,
-					"zoom": "out",
-					"gesture": "left",
-					"expression": "normal",
-					"lighting": { "backstage": "allOn", "presentation": "on", "character": "on" },
+					"change": [
+						{
+							"time": 0,
+							"changes": {
+								"slide": "s-portfolio",
+								"camera": {
+									"zoom": "out"
+								},
+								"character": {
+									"body": "left"
+								},
+								"lighting": {
+									"backstage": "on",
+									"presentation": "on",
+									"character": "on"
+								}
+							}
+						}
+					],
 					"overlays": [
 						{
 							"id": "ov-highlight",
@@ -129,45 +200,136 @@
 						}
 					]
 				}
-			]
+			],
+			"nextSectionId": "skills"
 		},
 		{
 			"id": "skills",
 			"title": "مهارت‌ها",
-			"interactionPause": 8000,
-			"questions": [
-				{ "id": "q-back-portfolio", "label": "نمونه کارها", "gotoSectionId": "portfolio" }
-			],
 			"steps": [
 				{
 					"id": "skills-1",
 					"text": "از طراحی تجربهٔ کاربری تا توسعهٔ فرانت‌اند و انیمیشن، تمام مسیر را پوشش می‌دهم.",
 					"duration": 5800,
-					"slide": 3,
-					"zoom": "out",
-					"gesture": "right",
-					"expression": "normal",
-					"lighting": { "backstage": "presentation", "presentation": "on", "character": "on" }
-				}
-			]
-		},
-		{
-			"id": "closing",
-			"title": "پایان",
-			"steps": [
+					"change": [
+						{
+							"time": 0,
+							"changes": {
+								"slide": "s-skills",
+								"camera": {
+									"zoom": "out"
+								},
+								"character": {
+									"body": "right"
+								},
+								"lighting": {
+									"backstage": "presentation",
+									"presentation": "on",
+									"character": "on"
+								}
+							}
+						}
+					]
+				},
 				{
-					"id": "closing-1",
-					"text": "از اینکه تا اینجا همراهم بودید سپاسگزارم. امیدوارم به‌زودی با هم کار کنیم!",
-					"cue": "[صدای دست زدن]",
-					"duration": 5600,
-					"slide": 4,
-					"zoom": "out",
-					"gesture": "none",
-					"expression": "happy",
-					"sfx": ["applaus"],
-					"lighting": { "backstage": "allOn", "presentation": "on", "character": "on" }
+					"id": "skills-2",
+					"text": "همین‌جا می‌توانیم ارائه را جمع کنیم.",
+					"duration": 4200,
+					"change": [
+						{
+							"time": 0,
+							"changes": {
+								"camera": {
+									"zoom": "in"
+								},
+								"character": {
+									"face": "happy"
+								}
+							}
+						}
+					],
+					"question": {
+						"title": "می‌خواهی ارائه را تمام کنی و با راه‌های ارتباطی من آشنا شوی؟",
+						"answers": [
+							{
+								"id": "q-end",
+								"label": "شروع مجدد",
+								"gotoSectionId": "about",
+								"restart": true,
+								"face": "happy"
+							}
+						]
+					}
 				}
-			]
+			],
+			"nextSectionId": "end"
 		}
-	]
+	],
+	"endSection": {
+		"title": "پایان",
+		"steps": [
+			{
+				"id": "end-1",
+				"text": "از اینکه تا اینجا همراهم بودید سپاسگزارم. امیدوارم به‌زودی با هم کار کنیم!",
+				"endCue": "[صدای دست زدن]",
+				"duration": 6000,
+				"sfx": [
+					{
+						"time": 200,
+						"sound": "applaus"
+					}
+				],
+				"change": [
+					{
+						"time": 0,
+						"changes": {
+							"slide": "s-end",
+							"character": {
+								"face": "happy"
+							},
+							"lighting": {
+								"backstage": "on",
+								"presentation": "on",
+								"character": "on"
+							}
+						}
+					},
+					{
+						"time": 2200,
+						"changes": {
+							"character": {
+								"move": "out"
+							}
+						}
+					}
+				],
+				"question": {
+					"title": "راه‌های ارتباطی",
+					"links": [
+						{
+							"id": "c-instagram",
+							"label": "اینستاگرام",
+							"url": "https://instagram.com/",
+							"icon": "📸",
+							"face": "happy"
+						},
+						{
+							"id": "c-linkedin",
+							"label": "لینکدین",
+							"url": "https://linkedin.com/",
+							"icon": "in",
+							"face": "normal"
+						},
+						{
+							"id": "c-email",
+							"label": "ایمیل",
+							"url": "mailto:hello@example.com",
+							"icon": "✉️",
+							"face": "happy"
+						}
+					]
+				}
+			}
+		]
+	}
 }

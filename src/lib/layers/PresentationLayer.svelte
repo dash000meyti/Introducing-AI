@@ -109,18 +109,26 @@
 	<div class="reveal" bind:this={deckEl}>
 		<div class="slides">
 			{#each slides as slide (slide.id)}
-				<section data-kind={slide.kind ?? 'text'}>
-					{#if slide.kind === 'title'}
+				<section data-theme={slide.theme ?? 'text'}>
+					{#if slide.theme === 'title'}
 						<div class="slide title-slide">
 							{#if slide.title}<h1>{slide.title}</h1>{/if}
 							{#if slide.subtitle}<p class="subtitle">{slide.subtitle}</p>{/if}
 						</div>
-					{:else if slide.kind === 'image'}
+					{:else if slide.theme === 'image'}
 						<div class="slide image-slide">
 							{#if slide.title}<h2>{slide.title}</h2>{/if}
 							{#if slide.image}<img src={slide.image} alt={slide.title ?? ''} />{/if}
 						</div>
-					{:else if slide.kind === 'grid'}
+					{:else if slide.theme === 'video'}
+						<div class="slide video-slide">
+							{#if slide.title}<h2>{slide.title}</h2>{/if}
+							{#if slide.video}
+								<!-- svelte-ignore a11y_media_has_caption -->
+								<video src={slide.video} autoplay muted loop playsinline></video>
+							{/if}
+						</div>
+					{:else if slide.theme === 'grid'}
 						<div class="slide grid-slide">
 							{#if slide.title}<h2>{slide.title}</h2>{/if}
 							<div class="grid">
@@ -222,6 +230,12 @@
 	}
 
 	.image-slide img {
+		width: 100%;
+		border-radius: 8px;
+		object-fit: cover;
+	}
+
+	.video-slide video {
 		width: 100%;
 		border-radius: 8px;
 		object-fit: cover;

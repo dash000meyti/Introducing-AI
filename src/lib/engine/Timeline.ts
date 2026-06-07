@@ -1,10 +1,7 @@
 // Pure timing helpers used by the PresentationEngine. Kept side-effect free so
 // they are trivially testable and reusable by a future LLM-driven sequencer.
 
-import { MOVE_LEFT_ENTRANCE_MS } from '../character/visemes';
 import type { MouthShape, Step, TranscriptToken, TranscriptView, Viseme } from './types';
-
-export { MOVE_LEFT_ENTRANCE_MS };
 
 // Synthetic mouth flutter cycle used when a step has no authored visemes.
 const SYNTH_VISEMES: MouthShape[] = ['a', 'rest', 'e', 'o', 'rest', 'mbp', 'fv', 'rest'];
@@ -106,6 +103,17 @@ export function buildTranscriptView(
 		const step = steps[si];
 		const words = splitWords(step.text ?? '');
 
+		// A startCue precedes the spoken text; it is "spoken" once the step opens.
+		if (step.startCue && si <= safeIndex) {
+			tokens.push({
+				kind: 'cue',
+				text: step.startCue,
+				spoken: si < safeIndex || stepProgress > 0,
+				active: false,
+				visible: true
+			});
+		}
+
 		for (const word of words) {
 			tokens.push({
 				kind: 'word',
@@ -118,7 +126,8 @@ export function buildTranscriptView(
 			wordIndex += 1;
 		}
 
-		if (step.cue && si <= safeIndex) {
+		// An endCue follows the spoken text; "spoken" as the step finishes.
+		if (step.endCue && si <= safeIndex) {
 			const cueSpoken =
 				si < safeIndex ||
 				(si === safeIndex &&
@@ -126,7 +135,7 @@ export function buildTranscriptView(
 						(onLastWord && (activeFraction >= 0.6 || stepProgress >= 0.9))));
 			tokens.push({
 				kind: 'cue',
-				text: step.cue,
+				text: step.endCue,
 				spoken: cueSpoken,
 				active: false,
 				visible: true

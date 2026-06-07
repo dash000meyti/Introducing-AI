@@ -70,10 +70,23 @@ no slides. The same path keeps a future LLM-generated deck working.
 A presentation is authored as JSON at
 `static/data/presentations/<id>.json` and loaded by `loadScenario()`.
 
-Shape: `Scenario -> slides[] + sections[] -> steps[]`. Each `Step` declares its
-text, optional audio + visemes, body animation, slide index, overlays, per-layer
-lighting, camera zoom, and sound effects. Sections can define an `interactionPause`
-and preset, branchable `questions` (a question's `gotoSectionId` jumps the flow).
+Shape: `Scenario -> slides[] + startSection + sections[] + endSection -> steps[]`.
+`startSection` / `endSection` share the section shape but have no `id`; the engine
+normalises them into one ordered list with reserved ids `__start` / `__end`, so
+the entrance, lighting-up, and exit are authored in JSON (not hardcoded).
+
+Each `Step` declares its `text`, optional `voice` + `visemes`, `startCue` /
+`endCue`, timed `sfx`, overlays, and a timed `change[]` of stage mutations
+(`slide` by id, `camera.zoom`, `lighting`, and `character` `face` / `body` /
+`move`) applied as the step clock crosses each `change.time`. Flow is driven by a
+section's `nextSectionId` (or `"end"`), applied after its last step, plus an
+optional per-step `question` with branchable `answers` (via `gotoSectionId`) and
+external `links`. A missing `nextSectionId` on the last section marks the end. A
+top-level `music` track loops from startSection to endSection.
+
+The viewer's route (section order + visit counts) is tracked in `PathMemory`;
+repeats raise a "replay this section?" prompt, and completed runs are appended to
+the `introducing-ai.paths` array in `localStorage`.
 
 See `static/data/presentations/intro.json` for the worked example.
 
