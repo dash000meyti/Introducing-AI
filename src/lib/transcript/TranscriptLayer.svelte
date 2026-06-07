@@ -207,7 +207,7 @@
 		font-weight: 800;
 		color: var(--accent);
 		opacity: 0.55;
-		margin-inline-start: 0.6rem;
+		margin-inline: 0.6rem;
 		line-height: 44px;
 		transition:
 			color 180ms ease,

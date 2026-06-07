@@ -488,5 +488,5 @@ function easeOutCubic(t: number): number {
 }
 
 function easeInCubic(t: number): number {
-	return Math.pow(t, 1.34);
+	return Math.pow(t, 2.8);
 }

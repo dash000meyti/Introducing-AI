@@ -479,9 +479,10 @@
 		border: 1px solid var(--orb-edge);
 		border-radius: 999px;
 		background: var(--orb-bg);
-		color: var(--glass-fg);
+		color: var(--accent-contrast-revers);
 		box-shadow: inset 0 1px 0 var(--glass-hi);
 		transition: transform 120ms ease;
+		opacity: 0.72;
 	}
 
 	.center {
