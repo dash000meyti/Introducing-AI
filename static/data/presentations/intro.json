@@ -280,7 +280,7 @@
 				"duration": 6000,
 				"sfx": [
 					{
-						"time": 200,
+						"time": 3000,
 						"sound": "applaus"
 					}
 				],
