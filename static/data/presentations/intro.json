@@ -123,7 +123,7 @@
 					"id": "about-2",
 					"text": "حالا می‌توانید مسیر ادامهٔ ارائه را خودتان انتخاب کنید.",
 					"endCue": "[منتظر انتخاب شما]",
-					"duration": 2200,
+					"duration": 4000,
 					"change": [
 						{
 							"time": 0,
@@ -136,7 +136,8 @@
 					],
 					"question": {
 						"title": "دوست داری کدام بخش را ببینی؟",
-						"pause": 15000,
+						"pause": 3000,
+						"showOnTime": 2000,
 						"answers": [
 							{
 								"id": "q-portfolio",

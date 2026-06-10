@@ -12,6 +12,7 @@
 	const isEnded = $derived(engine.phase === 'ended');
 	const loading = $derived(isLanding && !engine.scenario);
 	const canInteract = $derived(engine.canInteract);
+	const waitingForInteraction = $derived(engine.phase === 'interaction');
 	const isRepeat = $derived(engine.isRepeatPrompt);
 	const continuesToEnd = $derived(engine.continuesToEnd);
 	const question = $derived(engine.activeQuestion);
@@ -39,7 +40,7 @@
 	}
 
 	function onCounter() {
-		if (canInteract) engine.stopInteractionTimer();
+		if (waitingForInteraction) engine.stopInteractionTimer();
 		else engine.togglePlay();
 	}
 
@@ -144,9 +145,9 @@
 							<button
 								class="tool-pill counter"
 								onclick={onCounter}
-								aria-label={canInteract ? 'توقف شمارش' : 'پخش/توقف'}
+								aria-label={waitingForInteraction ? 'توقف شمارش' : 'پخش/توقف'}
 							>
-								{#if canInteract}
+								{#if waitingForInteraction}
 									{#if engine.interactionTimerStopped}
 										<span class="glyph">∞</span>
 									{:else}

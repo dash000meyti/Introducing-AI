@@ -175,6 +175,8 @@ export interface Question {
 	title: string;
 	answers?: Answer[];
 	links?: LinkDef[];
+	/** ms from step start to show the question while the step keeps playing. */
+	showOnTime?: number;
 	/** Auto-advance countdown in ms. Falls back to the engine default. */
 	pause?: number;
 }

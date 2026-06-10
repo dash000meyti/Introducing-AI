@@ -108,6 +108,7 @@ export class PresentationEngine {
 	private stepChangeCursor = 0;
 	private stepSfx: { time: number; sound: string }[] = [];
 	private stepSfxCursor = 0;
+	private timedQuestionShown = false;
 
 	// ---- setup -------------------------------------------------------------
 	constructor() {
@@ -235,7 +236,7 @@ export class PresentationEngine {
 	}
 
 	get canInteract(): boolean {
-		return this.phase === 'interaction';
+		return (this.phase === 'playing' || this.phase === 'interaction') && this.interactionQuestion !== null;
 	}
 
 	get activeQuestion(): Question | null {
@@ -260,7 +261,7 @@ export class PresentationEngine {
 	 * of "ادامه ارائه".
 	 */
 	get continuesToEnd(): boolean {
-		if (this.phase !== 'interaction' || this.pendingRepeat) return false;
+		if (!this.canInteract || this.pendingRepeat) return false;
 		const endIndex = this.indexOfSectionId(END_ID);
 		return endIndex >= 0 && this.continueTargetIndex === endIndex;
 	}
@@ -439,6 +440,7 @@ export class PresentationEngine {
 
 	/** Stop the interaction auto-advance countdown (gives more decision time). */
 	stopInteractionTimer() {
+		if (this.phase !== 'interaction') return;
 		this.interactionTimerStopped = true;
 	}
 
@@ -562,14 +564,30 @@ export class PresentationEngine {
 	}
 
 	private enterInteraction(question: Question) {
+		const alreadyShowingQuestion = this.interactionQuestion === question;
 		this.audio.pause();
 		this.pendingRepeat = false;
 		this.interactionQuestion = question;
-		this.interactionRemainingMs = question.pause ?? DEFAULT_INTERACTION_MS;
+		if (!alreadyShowingQuestion || this.interactionRemainingMs <= 0) {
+			this.interactionRemainingMs = question.pause ?? DEFAULT_INTERACTION_MS;
+		}
 		this.interactionTimerStopped = false;
 		this.zoom = 'in';
 		this.phase = 'interaction';
 		this.startLoop();
+	}
+
+	private showTimedQuestionIfDue(timeMs: number) {
+		const section = this.currentSection;
+		const question = this.currentStep?.question;
+		if (!question || section?.id === END_ID || question.showOnTime === undefined) return;
+		if (this.timedQuestionShown || timeMs < question.showOnTime) return;
+
+		this.timedQuestionShown = true;
+		this.pendingRepeat = false;
+		this.interactionQuestion = question;
+		this.interactionRemainingMs = question.pause ?? DEFAULT_INTERACTION_MS;
+		this.interactionTimerStopped = false;
 	}
 
 	/** Load a specific step and begin playing it. */
@@ -591,9 +609,11 @@ export class PresentationEngine {
 		this.stepChangeCursor = 0;
 		this.stepSfx = [...(step.sfx ?? [])].sort((a, b) => a.time - b.time);
 		this.stepSfxCursor = 0;
+		this.timedQuestionShown = false;
 
 		// Apply anything scheduled at time 0 before the first frame paints.
 		this.applyDueChanges(0);
+		this.showTimedQuestionIfDue(0);
 
 		this.audio.load(step.voice, step.duration);
 		this.audio.setMuted(this.muted);
@@ -713,6 +733,7 @@ export class PresentationEngine {
 				this.stepTimeMs = this.audio.timeMs;
 				this.applyDueChanges(this.stepTimeMs);
 				this.applyDueSfx(this.stepTimeMs);
+				this.showTimedQuestionIfDue(this.stepTimeMs);
 				if (this.audio.isFinished) this.advanceStep();
 				break;
 			case 'interaction':
