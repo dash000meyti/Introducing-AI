@@ -48,6 +48,8 @@ interface RuntimeSection {
 	steps: Step[];
 	/** Default next section id after the last step (or "end"); branches the flow. */
 	nextSectionId?: string;
+	/** Optional branch override based on the section that led into this one. */
+	nextSectionIf?: { inId: string; outId: string }[];
 }
 
 const REPEAT_QUESTION: Question = {
@@ -98,6 +100,8 @@ export class PresentationEngine {
 	private path = new PathMemory();
 	private rafId: number | null = null;
 	private lastFrame = 0;
+	private incomingSectionId: string | null = null;
+	private pendingRepeatIncomingSectionId: string | null = null;
 
 	// Per-step timed cursors.
 	private stepChanges: ChangeEvent[] = [];
@@ -141,14 +145,16 @@ export class PresentationEngine {
 				id: START_ID,
 				title: s.startSection.title,
 				steps: s.startSection.steps,
-				nextSectionId: s.startSection.nextSectionId
+				nextSectionId: s.startSection.nextSectionId,
+				nextSectionIf: s.startSection.nextSectionIf
 			},
 			...s.sections,
 			{
 				id: END_ID,
 				title: s.endSection.title,
 				steps: s.endSection.steps,
-				nextSectionId: s.endSection.nextSectionId
+				nextSectionId: s.endSection.nextSectionId,
+				nextSectionIf: s.endSection.nextSectionIf
 			}
 		];
 	}
@@ -264,8 +270,9 @@ export class PresentationEngine {
 		const section = this.currentSection;
 		if (!section) return this.indexOfSectionId(END_ID);
 		if (this.stepIndex + 1 < section.steps.length) return this.sectionIndex;
-		if (section.id !== END_ID && section.nextSectionId) {
-			return this.indexOfSectionId(section.nextSectionId);
+		const nextSectionId = this.resolveNextSectionId(section, this.incomingSectionId);
+		if (nextSectionId) {
+			return this.indexOfSectionId(nextSectionId);
 		}
 		// END section, or a section with no explicit next → presentation ends.
 		return this.indexOfSectionId(END_ID);
@@ -313,6 +320,8 @@ export class PresentationEngine {
 	start() {
 		if (!this.scenario) return;
 		this.path.reset();
+		this.incomingSectionId = null;
+		this.pendingRepeatIncomingSectionId = null;
 		this.resetLiveState({ backstage: 'off', presentation: 'off', character: 'off' });
 		this.characterPresent = false;
 		this.startMusic();
@@ -407,23 +416,25 @@ export class PresentationEngine {
 	/** Repeat-detection prompt: confirm replay of the already-seen section. */
 	confirmRepeat() {
 		if (!this.pendingRepeat) return;
-		this.presentSection(this.pendingRepeatIndex);
+		this.presentSection(this.pendingRepeatIndex, this.pendingRepeatIncomingSectionId);
 	}
 
 	/** Repeat-detection prompt: skip ("برو مرحله بعد") without re-presenting. */
 	skipRepeat() {
 		if (!this.pendingRepeat) return;
 		const section = this.runtimeSections[this.pendingRepeatIndex];
+		const incomingSectionId = this.pendingRepeatIncomingSectionId;
 		this.pendingRepeat = false;
+		this.pendingRepeatIncomingSectionId = null;
 		this.interactionQuestion = null;
-		this.skipRepeatedDefaultsAfter(section ?? null);
+		this.skipRepeatedDefaultsAfter(section ?? null, incomingSectionId);
 	}
 
 	/** "تکرار ارائه این بخش" — replay the current section, counting the repeat. */
 	repeatSectionForce() {
 		const section = this.currentSection;
 		if (!this.isRealSection(section ?? undefined)) return;
-		this.presentSection(this.sectionIndex);
+		this.presentSection(this.sectionIndex, this.incomingSectionId);
 	}
 
 	/** Stop the interaction auto-advance countdown (gives more decision time). */
@@ -433,29 +444,32 @@ export class PresentationEngine {
 
 	// ---- navigation internals ----------------------------------------------
 
-	private goToSectionById(id: string) {
+	private goToSectionById(id: string, incomingSectionId = this.currentRealSectionId()) {
 		const idx = this.indexOfSectionId(id);
 		if (idx < 0) return;
 		const section = this.runtimeSections[idx];
 		if (this.isRealSection(section) && this.path.count(section.id) >= 1) {
-			this.openRepeatPrompt(idx);
+			this.openRepeatPrompt(idx, incomingSectionId);
 			return;
 		}
-		this.presentSection(idx);
+		this.presentSection(idx, incomingSectionId);
 	}
 
-	private presentSection(idx: number) {
+	private presentSection(idx: number, incomingSectionId: string | null) {
 		const section = this.runtimeSections[idx];
 		if (!section) return;
+		this.incomingSectionId = incomingSectionId;
 		if (this.isRealSection(section)) this.path.record(section.id);
 		this.pendingRepeat = false;
+		this.pendingRepeatIncomingSectionId = null;
 		this.interactionQuestion = null;
 		this.applyStep(idx, 0);
 	}
 
-	private openRepeatPrompt(idx: number) {
+	private openRepeatPrompt(idx: number, incomingSectionId: string | null) {
 		this.audio.pause();
 		this.pendingRepeatIndex = idx;
+		this.pendingRepeatIncomingSectionId = incomingSectionId;
 		this.pendingRepeat = true;
 		this.interactionQuestion = REPEAT_QUESTION;
 		this.interactionRemainingMs = DEFAULT_INTERACTION_MS;
@@ -481,10 +495,11 @@ export class PresentationEngine {
 		this.onSectionEndDefault(section);
 	}
 
-	/** After a section's last step, branch to its nextSectionId or end. */
+	/** After a section's last step, branch to its resolved next section or end. */
 	private onSectionEndDefault(section: RuntimeSection | null) {
-		if (section && section.id !== END_ID && section.nextSectionId) {
-			this.goToSectionById(section.nextSectionId);
+		const nextSectionId = this.resolveNextSectionId(section, this.incomingSectionId);
+		if (nextSectionId) {
+			this.goToSectionById(nextSectionId, this.currentRealSectionId());
 			return;
 		}
 		this.end();
@@ -495,9 +510,11 @@ export class PresentationEngine {
 	 * every already-seen section in a default chain. Walk forward until the first
 	 * real section that has not been presented in this run, or the end section.
 	 */
-	private skipRepeatedDefaultsAfter(section: RuntimeSection | null) {
+	private skipRepeatedDefaultsAfter(section: RuntimeSection | null, incomingSectionId: string | null) {
 		const visited = new Set<number>();
-		let nextIndex = this.defaultNextIndex(section);
+		let skippedSection = section;
+		let skippedIncomingSectionId = incomingSectionId;
+		let nextIndex = this.defaultNextIndex(skippedSection, skippedIncomingSectionId);
 
 		while (nextIndex >= 0) {
 			if (visited.has(nextIndex)) {
@@ -509,19 +526,39 @@ export class PresentationEngine {
 			const nextSection = this.runtimeSections[nextIndex];
 			if (!nextSection) break;
 			if (!this.isRealSection(nextSection) || this.path.count(nextSection.id) === 0) {
-				this.presentSection(nextIndex);
+				this.presentSection(nextIndex, this.realSectionId(skippedSection));
 				return;
 			}
 
-			nextIndex = this.defaultNextIndex(nextSection);
+			skippedIncomingSectionId = this.realSectionId(skippedSection);
+			skippedSection = nextSection;
+			nextIndex = this.defaultNextIndex(skippedSection, skippedIncomingSectionId);
 		}
 
 		this.end();
 	}
 
-	private defaultNextIndex(section: RuntimeSection | null): number {
-		if (!section || section.id === END_ID || !section.nextSectionId) return -1;
-		return this.indexOfSectionId(section.nextSectionId);
+	private defaultNextIndex(section: RuntimeSection | null, incomingSectionId: string | null): number {
+		const nextSectionId = this.resolveNextSectionId(section, incomingSectionId);
+		return nextSectionId ? this.indexOfSectionId(nextSectionId) : -1;
+	}
+
+	private resolveNextSectionId(
+		section: RuntimeSection | null,
+		incomingSectionId: string | null
+	): string | undefined {
+		if (!section || section.id === END_ID) return undefined;
+		const override = section.nextSectionIf?.find((rule) => rule.inId === incomingSectionId);
+		return override?.outId ?? section.nextSectionId;
+	}
+
+	private currentRealSectionId(): string | null {
+		return this.realSectionId(this.currentSection);
+	}
+
+	private realSectionId(section: RuntimeSection | null | undefined): string | null {
+		if (!section) return null;
+		return this.isRealSection(section) ? section.id : null;
 	}
 
 	private enterInteraction(question: Question) {

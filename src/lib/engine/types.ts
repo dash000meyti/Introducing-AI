@@ -202,12 +202,22 @@ export interface Step {
 	visemes?: Viseme[];
 }
 
+/** Conditional default branch chosen by the section visited immediately before this one. */
+export interface NextSectionCondition {
+	/** Previous section id that led into the current section. */
+	inId: string;
+	/** Section id to visit instead of nextSectionId when inId matches. */
+	outId: string;
+}
+
 /** Shared section shape. startSection / endSection use this (no id). */
 export interface SectionTemplate {
 	title: string;
 	steps: Step[];
 	/** Default branch to this section id after the last step (or "end"). */
 	nextSectionId?: string;
+	/** Optional overrides for the default branch based on the incoming section id. */
+	nextSectionIf?: NextSectionCondition[];
 }
 
 /** A regular, addressable section of the presentation. */

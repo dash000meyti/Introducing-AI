@@ -84,7 +84,7 @@
 			{
 				"id": "start-2",
 				"text": "سلام! من مهدی هستم. خوشحالم که اینجا کنار شما روی این استیج ایستاده‌ام.",
-				"duration": 5000
+				"duration": 2000
 			}
 		],
 		"nextSectionId": "about"
@@ -98,7 +98,7 @@
 					"id": "about-1",
 					"text": "من تجربه‌های دیجیتال تعاملی می‌سازم؛ جایی که طراحی و مهندسی به هم می‌رسند.",
 					"voice": "/audio/voice/v-about-1.mp3",
-					"duration": 6100,
+					"duration": 2100,
 					"change": [
 						{
 							"time": 0,
@@ -123,7 +123,7 @@
 					"id": "about-2",
 					"text": "حالا می‌توانید مسیر ادامهٔ ارائه را خودتان انتخاب کنید.",
 					"endCue": "[منتظر انتخاب شما]",
-					"duration": 4200,
+					"duration": 2200,
 					"change": [
 						{
 							"time": 0,
@@ -149,6 +149,12 @@
 								"label": "چه مهارت‌هایی داری؟",
 								"gotoSectionId": "skills",
 								"face": "question"
+							},
+							{
+								"id": "q-portfolio2",
+								"label": "portfolio2",
+								"gotoSectionId": "portfolio2",
+								"face": "question"
 							}
 						]
 					}
@@ -158,7 +164,7 @@
 		},
 		{
 			"id": "portfolio1",
-			"title": "نمونه کارها",
+			"title": "1نمونه کارها",
 			"steps": [
 				{
 					"id": "portfolio-1",
@@ -210,7 +216,7 @@
 		},
 		{
 			"id": "portfolio2",
-			"title": "نمونه کارها",
+			"title": "2نمونه کارها",
 			"steps": [
 				{
 					"id": "portfolio-2",
@@ -258,11 +264,17 @@
 					]
 				}
 			],
-			"nextSectionId": "portfolio3"
+			"nextSectionId": "portfolio3",
+			"nextSectionIf": [
+				{
+					"inId": "about",
+					"outId": "portfolio1"
+				}
+			]
 		},
 		{
 			"id": "portfolio3",
-			"title": "نمونه کارها",
+			"title": "3نمونه کارها",
 			"steps": [
 				{
 					"id": "portfolio-3",
@@ -331,7 +343,7 @@
 				{
 					"id": "skills-1",
 					"text": "از طراحی تجربهٔ کاربری تا توسعهٔ فرانت‌اند و انیمیشن، تمام مسیر را پوشش می‌دهم.",
-					"duration": 5800,
+					"duration": 2800,
 					"change": [
 						{
 							"time": 0,
@@ -383,7 +395,13 @@
 					}
 				}
 			],
-			"nextSectionId": "end"
+			"nextSectionId": "end",
+			"nextSectionIf": [
+				{
+					"inId": "about",
+					"outId": "portfolio1"
+				}
+			]
 		}
 	],
 	"endSection": {
