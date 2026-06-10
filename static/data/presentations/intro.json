@@ -141,7 +141,7 @@
 							{
 								"id": "q-portfolio",
 								"label": "نمونه کارهایت را نشان بده",
-								"gotoSectionId": "portfolio",
+								"gotoSectionId": "portfolio1",
 								"face": "happy"
 							},
 							{
@@ -154,16 +154,16 @@
 					}
 				}
 			],
-			"nextSectionId": "portfolio"
+			"nextSectionId": "portfolio1"
 		},
 		{
-			"id": "portfolio",
+			"id": "portfolio1",
 			"title": "نمونه کارها",
 			"steps": [
 				{
 					"id": "portfolio-1",
 					"text": "این‌ها بخشی از پروژه‌هایی است که روی آن‌ها کار کرده‌ام.",
-					"duration": 5600,
+					"duration": 2600,
 					"change": [
 						{
 							"time": 0,
@@ -204,6 +204,122 @@
 							"until": 4500
 						}
 					]
+				}
+			],
+			"nextSectionId": "portfolio2"
+		},
+		{
+			"id": "portfolio2",
+			"title": "نمونه کارها",
+			"steps": [
+				{
+					"id": "portfolio-2",
+					"text": "این‌ها بخشی از پروژه‌هایی است که روی آن‌ها کار کرده‌ام.",
+					"duration": 2600,
+					"change": [
+						{
+							"time": 0,
+							"changes": {
+								"slide": "s-portfolio",
+								"camera": {
+									"zoom": "out"
+								},
+								"character": {
+									"body": "left"
+								},
+								"lighting": {
+									"backstage": "on",
+									"presentation": "on",
+									"character": "on"
+								}
+							}
+						}
+					],
+					"overlays": [
+						{
+							"id": "ov-highlight",
+							"kind": "highlight",
+							"x": 50,
+							"y": 26,
+							"w": 42,
+							"h": 16,
+							"at": 1200,
+							"until": 4500
+						},
+						{
+							"id": "ov-callout",
+							"kind": "callout",
+							"text": "پروژهٔ منتخب",
+							"x": 32,
+							"y": 26,
+							"at": 1600,
+							"until": 4500
+						}
+					]
+				}
+			],
+			"nextSectionId": "portfolio3"
+		},
+		{
+			"id": "portfolio3",
+			"title": "نمونه کارها",
+			"steps": [
+				{
+					"id": "portfolio-3",
+					"text": "این‌ها بخشی از پروژه‌هایی است که روی آن‌ها کار کرده‌ام.",
+					"duration": 2600,
+					"change": [
+						{
+							"time": 0,
+							"changes": {
+								"slide": "s-portfolio",
+								"camera": {
+									"zoom": "out"
+								},
+								"character": {
+									"body": "left"
+								},
+								"lighting": {
+									"backstage": "on",
+									"presentation": "on",
+									"character": "on"
+								}
+							}
+						}
+					],
+					"overlays": [
+						{
+							"id": "ov-highlight",
+							"kind": "highlight",
+							"x": 50,
+							"y": 26,
+							"w": 42,
+							"h": 16,
+							"at": 1200,
+							"until": 4500
+						},
+						{
+							"id": "ov-callout",
+							"kind": "callout",
+							"text": "پروژهٔ منتخب",
+							"x": 32,
+							"y": 26,
+							"at": 1600,
+							"until": 4500
+						}
+					],
+					"question": {
+						"title": "دوست داری کدام بخش را ببینی؟",
+						"pause": 15000,
+						"answers": [
+							{
+								"id": "q-portfolio",
+								"label": "نمونه کارهایت را نشان بده",
+								"gotoSectionId": "portfolio1",
+								"face": "happy"
+							}
+						]
+					}
 				}
 			],
 			"nextSectionId": "skills"
