@@ -416,7 +416,7 @@ export class PresentationEngine {
 		const section = this.runtimeSections[this.pendingRepeatIndex];
 		this.pendingRepeat = false;
 		this.interactionQuestion = null;
-		this.onSectionEndDefault(section ?? null);
+		this.skipRepeatedDefaultsAfter(section ?? null);
 	}
 
 	/** "تکرار ارائه این بخش" — replay the current section, counting the repeat. */
@@ -488,6 +488,40 @@ export class PresentationEngine {
 			return;
 		}
 		this.end();
+	}
+
+	/**
+	 * "Skip repeat" should not make the viewer dismiss the same repeat prompt for
+	 * every already-seen section in a default chain. Walk forward until the first
+	 * real section that has not been presented in this run, or the end section.
+	 */
+	private skipRepeatedDefaultsAfter(section: RuntimeSection | null) {
+		const visited = new Set<number>();
+		let nextIndex = this.defaultNextIndex(section);
+
+		while (nextIndex >= 0) {
+			if (visited.has(nextIndex)) {
+				this.end();
+				return;
+			}
+			visited.add(nextIndex);
+
+			const nextSection = this.runtimeSections[nextIndex];
+			if (!nextSection) break;
+			if (!this.isRealSection(nextSection) || this.path.count(nextSection.id) === 0) {
+				this.presentSection(nextIndex);
+				return;
+			}
+
+			nextIndex = this.defaultNextIndex(nextSection);
+		}
+
+		this.end();
+	}
+
+	private defaultNextIndex(section: RuntimeSection | null): number {
+		if (!section || section.id === END_ID || !section.nextSectionId) return -1;
+		return this.indexOfSectionId(section.nextSectionId);
 	}
 
 	private enterInteraction(question: Question) {
