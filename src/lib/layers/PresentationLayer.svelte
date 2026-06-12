@@ -7,7 +7,7 @@
 
 	const slides = $derived(engine.scenario?.slides ?? []);
 	// Presentation lighting: off => 10% opacity, on => 100%.
-	const opacity = $derived(engine.lighting.presentation === 'on' ? 1 : 0.1);
+	const opacity = $derived(engine.lighting.presentation === 'on' ? 1 : 0);
 
 	let deckEl: HTMLDivElement;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any

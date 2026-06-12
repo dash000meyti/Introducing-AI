@@ -16,6 +16,11 @@ export class AudioController {
 	private currentSrc: string | null = null;
 	private activeSfx = new Set<HTMLAudioElement>();
 
+	/** Only tear down the clip that actually failed — not a newer step's element. */
+	private onVoiceError = (event: Event) => {
+		if (event.target === this.audio) this.disposeAudio();
+	};
+
 	/** Load the clip for a step. `durationMs` is the fallback/clamp length. */
 	load(src: string | undefined, durationMs: number) {
 		this.elapsed = 0;
@@ -29,7 +34,7 @@ export class AudioController {
 				el.preload = 'auto';
 				el.muted = this.muted;
 				// Missing files should never break playback; we fall back to the clock.
-				el.addEventListener('error', () => this.disposeAudio());
+				el.addEventListener('error', this.onVoiceError);
 				this.audio = el;
 				this.currentSrc = src;
 			}
@@ -138,11 +143,15 @@ export class AudioController {
 
 	private disposeAudio() {
 		if (this.audio) {
-			this.audio.pause();
-			this.audio.src = '';
+			const el = this.audio;
 			this.audio = null;
+			this.currentSrc = null;
+			el.removeEventListener('error', this.onVoiceError);
+			el.pause();
+			el.src = '';
+		} else {
+			this.currentSrc = null;
 		}
-		this.currentSrc = null;
 	}
 
 	dispose() {

@@ -6,26 +6,26 @@
 	"music": "/audio/music/ambient.mp3",
 	"slides": [
 		{
-			"id": "s-0-intro-1",
+			"id": "00-intro-1",
 			"theme": "image",
-			"image": "/assets/slides/intro/0-intro-1.png"
+			"image": "/assets/slides/intro/00-intro-1.png"
 		},
 		{
-			"id": "s-portfolio",
+			"id": "00-intro-2",
 			"theme": "image",
-			"image": "/assets/slides/intro/0-intro-2.png"
+			"image": "/assets/slides/intro/00-intro-2.png"
 		}
 	],
 	"startSection": {
-		"title": "شروع",
+		"title": "سلام",
 		"steps": [
 			{
-				"id": "start-1",
+				"id": "intro-0",
 				"startCue": "[ورود مهدی گودینی]",
-				"duration": 2000,
+				"duration": 2500,
 				"sfx": [
 					{
-						"time": 1000,
+						"time": 313,
 						"sound": "applaus"
 					}
 				],
@@ -33,15 +33,12 @@
 					{
 						"time": 0,
 						"changes": {
-							"slide": "s-portfolio",
-							"camera": {
-								"zoom": "in"
-							},
+							"slide": "00-intro-1",
 							"character": {
-								"move": "in",
-								"face": "normal"
+								"move": "in"
 							},
 							"lighting": {
+								"presentation": "on",
 								"backstage": "on",
 								"character": "on"
 							}
@@ -50,322 +47,428 @@
 				]
 			},
 			{
-				"id": "start-2",
-				"text": "سلام! من مهدی هستم. خوشحالم که اینجا کنار شما روی این استیج ایستاده‌ام.",
-				"duration": 2000
+				"id": "intro-1",
+				"text": "من مهدی گودینی طراح و توسعه دهنده تجربه کاربری هستم.",
+				"voice": "/audio/voice/presentations/intro/00-intro-1.mp3",
+				"duration": 421.3,
+				"change": [
+					{
+						"time": 0,
+						"changes": {
+							"camera": {
+								"zoom": "out"
+							}
+						}
+					}
+				]
+			},
+			{
+				"id": "intro-2",
+				"text": "هدف این نوع ارائه اینه که شما با انتخاب مسیر و تامل سریع تر به نتیجه ای که می خواد برسید",
+				"voice": "/audio/voice/presentations/intro/00-intro-2.mp3",
+				"duration": 596.5,
+				"change": [
+					{
+						"time": 300.0,
+						"changes": {
+							"slide": "00-intro-2"
+						}
+					}
+				]
+			},
+			{
+				"id": "intro-3",
+				"text": "پس اگی هدف خاصیداری انت خاب کون وگی هنم اصیر اپنیش برزو دن ما بده",
+				"voice": "/audio/voice/presentations/intro/00-intro-3.mp3",
+				"duration": 421.3
 			}
 		],
-		"nextSectionId": "about"
+		"nextSectionId": "16-outro"
 	},
 	"sections": [
 		{
-			"id": "about",
-			"title": "درباره من",
+			"id": "01-about",
+			"title": "من کی هستم",
 			"steps": [
 				{
-					"id": "about-1",
-					"text": "من تجربه‌های دیجیتال تعاملی می‌سازم؛ جایی که طراحی و مهندسی به هم می‌رسند.",
-					"voice": "/audio/voice/v-about-1.mp3",
-					"duration": 2100,
+					"id": "01-about-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/01-about-1.mp3",
+					"duration": 2269,
 					"change": [
 						{
 							"time": 0,
 							"changes": {
-								"slide": "s-portfolio",
-								"camera": {
-									"zoom": "out"
-								},
-								"character": {
-									"body": "both"
-								},
-								"lighting": {
-									"backstage": "on",
-									"presentation": "on",
-									"character": "on"
-								}
+								"slide": "00-intro-1"
 							}
 						}
 					]
 				},
 				{
-					"id": "about-2",
-					"text": "حالا می‌توانید مسیر ادامهٔ ارائه را خودتان انتخاب کنید.",
-					"endCue": "[منتظر انتخاب شما]",
-					"duration": 4000,
-					"change": [
-						{
-							"time": 0,
-							"changes": {
-								"character": {
-									"face": "question"
-								}
-							}
-						}
-					],
-					"question": {
-						"title": "دوست داری کدام بخش را ببینی؟",
-						"pause": 9000,
-						"showOnTime": 2000,
-						"links": [
-							{
-								"id": "c-instagram",
-								"label": "اینستاگرام",
-								"url": "https://instagram.com/",
-								"icon": "📸",
-								"face": "happy"
-							}
-						],
-						"answers": [
-							{
-								"id": "q-portfolio",
-								"label": "نمونه کارهایت را نشان بده",
-								"gotoSectionId": "portfolio1",
-								"face": "happy"
-							},
-							{
-								"id": "q-skills",
-								"label": "چه مهارت‌هایی داری؟",
-								"gotoSectionId": "skills",
-								"face": "question"
-							},
-							{
-								"id": "q-portfolio2",
-								"label": "portfolio2",
-								"gotoSectionId": "portfolio2",
-								"face": "question"
-							}
-						]
-					}
+					"id": "01-about-2",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/01-about-2.mp3",
+					"duration": 5173
 				}
 			],
-			"nextSectionId": "portfolio1"
+			"nextSectionId": "02-about"
 		},
 		{
-			"id": "portfolio1",
-			"title": "1نمونه کارها",
+			"id": "02-about",
+			"title": "نسخه امروز",
 			"steps": [
 				{
-					"id": "portfolio-1",
-					"text": "این‌ها بخشی از پروژه‌هایی است که روی آن‌ها کار کرده‌ام.",
-					"duration": 2600,
-					"change": [
-						{
-							"time": 0,
-							"changes": {
-								"slide": "s-portfolio",
-								"camera": {
-									"zoom": "out"
-								},
-								"character": {
-									"body": "left"
-								},
-								"lighting": {
-									"backstage": "on",
-									"presentation": "on",
-									"character": "on"
-								}
-							}
-						}
-					],
-					"overlays": [
-						{
-							"id": "ov-highlight",
-							"kind": "highlight",
-							"x": 50,
-							"y": 26,
-							"w": 42,
-							"h": 16,
-							"at": 1200,
-							"until": 4500
-						},
-						{
-							"id": "ov-callout",
-							"kind": "callout",
-							"text": "پروژهٔ منتخب",
-							"x": 32,
-							"y": 26,
-							"at": 1600,
-							"until": 4500
-						}
-					]
-				}
-			],
-			"nextSectionId": "portfolio2"
-		},
-		{
-			"id": "portfolio2",
-			"title": "2نمونه کارها",
-			"steps": [
-				{
-					"id": "portfolio-2",
-					"text": "این‌ها بخشی از پروژه‌هایی است که روی آن‌ها کار کرده‌ام.",
-					"duration": 2600,
-					"change": [
-						{
-							"time": 0,
-							"changes": {
-								"slide": "s-portfolio",
-								"camera": {
-									"zoom": "out"
-								},
-								"character": {
-									"body": "left"
-								},
-								"lighting": {
-									"backstage": "on",
-									"presentation": "on",
-									"character": "on"
-								}
-							}
-						}
-					],
-					"overlays": [
-						{
-							"id": "ov-highlight",
-							"kind": "highlight",
-							"x": 50,
-							"y": 26,
-							"w": 42,
-							"h": 16,
-							"at": 1200,
-							"until": 4500
-						},
-						{
-							"id": "ov-callout",
-							"kind": "callout",
-							"text": "پروژهٔ منتخب",
-							"x": 32,
-							"y": 26,
-							"at": 1600,
-							"until": 4500
-						}
-					]
-				}
-			],
-			"nextSectionId": "portfolio3",
-			"nextSectionIf": [
-				{
-					"inId": "about",
-					"outId": "portfolio1"
-				}
-			]
-		},
-		{
-			"id": "portfolio3",
-			"title": "3نمونه کارها",
-			"steps": [
-				{
-					"id": "portfolio-3",
-					"text": "این‌ها بخشی از پروژه‌هایی است که روی آن‌ها کار کرده‌ام.",
-					"duration": 2600,
-					"change": [
-						{
-							"time": 0,
-							"changes": {
-								"slide": "s-portfolio",
-								"camera": {
-									"zoom": "out"
-								},
-								"character": {
-									"body": "left"
-								},
-								"lighting": {
-									"backstage": "on",
-									"presentation": "on",
-									"character": "on"
-								}
-							}
-						}
-					],
-					"overlays": [
-						{
-							"id": "ov-highlight",
-							"kind": "highlight",
-							"x": 50,
-							"y": 26,
-							"w": 42,
-							"h": 16,
-							"at": 1200,
-							"until": 4500
-						},
-						{
-							"id": "ov-callout",
-							"kind": "callout",
-							"text": "پروژهٔ منتخب",
-							"x": 32,
-							"y": 26,
-							"at": 1600,
-							"until": 4500
-						}
-					],
-					"question": {
-						"title": "دوست داری کدام بخش را ببینی؟",
-						"pause": 15000,
-						"answers": [
-							{
-								"id": "q-portfolio",
-								"label": "نمونه کارهایت را نشان بده",
-								"gotoSectionId": "portfolio1",
-								"face": "happy"
-							}
-						]
-					}
-				}
-			],
-			"nextSectionId": "skills"
-		},
-		{
-			"id": "skills",
-			"title": "مهارت‌ها",
-			"steps": [
-				{
-					"id": "skills-1",
-					"text": "از طراحی تجربهٔ کاربری تا توسعهٔ فرانت‌اند و انیمیشن، تمام مسیر را پوشش می‌دهم.",
-					"duration": 2800,
-					"change": [
-						{
-							"time": 0,
-							"changes": {
-								"slide": "s-portfolio",
-								"camera": {
-									"zoom": "out"
-								},
-								"character": {
-									"body": "right"
-								},
-								"lighting": {
-									"backstage": "presentation",
-									"presentation": "on",
-									"character": "on"
-								}
-							}
-						}
-					]
+					"id": "02-about-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/02-about-1.mp3",
+					"duration": 7021
 				},
 				{
-					"id": "skills-2",
-					"text": "همین‌جا می‌توانیم ارائه را جمع کنیم.",
-					"duration": 4200,
+					"id": "02-about-2",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/02-about-2.mp3",
+					"duration": 8197
+				},
+				{
+					"id": "02-about-3",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/02-about-3.mp3",
+					"duration": 6061
+				}
+			],
+			"nextSectionId": "03-about"
+		},
+		{
+			"id": "03-about",
+			"title": "نقطه تمایز",
+			"steps": [
+				{
+					"id": "03-about-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/03-about-1.mp3",
+					"duration": 6061
+				},
+				{
+					"id": "03-about-2",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/03-about-2.mp3",
+					"duration": 4237
+				}
+			],
+			"nextSectionId": "04-history"
+		},
+		{
+			"id": "04-history",
+			"title": "",
+			"steps": [
+				{
+					"id": "04-history-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/04-history-1.mp3",
+					"duration": 4645
+				},
+				{
+					"id": "04-history-2",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/04-history-2.mp3",
+					"duration": 5053
+				}
+			],
+			"nextSectionId": "05-history"
+		},
+		{
+			"id": "05-history",
+			"title": "",
+			"steps": [
+				{
+					"id": "05-history-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/05-history-1.mp3",
+					"duration": 6061
+				},
+				{
+					"id": "05-history-2",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/05-history-2.mp3",
+					"duration": 3517
+				},
+				{
+					"id": "05-history-3",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/05-history-3.mp3",
+					"duration": 5125
+				},
+				{
+					"id": "05-history-4",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/05-history-4.mp3",
+					"duration": 6661
+				},
+				{
+					"id": "05-history-5",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/05-history-5.mp3",
+					"duration": 7213
+				},
+				{
+					"id": "05-history-6",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/05-history-6.mp3",
+					"duration": 4261
+				},
+				{
+					"id": "05-history-7",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/05-history-7.mp3",
+					"duration": 5413
+				}
+			],
+			"nextSectionId": "06-history"
+		},
+		{
+			"id": "06-history",
+			"title": "",
+			"steps": [
+				{
+					"id": "06-history-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/06-history-1.mp3",
+					"duration": 4573
+				}
+			],
+			"nextSectionId": "07-idea"
+		},
+		{
+			"id": "07-idea",
+			"title": "",
+			"steps": [
+				{
+					"id": "07-idea-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/07-idea-1.mp3",
+					"duration": 6733
+				}
+			],
+			"nextSectionId": "08-job"
+		},
+		{
+			"id": "08-job",
+			"title": "",
+			"steps": [
+				{
+					"id": "08-job-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/08-job-1.mp3",
+					"duration": 7381
+				},
+				{
+					"id": "08-job-2",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/08-job-2.mp3",
+					"duration": 5917
+				}
+			],
+			"nextSectionId": "09-job"
+		},
+		{
+			"id": "09-job",
+			"title": "",
+			"steps": [
+				{
+					"id": "09-job-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/09-job-1.mp3",
+					"duration": 5989
+				},
+				{
+					"id": "09-job-2",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/09-job-2.mp3",
+					"duration": 6181
+				}
+			],
+			"nextSectionId": "10-job"
+		},
+		{
+			"id": "10-job",
+			"title": "",
+			"steps": [
+				{
+					"id": "10-job-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/10-job-1.mp3",
+					"duration": 6181
+				},
+				{
+					"id": "10-job-2",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/10-job-2.mp3",
+					"duration": 6541
+				}
+			],
+			"nextSectionId": "11-skill"
+		},
+		{
+			"id": "11-skill",
+			"title": "",
+			"steps": [
+				{
+					"id": "11-skill-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/11-skill-1.mp3",
+					"duration": 4933
+				}
+			],
+			"nextSectionId": "12-skill"
+		},
+		{
+			"id": "12-skill",
+			"title": "",
+			"steps": [
+				{
+					"id": "12-skill-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/12-skill-1.mp3",
+					"duration": 8149
+				},
+				{
+					"id": "12-skill-2",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/12-skill-2.mp3",
+					"duration": 7429
+				},
+				{
+					"id": "12-skill-3",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/12-skill-3.mp3",
+					"duration": 8365
+				}
+			],
+			"nextSectionId": "13-skill"
+		},
+		{
+			"id": "13-skill",
+			"title": "",
+			"steps": [
+				{
+					"id": "13-skill-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/13-skill-1.mp3",
+					"duration": 6445
+				},
+				{
+					"id": "13-skill-2",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/13-skill-2.mp3",
+					"duration": 3181
+				}
+			],
+			"nextSectionId": "14-skill"
+		},
+		{
+			"id": "14-skill",
+			"title": "",
+			"steps": [
+				{
+					"id": "14-skill-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/14-skill-1.mp3",
+					"duration": 5461
+				},
+				{
+					"id": "14-skill-2",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/14-skill-2.mp3",
+					"duration": 4909
+				},
+				{
+					"id": "14-skill-3",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/14-skill-3.mp3",
+					"duration": 3541
+				}
+			],
+			"nextSectionId": "15-skill"
+		},
+		{
+			"id": "15-skill",
+			"title": "",
+			"steps": [
+				{
+					"id": "15-skill-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/15-skill-1.mp3",
+					"duration": 2917
+				},
+				{
+					"id": "15-skill-2",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/15-skill-2.mp3",
+					"duration": 5773
+				},
+				{
+					"id": "15-skill-3",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/15-skill-3.mp3",
+					"duration": 8581
+				},
+				{
+					"id": "15-skill-4",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/15-skill-4.mp3",
+					"duration": 7909
+				}
+			],
+			"nextSectionId": "16-outro"
+		},
+		{
+			"id": "16-outro",
+			"title": "پایان یا شروع دوباره",
+			"steps": [
+				{
+					"id": "16-outro-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/16-outro-1.mp3",
+					"duration": 7789,
+					"question": {
+						"showOnTime": 6000,
+						"pause": 0,
+						"title": "میخوای از اول اول شروع کنی ؟",
+						"answers": [
+							{
+								"id": "q-end",
+								"label": "شروع مجدد",
+								"gotoSectionId": "01-about",
+								"restart": true,
+								"face": "happy"
+							}
+						]
+					},
 					"change": [
 						{
 							"time": 0,
 							"changes": {
 								"camera": {
 									"zoom": "in"
-								},
-								"character": {
-									"face": "happy"
 								}
 							}
 						}
-					],
+					]
+				},
+				{
+					"id": "16-outro-2",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/16-outro-2.mp3",
+					"duration": 5461,
 					"question": {
+						"showOnTime": 0,
+						"pause": 10000,
 						"title": "میخوای از اول اول شروع کنی ؟",
 						"answers": [
 							{
 								"id": "q-end",
 								"label": "شروع مجدد",
-								"gotoSectionId": "about",
+								"gotoSectionId": "01-about",
 								"restart": true,
 								"face": "happy"
 							}
@@ -373,49 +476,513 @@
 					}
 				}
 			],
-			"nextSectionId": "end",
-			"nextSectionIf": [
+			"nextSectionId": "end"
+		},
+		{
+			"id": "18-history",
+			"title": "",
+			"steps": [
 				{
-					"inId": "about",
-					"outId": "portfolio1"
+					"id": "18-history-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/18-history-1.mp3",
+					"duration": 14245
+				},
+				{
+					"id": "18-history-10",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/18-history-10.mp3",
+					"duration": 9949
+				},
+				{
+					"id": "18-history-11",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/18-history-11.mp3",
+					"duration": 12733
+				},
+				{
+					"id": "18-history-2",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/18-history-2.mp3",
+					"duration": 12253
+				},
+				{
+					"id": "18-history-3",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/18-history-3.mp3",
+					"duration": 14629
+				},
+				{
+					"id": "18-history-4",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/18-history-4.mp3",
+					"duration": 11749
+				},
+				{
+					"id": "18-history-5",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/18-history-5.mp3",
+					"duration": 13237
+				},
+				{
+					"id": "18-history-6",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/18-history-6.mp3",
+					"duration": 11989
+				},
+				{
+					"id": "18-history-7",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/18-history-7.mp3",
+					"duration": 13237
+				},
+				{
+					"id": "18-history-8",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/18-history-8.mp3",
+					"duration": 11725
+				},
+				{
+					"id": "18-history-9",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/18-history-9.mp3",
+					"duration": 15997
 				}
-			]
+			],
+			"nextSectionId": ""
+		},
+		{
+			"id": "19-idea",
+			"title": "",
+			"steps": [
+				{
+					"id": "19-idea-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/19-idea-1.mp3",
+					"duration": 2797
+				}
+			],
+			"nextSectionId": ""
+		},
+		{
+			"id": "20-idea",
+			"title": "",
+			"steps": [
+				{
+					"id": "20-idea-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/20-idea-1.mp3",
+					"duration": 4141
+				},
+				{
+					"id": "20-idea-2",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/20-idea-2.mp3",
+					"duration": 7765
+				}
+			],
+			"nextSectionId": ""
+		},
+		{
+			"id": "21-idea",
+			"title": "",
+			"steps": [
+				{
+					"id": "21-idea-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/21-idea-1.mp3",
+					"duration": 11293
+				}
+			],
+			"nextSectionId": ""
+		},
+		{
+			"id": "22-growth",
+			"title": "",
+			"steps": [
+				{
+					"id": "22-growth-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/22-growth-1.mp3",
+					"duration": 2317
+				}
+			],
+			"nextSectionId": ""
+		},
+		{
+			"id": "23-growth",
+			"title": "",
+			"steps": [
+				{
+					"id": "23-growth-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/23-growth-1.mp3",
+					"duration": 11197
+				}
+			],
+			"nextSectionId": ""
+		},
+		{
+			"id": "24-growth",
+			"title": "",
+			"steps": [
+				{
+					"id": "24-growth-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/24-growth-1.mp3",
+					"duration": 7789
+				},
+				{
+					"id": "24-growth-2",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/24-growth-2.mp3",
+					"duration": 7957
+				}
+			],
+			"nextSectionId": ""
+		},
+		{
+			"id": "25-growth",
+			"title": "",
+			"steps": [
+				{
+					"id": "25-growth-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/25-growth-1.mp3",
+					"duration": 12181
+				},
+				{
+					"id": "25-growth-2",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/25-growth-2.mp3",
+					"duration": 10141
+				}
+			],
+			"nextSectionId": ""
+		},
+		{
+			"id": "26-job",
+			"title": "",
+			"steps": [
+				{
+					"id": "26-job-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/26-job-1.mp3",
+					"duration": 7837
+				},
+				{
+					"id": "26-job-2",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/26-job-2.mp3",
+					"duration": 2149
+				},
+				{
+					"id": "26-job-3",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/26-job-3.mp3",
+					"duration": 2797
+				},
+				{
+					"id": "26-job-4",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/26-job-4.mp3",
+					"duration": 2245
+				},
+				{
+					"id": "26-job-5",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/26-job-5.mp3",
+					"duration": 2533
+				},
+				{
+					"id": "26-job-6",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/26-job-6.mp3",
+					"duration": 2845
+				},
+				{
+					"id": "26-job-7",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/26-job-7.mp3",
+					"duration": 1861
+				},
+				{
+					"id": "26-job-8",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/26-job-8.mp3",
+					"duration": 1885
+				},
+				{
+					"id": "26-job-9",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/26-job-9.mp3",
+					"duration": 2821
+				}
+			],
+			"nextSectionId": ""
+		},
+		{
+			"id": "27-job",
+			"title": "",
+			"steps": [
+				{
+					"id": "27-job-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/27-job-1.mp3",
+					"duration": 10165
+				},
+				{
+					"id": "27-job-10",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/27-job-10.mp3",
+					"duration": 2821
+				},
+				{
+					"id": "27-job-11",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/27-job-11.mp3",
+					"duration": 2437
+				},
+				{
+					"id": "27-job-12",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/27-job-12.mp3",
+					"duration": 2773
+				},
+				{
+					"id": "27-job-13",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/27-job-13.mp3",
+					"duration": 2581
+				},
+				{
+					"id": "27-job-2",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/27-job-2.mp3",
+					"duration": 10357
+				},
+				{
+					"id": "27-job-3",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/27-job-3.mp3",
+					"duration": 2485
+				},
+				{
+					"id": "27-job-4",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/27-job-4.mp3",
+					"duration": 2677
+				},
+				{
+					"id": "27-job-5",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/27-job-5.mp3",
+					"duration": 2365
+				},
+				{
+					"id": "27-job-6",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/27-job-6.mp3",
+					"duration": 1717
+				},
+				{
+					"id": "27-job-7",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/27-job-7.mp3",
+					"duration": 3109
+				},
+				{
+					"id": "27-job-8",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/27-job-8.mp3",
+					"duration": 1549
+				},
+				{
+					"id": "27-job-9",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/27-job-9.mp3",
+					"duration": 2701
+				}
+			],
+			"nextSectionId": ""
+		},
+		{
+			"id": "28-job",
+			"title": "",
+			"steps": [
+				{
+					"id": "28-job-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/28-job-1.mp3",
+					"duration": 3133
+				},
+				{
+					"id": "28-job-2",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/28-job-2.mp3",
+					"duration": 6781
+				},
+				{
+					"id": "28-job-3",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/28-job-3.mp3",
+					"duration": 6181
+				}
+			],
+			"nextSectionId": ""
+		},
+		{
+			"id": "29-job",
+			"title": "",
+			"steps": [
+				{
+					"id": "29-job-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/29-job-1.mp3",
+					"duration": 5725
+				},
+				{
+					"id": "29-job-2",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/29-job-2.mp3",
+					"duration": 5557
+				}
+			],
+			"nextSectionId": ""
+		},
+		{
+			"id": "30-job",
+			"title": "",
+			"steps": [
+				{
+					"id": "30-job-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/30-job-1.mp3",
+					"duration": 8797
+				},
+				{
+					"id": "30-job-10",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/30-job-10.mp3",
+					"duration": 12157
+				},
+				{
+					"id": "30-job-2",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/30-job-2.mp3",
+					"duration": 4693
+				},
+				{
+					"id": "30-job-3",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/30-job-3.mp3",
+					"duration": 7981
+				},
+				{
+					"id": "30-job-4",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/30-job-4.mp3",
+					"duration": 11917
+				},
+				{
+					"id": "30-job-5",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/30-job-5.mp3",
+					"duration": 6949
+				},
+				{
+					"id": "30-job-6",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/30-job-6.mp3",
+					"duration": 8629
+				},
+				{
+					"id": "30-job-7",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/30-job-7.mp3",
+					"duration": 11797
+				},
+				{
+					"id": "30-job-8",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/30-job-8.mp3",
+					"duration": 12613
+				},
+				{
+					"id": "30-job-9",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/30-job-9.mp3",
+					"duration": 7429
+				}
+			],
+			"nextSectionId": ""
+		},
+		{
+			"id": "31-job",
+			"title": "",
+			"steps": [
+				{
+					"id": "31-job-1",
+					"text": "",
+					"voice": "/audio/voice/presentations/intro/31-job-1.mp3",
+					"duration": 6013
+				}
+			],
+			"nextSectionId": ""
 		}
 	],
 	"endSection": {
-		"title": "پایان",
+		"title": "ممنون از همراهی شما",
 		"steps": [
 			{
-				"id": "end-1",
-				"text": "از اینکه تا اینجا همراهم بودید سپاسگزارم. امیدوارم به‌زودی با هم کار کنیم!",
+				"id": "17-outro-1",
+				"text": "",
+				"voice": "/audio/voice/presentations/intro/17-outro-1.mp3",
+				"duration": 8533,
+				"change": [
+					{
+						"time": 0,
+						"changes": {
+							"camera": {
+								"zoom": "in"
+							},
+							"slide": "00-intro-1"
+						}
+					}
+				]
+			},
+			{
+				"id": "17-outro-2",
+				"text": "",
+				"voice": "/audio/voice/presentations/intro/17-outro-2.mp3",
+				"duration": 4333
+			},
+			{
+				"id": "17-outro-3",
+				"text": "",
+				"voice": "/audio/voice/presentations/intro/17-outro-3.mp3",
 				"endCue": "[صدای دست زدن]",
-				"duration": 6000,
+				"duration": 6645,
 				"sfx": [
 					{
-						"time": 3000,
+						"time": 4645,
 						"sound": "applaus"
 					}
 				],
 				"change": [
 					{
-						"time": 0,
-						"changes": {
-							"slide": "s-portfolio",
-							"character": {
-								"face": "happy"
-							},
-							"lighting": {
-								"backstage": "on",
-								"presentation": "on",
-								"character": "on"
-							}
-						}
-					},
-					{
-						"time": 2200,
+						"time": 4645,
 						"changes": {
 							"character": {
 								"move": "out"
+							},
+							"lighting": {
+								"presentation": "off",
+								"backstage": "on",
+								"character": "on"
+							},
+							"camera": {
+								"zoom": "in"
 							}
 						}
 					}
