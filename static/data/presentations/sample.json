@@ -6,55 +6,51 @@
 	"music": "/audio/music/ambient.mp3",
 	"slides": [
 		{
-			"id": "s-0-intro-1",
-			"theme": "image",
-			"image": "/assets/slides/intro/0-intro-1.png"
+			"id": "s-title",
+			"theme": "title",
+			"title": "مهدی گودینی",
+			"subtitle": "طراح و توسعه‌دهنده تجربه کاربر"
+		},
+		{
+			"id": "s-about",
+			"theme": "text",
+			"title": "درباره من",
+			"body": "سازندهٔ تجربه‌های دیجیتال تعاملی، با تمرکز بر طراحی محصول و رابط کاربری."
 		},
 		{
 			"id": "s-portfolio",
-			"theme": "image",
-			"image": "/assets/slides/intro/0-intro-2.png"
+			"theme": "grid",
+			"title": "نمونه کارها",
+			"images": [
+				"",
+				"",
+				"",
+				"",
+				"",
+				""
+			]
+		},
+		{
+			"id": "s-skills",
+			"theme": "text",
+			"title": "مهارت‌ها",
+			"bullets": [
+				"طراحی تجربه و رابط کاربری",
+				"توسعهٔ فرانت‌اند",
+				"انیمیشن و تعامل",
+				"روایت محصول"
+			]
+		},
+		{
+			"id": "s-end",
+			"theme": "title",
+			"title": "سپاس از همراهی شما",
+			"subtitle": "بیایید با هم چیزی بسازیم"
 		}
 	],
 	"startSection": {
 		"title": "شروع",
-		"steps": [
-			{
-				"id": "start-1",
-				"startCue": "[ورود مهدی گودینی]",
-				"duration": 2000,
-				"sfx": [
-					{
-						"time": 1000,
-						"sound": "applaus"
-					}
-				],
-				"change": [
-					{
-						"time": 0,
-						"changes": {
-							"slide": "s-portfolio",
-							"camera": {
-								"zoom": "in"
-							},
-							"character": {
-								"move": "in",
-								"face": "normal"
-							},
-							"lighting": {
-								"backstage": "on",
-								"character": "on"
-							}
-						}
-					}
-				]
-			},
-			{
-				"id": "start-2",
-				"text": "سلام! من مهدی هستم. خوشحالم که اینجا کنار شما روی این استیج ایستاده‌ام.",
-				"duration": 2000
-			}
-		],
+		"steps": [],
 		"nextSectionId": "about"
 	},
 	"sections": [
@@ -63,20 +59,30 @@
 			"title": "درباره من",
 			"steps": [
 				{
-					"id": "about-1",
-					"text": "من تجربه‌های دیجیتال تعاملی می‌سازم؛ جایی که طراحی و مهندسی به هم می‌رسند.",
+					"id": "end-1",
+					"text": "از اینکه تا اینجا همراهم بودید سپاسگزارم. امیدوارم به‌زودی با هم کار کنیم!",
+					"duration": 6000,
 					"voice": "/audio/voice/v-about-1.mp3",
-					"duration": 2100,
+					"startCue": "[منتظر انتخاب شما]",
+					"endCue": "[صدای دست زدن]",
+					"sfx": [
+						{
+							"time": 3000,
+							"sound": "applaus"
+						}
+					],
 					"change": [
 						{
 							"time": 0,
 							"changes": {
-								"slide": "s-portfolio",
+								"slide": "s-about",
 								"camera": {
 									"zoom": "out"
 								},
 								"character": {
-									"body": "both"
+									"body": "both",
+									"face": "happy",
+									"move": "in"
 								},
 								"lighting": {
 									"backstage": "on",
@@ -85,21 +91,26 @@
 								}
 							}
 						}
-					]
-				},
-				{
-					"id": "about-2",
-					"text": "حالا می‌توانید مسیر ادامهٔ ارائه را خودتان انتخاب کنید.",
-					"endCue": "[منتظر انتخاب شما]",
-					"duration": 4000,
-					"change": [
+					],
+					"overlays": [
 						{
-							"time": 0,
-							"changes": {
-								"character": {
-									"face": "question"
-								}
-							}
+							"id": "ov-highlight",
+							"kind": "highlight",
+							"x": 50,
+							"y": 26,
+							"w": 42,
+							"h": 16,
+							"at": 1200,
+							"until": 4500
+						},
+						{
+							"id": "ov-callout",
+							"kind": "callout",
+							"text": "پروژهٔ منتخب",
+							"x": 32,
+							"y": 26,
+							"at": 1600,
+							"until": 4500
 						}
 					],
 					"question": {
@@ -120,23 +131,13 @@
 								"id": "q-portfolio",
 								"label": "نمونه کارهایت را نشان بده",
 								"gotoSectionId": "portfolio1",
+								"restart": true,
 								"face": "happy"
-							},
-							{
-								"id": "q-skills",
-								"label": "چه مهارت‌هایی داری؟",
-								"gotoSectionId": "skills",
-								"face": "question"
-							},
-							{
-								"id": "q-portfolio2",
-								"label": "portfolio2",
-								"gotoSectionId": "portfolio2",
-								"face": "question"
 							}
 						]
 					}
-				}
+				},
+				{}
 			],
 			"nextSectionId": "portfolio1"
 		},
@@ -239,7 +240,8 @@
 							"at": 1600,
 							"until": 4500
 						}
-					]
+					],
+					"visemes": "???"
 				}
 			],
 			"nextSectionId": "portfolio3",
@@ -326,7 +328,7 @@
 						{
 							"time": 0,
 							"changes": {
-								"slide": "s-portfolio",
+								"slide": "s-skills",
 								"camera": {
 									"zoom": "out"
 								},
@@ -400,7 +402,7 @@
 					{
 						"time": 0,
 						"changes": {
-							"slide": "s-portfolio",
+							"slide": "s-end",
 							"character": {
 								"face": "happy"
 							},

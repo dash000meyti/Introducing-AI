@@ -229,9 +229,18 @@
 		list-style-position: inside;
 	}
 
+	.image-slide {
+		padding: 0;
+		gap: 0;
+	}
+	.image-slide h2 {
+		padding: 24px 36px 0;
+	}
 	.image-slide img {
+		flex: 1;
+		min-height: 0;
 		width: 100%;
-		border-radius: 8px;
+		border-radius: 0;
 		object-fit: cover;
 	}
 
@@ -244,9 +253,14 @@
 	.grid-slide .grid {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
+		grid-auto-rows: 1fr;
 		gap: 12px;
+		flex: 1;
+		min-height: 0;
 		width: 100%;
-		height: 100%;
+	}
+	.grid-slide .grid:has(.grid-cell:only-child) {
+		grid-template-columns: 1fr;
 	}
 	.grid-cell {
 		border-radius: 8px;
