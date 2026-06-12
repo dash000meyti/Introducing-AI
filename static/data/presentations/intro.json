@@ -92,7 +92,7 @@
 			"steps": [
 				{
 					"id": "01-about-1",
-					"text": "",
+					"text": "توی شروع می‌خوام خودم رو معرفی کنم.",
 					"voice": "/audio/voice/presentations/intro/01-about-1.mp3",
 					"duration": 2269,
 					"change": [
@@ -106,7 +106,7 @@
 				},
 				{
 					"id": "01-about-2",
-					"text": "",
+					"text": "فراتر از عناوین شغلی‌ای مثل طراح و توسعه‌دهنده، کار من تصمیم‌گیری است.",
 					"voice": "/audio/voice/presentations/intro/01-about-2.mp3",
 					"duration": 5173
 				}
