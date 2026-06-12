@@ -78,12 +78,12 @@
 			},
 			{
 				"id": "intro-3",
-				"text": "پس اگی هدف خاصیداری انت خاب کون وگی هنم اصیر اپنیش برزو دن ما بده",
+				"text": "پس اگه هدف خاصی داری انتخاب کن وگرنه به صورت پیشفرض ادامه بده",
 				"voice": "/audio/voice/presentations/intro/00-intro-3.mp3",
-				"duration": 421.3
+				"duration": 4213
 			}
 		],
-		"nextSectionId": "16-outro"
+		"nextSectionId": "04-history"
 	},
 	"sections": [
 		{
@@ -159,7 +159,7 @@
 		},
 		{
 			"id": "04-history",
-			"title": "",
+			"title": "ﺗﺎرﻳﺨﭽﻪ و ﮔﺬﺷﺘﻪ",
 			"steps": [
 				{
 					"id": "04-history-1",
