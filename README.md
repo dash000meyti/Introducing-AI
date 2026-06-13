@@ -24,7 +24,23 @@ npm install
 npm run dev      # http://localhost:5173
 npm run check    # type-check
 npm run build    # production build
+npm start        # run production server (after build)
 ```
+
+## Docker
+
+```bash
+# Build image
+docker build -t introducing-ai .
+
+# Run container
+docker run -p 3000:3000 introducing-ai
+
+# Or with docker compose
+docker compose up -d --build
+```
+
+The app listens on port **3000** inside the container. Map it to any host port you need (e.g. `-p 80:3000`).
 
 Open on a phone (or a narrow viewport); on desktop the stage is framed as a phone.
 
