@@ -58,16 +58,16 @@
 				"id": "intro-1",
 				"text": "من مهدی گودینی طراح و توسعه دهنده تجربه کاربری هستم.",
 				"voice": "/audio/voice/presentations/intro/00-intro-1.mp3",
-				"duration": 421.3
+				"duration": 4213
 			},
 			{
 				"id": "intro-2",
 				"text": "هدف این نوع ارائه اینه که شما با انتخاب مسیر و تعامل سریع‌تر به نتیجه‌ای که می‌خواید برسید",
 				"voice": "/audio/voice/presentations/intro/00-intro-2.mp3",
-				"duration": 596.5,
+				"duration": 5965,
 				"change": [
 					{
-						"time": 300.0,
+						"time": 3000,
 						"changes": {
 							"slide": "00-intro-2"
 						}
@@ -78,10 +78,10 @@
 				"id": "intro-3",
 				"text": "پس اگه هدف خاصی داری انتخاب کن وگرنه مسیر پیش فرض رو ادامه بده",
 				"voice": "/audio/voice/presentations/intro/00-intro-3.mp3",
-				"duration": 421.3
+				"duration": 4213
 			}
 		],
-		"nextSectionId": "end"
+		"nextSectionId": "01-about"
 	},
 	"sections": [
 		{
@@ -120,19 +120,19 @@
 							{
 								"id": "q-00-2",
 								"label": "طراحی های من",
-								"gotoSectionId": "XXX",
+								"gotoSectionId": "27-job",
 								"face": "happy"
 							},
 							{
 								"id": "q-00-3",
 								"label": "توسعه های من",
-								"gotoSectionId": "XXX",
+								"gotoSectionId": "26-job",
 								"face": "happy"
 							},
 							{
 								"id": "q-00-4",
-								"label": "مهارت ها",
-								"gotoSectionId": "XXX",
+								"label": "ابزار های من",
+								"gotoSectionId": "12-skill",
 								"face": "happy"
 							}
 						]
@@ -294,7 +294,7 @@
 							{
 								"id": "q-06-1",
 								"label": "شناخت مدل فکری",
-								"gotoSectionId": "XXX",
+								"gotoSectionId": "19-idea",
 								"face": "happy"
 							}
 						]
@@ -358,13 +358,13 @@
 							{
 								"id": "q-10-1",
 								"label": "تجربه من",
-								"gotoSectionId": "XXX",
+								"gotoSectionId": "29-job",
 								"face": "happy"
 							},
 							{
 								"id": "q-10-2",
 								"label": "پروژه من",
-								"gotoSectionId": "XXX",
+								"gotoSectionId": "26-job",
 								"face": "happy"
 							}
 						]
@@ -383,13 +383,13 @@
 							{
 								"id": "q-10-1",
 								"label": "تجربه من",
-								"gotoSectionId": "XXX",
+								"gotoSectionId": "29-job",
 								"face": "happy"
 							},
 							{
 								"id": "q-10-2",
 								"label": "پروژه من",
-								"gotoSectionId": "XXX",
+								"gotoSectionId": "26-job",
 								"face": "happy"
 							}
 						]
@@ -434,7 +434,63 @@
 					"duration": 8365
 				}
 			],
-			"nextSectionId": "13-skill"
+			"nextSectionId": "13-skill",
+			"nextSectionIf": [
+				{
+					"inId": "01-about",
+					"outId": "12-skill-end"
+				}
+			]
+		},
+		{
+			"id": "12-skill-end",
+			"title": "انتخاب مسیر",
+			"steps": [
+				{
+					"id": "12-skill-end-1",
+					"text": "[انتخاب مسیر]",
+					"duration": 2000,
+					"question": {
+						"pause": 8000,
+						"title": "میخوای از بخش دیگه ای شروع کنم ؟",
+						"answers": [
+							{
+								"id": "q-26-1",
+								"label": "تاریخچه کاری",
+								"gotoSectionId": "18-history",
+								"face": "happy"
+							},
+							{
+								"id": "q-00-2",
+								"label": "طراحی های من",
+								"gotoSectionId": "27-job",
+								"face": "happy"
+							},
+							{
+								"id": "q-00-3",
+								"label": "توسعه های من",
+								"gotoSectionId": "26-job",
+								"face": "happy"
+							}
+						]
+					}
+				}
+			],
+			"nextSectionId": "02-about",
+			"nextSectionIf": [
+				{
+					"inId": "18-history-end",
+					"outId": "02-about"
+				},
+				{
+					"inId": "26-job-end",
+					"outId": "02-about"
+				},
+				{
+					"inId": "27-job-end",
+					"outId": "02-about"
+				}
+			]
 		},
 		{
 			"id": "13-skill",
@@ -643,388 +699,607 @@
 			"nextSectionIf": [
 				{
 					"inId": "01-about",
-					"outId": "01-about"
+					"outId": "18-history-end"
+				}
+			]
+		},
+		{
+			"id": "18-history-end",
+			"title": "انتخاب مسیر",
+			"steps": [
+				{
+					"id": "18-history-end-1",
+					"text": "[انتخاب مسیر]",
+					"duration": 2000,
+					"question": {
+						"pause": 8000,
+						"title": "میخوای از بخش دیگه ای شروع کنم ؟",
+						"answers": [
+							{
+								"id": "q-00-2",
+								"label": "طراحی های من",
+								"gotoSectionId": "27-job",
+								"face": "happy"
+							},
+							{
+								"id": "q-00-3",
+								"label": "توسعه های من",
+								"gotoSectionId": "26-job",
+								"face": "happy"
+							},
+							{
+								"id": "q-00-4",
+								"label": "ابزار های من",
+								"gotoSectionId": "12-skill",
+								"face": "happy"
+							}
+						]
+					}
+				}
+			],
+			"nextSectionId": "02-about",
+			"nextSectionIf": [
+				{
+					"inId": "12-skill-end",
+					"outId": "02-about"
+				},
+				{
+					"inId": "26-job-end",
+					"outId": "02-about"
+				},
+				{
+					"inId": "27-job-end",
+					"outId": "02-about"
 				}
 			]
 		},
 		{
 			"id": "19-idea",
-			"title": "",
+			"title": "اندیشه ها",
 			"steps": [
 				{
 					"id": "19-idea-1",
-					"text": "",
+					"text": "اینجا قراره با مدل فکریم آشنا بشی.",
 					"voice": "/audio/voice/presentations/intro/19-idea-1.mp3",
 					"duration": 2797
 				}
 			],
-			"nextSectionId": ""
+			"nextSectionId": "20-idea"
 		},
 		{
 			"id": "20-idea",
-			"title": "",
+			"title": "ﻓﻠﺴﻔﻪ ﻃﺮاحی",
 			"steps": [
 				{
 					"id": "20-idea-1",
-					"text": "",
+					"text": " من به کسی میگم طراح که هنر حذف کردن داشته باشه",
 					"voice": "/audio/voice/presentations/intro/20-idea-1.mp3",
 					"duration": 4141
 				},
 				{
 					"id": "20-idea-2",
-					"text": "",
+					"text": "و با اون تعادلی بین نیاز کاربر و کسب و کار ایجاد می‌کنه چون ارزش واقعی همین تعادل شکل گرفته است.",
 					"voice": "/audio/voice/presentations/intro/20-idea-2.mp3",
 					"duration": 7765
 				}
 			],
-			"nextSectionId": ""
+			"nextSectionId": "21-idea"
 		},
 		{
 			"id": "21-idea",
-			"title": "",
+			"title": "فلسفه ﮐﺎری",
 			"steps": [
 				{
 					"id": "21-idea-1",
-					"text": "",
+					"text": "و در آخر هرچی تجربه بیشتری کسب کردم بیشتر فهمیدم که اکثر مشکلات به خاطر کم بودن دانش نیست به خاطر عجله کردن تو تصمیم گیری آدماست",
 					"voice": "/audio/voice/presentations/intro/21-idea-1.mp3",
 					"duration": 11293
 				}
 			],
-			"nextSectionId": ""
+			"nextSectionId": "22-growth"
 		},
 		{
 			"id": "22-growth",
-			"title": "",
+			"title": "پیشرفت",
 			"steps": [
 				{
 					"id": "22-growth-1",
-					"text": "",
+					"text": "میخوام در مورد دلایل پیشرفتم بگم.",
 					"voice": "/audio/voice/presentations/intro/22-growth-1.mp3",
 					"duration": 2317
 				}
 			],
-			"nextSectionId": ""
+			"nextSectionId": "23-growth"
 		},
 		{
 			"id": "23-growth",
-			"title": "",
+			"title": "ﻟﺤﻈﻪ ﻫﺎی ﺳﺎزﻧﺪه",
 			"steps": [
 				{
 					"id": "23-growth-1",
-					"text": "",
+					"text": "بزرگترین معلم من نه موفقیت بلکه تجربه ها و شکست های بوده که نحوه فکر کردن تغییر داده و یاد گرفتم مسئولیت من فقط ساخت خروجی نیست.",
 					"voice": "/audio/voice/presentations/intro/23-growth-1.mp3",
 					"duration": 11197
 				}
 			],
-			"nextSectionId": ""
+			"nextSectionId": "24-growth"
 		},
 		{
 			"id": "24-growth",
-			"title": "",
+			"title": "ﺷﮑﺴﺖ ﺑﺰرگ",
 			"steps": [
 				{
 					"id": "24-growth-1",
-					"text": "",
+					"text": "یه موقعی برای رسیدن به سود بیشتر روی محصولی که به اون باور کامل نداشتم سرمایه‌گذاری کردم و شکست خوردم.",
 					"voice": "/audio/voice/presentations/intro/24-growth-1.mp3",
 					"duration": 7789
 				},
 				{
 					"id": "24-growth-2",
-					"text": "",
+					"text": "از اون روز یاد گرفتم روی چیزی کار کنم که حاضر باشم اعتبارمو پاش بذارم و همه کارا رو پروژه شخصی خودم بدونم.",
 					"voice": "/audio/voice/presentations/intro/24-growth-2.mp3",
 					"duration": 7957
 				}
 			],
-			"nextSectionId": ""
+			"nextSectionId": "25-growth"
 		},
 		{
 			"id": "25-growth",
-			"title": "",
+			"title": "ﯾﺎدﮔﯿﺮی",
 			"steps": [
 				{
 					"id": "25-growth-1",
-					"text": "",
+					"text": "رشد برای من بخشی از سبک زندگیه سرعت یادگیریم رو مدیون کنجکاوی تجربه کردن و دوستان و مشاوران ارزشمندی می‌دونم که بارها مسیر فکری من رو اصلاح کردن.",
 					"voice": "/audio/voice/presentations/intro/25-growth-1.mp3",
 					"duration": 12181
 				},
 				{
 					"id": "25-growth-2",
-					"text": "",
+					"text": "در کنار یادگیری همیشه تلاش کردم آموخته هامو به دیگران یاد بدم چون فکر می‌کنم یادگیری زمانی اتفاق میفته که بتونی چیزی رو به دیگران آموزش بدی.",
 					"voice": "/audio/voice/presentations/intro/25-growth-2.mp3",
 					"duration": 10141
 				}
 			],
-			"nextSectionId": ""
+			"nextSectionId": "08-job"
 		},
 		{
 			"id": "26-job",
-			"title": "",
+			"title": "ﺗﻮﺳﻌﻪ ﻫﺎی ﻣﻦ",
 			"steps": [
 				{
 					"id": "26-job-1",
-					"text": "",
+					"text": "من توی سال‌های کارم به جای تمرکز روی تخصص سعی کردم مجموعه‌ای از توانایی‌های مکمل همو پرورش بدم",
 					"voice": "/audio/voice/presentations/intro/26-job-1.mp3",
 					"duration": 7837
 				},
 				{
 					"id": "26-job-2",
-					"text": "",
+					"text": "مثل شناخت کاربر و تحقیق",
 					"voice": "/audio/voice/presentations/intro/26-job-2.mp3",
 					"duration": 2149
 				},
 				{
 					"id": "26-job-3",
-					"text": "",
+					"text": "طراحی رابط و تجربه کاربری",
 					"voice": "/audio/voice/presentations/intro/26-job-3.mp3",
 					"duration": 2797
 				},
 				{
 					"id": "26-job-4",
-					"text": "",
+					"text": "مدیریت پروژه و محصول",
 					"voice": "/audio/voice/presentations/intro/26-job-4.mp3",
 					"duration": 2245
 				},
 				{
 					"id": "26-job-5",
-					"text": "",
+					"text": "تحلیل داده و تصمیم‌سازی",
 					"voice": "/audio/voice/presentations/intro/26-job-5.mp3",
 					"duration": 2533
 				},
 				{
 					"id": "26-job-6",
-					"text": "",
+					"text": "معماری و درک فنی محصولات",
 					"voice": "/audio/voice/presentations/intro/26-job-6.mp3",
 					"duration": 2845
 				},
 				{
 					"id": "26-job-7",
-					"text": "",
+					"text": "اتوماسیون فرایندها",
 					"voice": "/audio/voice/presentations/intro/26-job-7.mp3",
 					"duration": 1861
 				},
 				{
 					"id": "26-job-8",
-					"text": "",
+					"text": "توسعه فرانت و بک",
 					"voice": "/audio/voice/presentations/intro/26-job-8.mp3",
 					"duration": 1885
 				},
 				{
 					"id": "26-job-9",
-					"text": "",
+					"text": "و خب کار با اکثر دستیارای هوش مصنوعی",
 					"voice": "/audio/voice/presentations/intro/26-job-9.mp3",
 					"duration": 2821
 				}
 			],
-			"nextSectionId": ""
+			"nextSectionId": "27-job",
+			"nextSectionIf": [
+				{
+					"inId": "01-about",
+					"outId": "26-job-end"
+				}
+			]
+		},
+		{
+			"id": "26-job-end",
+			"title": "انتخاب مسیر",
+			"steps": [
+				{
+					"id": "26-job-end-1",
+					"text": "[انتخاب مسیر]",
+					"duration": 2000,
+					"question": {
+						"pause": 8000,
+						"title": "میخوای از بخش دیگه ای شروع کنم ؟",
+						"answers": [
+							{
+								"id": "q-26-1",
+								"label": "تاریخچه کاری",
+								"gotoSectionId": "18-history",
+								"face": "happy"
+							},
+							{
+								"id": "q-26-2",
+								"label": "طراحی های من",
+								"gotoSectionId": "27-job",
+								"face": "happy"
+							},
+							{
+								"id": "q-26-3",
+								"label": "ابزار های من",
+								"gotoSectionId": "12-skill",
+								"face": "happy"
+							}
+						]
+					}
+				}
+			],
+			"nextSectionId": "02-about",
+			"nextSectionIf": [
+				{
+					"inId": "12-skill-end",
+					"outId": "02-about"
+				},
+				{
+					"inId": "18-history-end",
+					"outId": "02-about"
+				},
+				{
+					"inId": "27-job-end",
+					"outId": "02-about"
+				}
+			]
 		},
 		{
 			"id": "27-job",
-			"title": "",
+			"title": "ﻃﺮاﺣﯽ ﻫﺎی ﻣﻦ",
 			"steps": [
 				{
 					"id": "27-job-1",
-					"text": "",
+					"text": "به نظر من طراحی بصری موقع ارزشمند که بتونه پیام بهتر منتقل کنه تجربه بهتری بسازه و به هدف مخاطب و کسب و کار نزدیک باشه.",
 					"voice": "/audio/voice/presentations/intro/27-job-1.mp3",
 					"duration": 10165
 				},
 				{
 					"id": "27-job-10",
-					"text": "",
+					"text": "ترکیب مدیریتی شناخت فنی و سلیقه بصری به من کمک می‌کنه بین زیبایی کارکرد و محدودیت‌ها تعادل ایجاد کنم.",
 					"voice": "/audio/voice/presentations/intro/27-job-10.mp3",
 					"duration": 2821
 				},
 				{
 					"id": "27-job-11",
-					"text": "",
+					"text": "بخشی از کارای من شامل:",
 					"voice": "/audio/voice/presentations/intro/27-job-11.mp3",
 					"duration": 2437
 				},
 				{
 					"id": "27-job-12",
-					"text": "",
+					"text": "طراحی هویت سازمانی و برند",
 					"voice": "/audio/voice/presentations/intro/27-job-12.mp3",
 					"duration": 2773
 				},
 				{
 					"id": "27-job-13",
-					"text": "",
+					"text": "طراحی تبلیغات و کمپین",
 					"voice": "/audio/voice/presentations/intro/27-job-13.mp3",
 					"duration": 2581
 				},
 				{
 					"id": "27-job-2",
-					"text": "",
+					"text": "طراحی سه بعدی",
 					"voice": "/audio/voice/presentations/intro/27-job-2.mp3",
 					"duration": 10357
 				},
 				{
 					"id": "27-job-3",
-					"text": "",
+					"text": "طراحی محتوای شبکه اجتماعی",
 					"voice": "/audio/voice/presentations/intro/27-job-3.mp3",
 					"duration": 2485
 				},
 				{
 					"id": "27-job-4",
-					"text": "",
+					"text": "تصویرسازی",
 					"voice": "/audio/voice/presentations/intro/27-job-4.mp3",
 					"duration": 2677
 				},
 				{
 					"id": "27-job-5",
-					"text": "",
+					"text": "طراحی‌های چاپ و بسته بندی",
 					"voice": "/audio/voice/presentations/intro/27-job-5.mp3",
 					"duration": 2365
 				},
 				{
 					"id": "27-job-6",
-					"text": "",
+					"text": "طراحی ظاهری رابط کاربری",
 					"voice": "/audio/voice/presentations/intro/27-job-6.mp3",
 					"duration": 1717
 				},
 				{
 					"id": "27-job-7",
-					"text": "",
+					"text": "عکاسی صنعتی و تبلیغاتی",
 					"voice": "/audio/voice/presentations/intro/27-job-7.mp3",
 					"duration": 3109
 				},
 				{
 					"id": "27-job-8",
-					"text": "",
+					"text": "طراحی هنری و توکن های بصری",
 					"voice": "/audio/voice/presentations/intro/27-job-8.mp3",
 					"duration": 1549
 				},
 				{
 					"id": "27-job-9",
-					"text": "",
+					"text": "طراحی رویداد و تجربه حضور",
 					"voice": "/audio/voice/presentations/intro/27-job-9.mp3",
 					"duration": 2701
 				}
 			],
-			"nextSectionId": ""
+			"nextSectionId": "28-job",
+			"nextSectionIf": [
+				{
+					"inId": "01-about",
+					"outId": "27-job-end"
+				}
+			]
+		},
+		{
+			"id": "27-job-end",
+			"title": "انتخاب مسیر",
+			"steps": [
+				{
+					"id": "27-job-end-1",
+					"text": "[انتخاب مسیر]",
+					"duration": 2000,
+					"question": {
+						"pause": 8000,
+						"title": "میخوای از بخش دیگه ای شروع کنم ؟",
+						"answers": [
+							{
+								"id": "q-27-1",
+								"label": "تاریخچه کاری",
+								"gotoSectionId": "18-history",
+								"face": "happy"
+							},
+							{
+								"id": "q-00-3",
+								"label": "توسعه های من",
+								"gotoSectionId": "26-job",
+								"face": "happy"
+							},
+							{
+								"id": "q-27-3",
+								"label": "ابزار های من",
+								"gotoSectionId": "12-skill",
+								"face": "happy"
+							}
+						]
+					}
+				}
+			],
+			"nextSectionId": "02-about",
+			"nextSectionIf": [
+				{
+					"inId": "12-skill-end",
+					"outId": "02-about"
+				},
+				{
+					"inId": "18-history-end",
+					"outId": "02-about"
+				},
+				{
+					"inId": "26-job-end",
+					"outId": "02-about"
+				}
+			]
 		},
 		{
 			"id": "28-job",
-			"title": "",
+			"title": "و کلی تجربه دیگه ...",
 			"steps": [
 				{
 					"id": "28-job-1",
-					"text": "",
+					"text": "و کلی تجربه دیگه که تو اونا مشارکت داشتم",
 					"voice": "/audio/voice/presentations/intro/28-job-1.mp3",
 					"duration": 3133
 				},
 				{
 					"id": "28-job-2",
-					"text": "",
+					"text": "برای آشنایی با بخش از دست آوردم توی جاهایی که کار کردم روی دکمه تجربیات من کلیک کنید.",
 					"voice": "/audio/voice/presentations/intro/28-job-2.mp3",
-					"duration": 6781
+					"duration": 6781,
+					"question": {
+						"showOnTime": 5600,
+						"pause": 100000,
+						"title": "میخوای با جزئیات بیشتر بگم ؟",
+						"answers": [
+							{
+								"id": "q-28-1",
+								"label": "تجربه من",
+								"gotoSectionId": "29-job",
+								"face": "happy"
+							}
+						],
+						"links": [
+							{
+								"id": "l-28-1",
+								"label": "نمونه کار",
+								"url": "/data/presentations/portfolio.pdf",
+								"icon": "⏬",
+								"face": "angry"
+							}
+						]
+					}
 				},
 				{
 					"id": "28-job-3",
-					"text": "",
+					"text": "و برای دیدن پورتفولیو یا نمونه کارهای بصری من روی لینک نمونه کار کلیک کنید.",
 					"voice": "/audio/voice/presentations/intro/28-job-3.mp3",
-					"duration": 6181
+					"duration": 6181,
+					"question": {
+						"showOnTime": 0,
+						"pause": 8000,
+						"title": "میخوای با جزئیات بیشتر بگم ؟",
+						"answers": [
+							{
+								"id": "q-28-1",
+								"label": "تجربه من",
+								"gotoSectionId": "29-job",
+								"face": "happy"
+							}
+						],
+						"links": [
+							{
+								"id": "l-28-1",
+								"label": "نمونه کار",
+								"url": "/data/presentations/portfolio.pdf",
+								"icon": "⏬",
+								"face": "angry"
+							}
+						]
+					}
 				}
 			],
-			"nextSectionId": ""
+			"nextSectionId": "11-skill"
 		},
 		{
 			"id": "29-job",
-			"title": "",
+			"title": "ﺗﺠﺮﺑﯿﺎت ﻣﻦ",
 			"steps": [
 				{
 					"id": "29-job-1",
-					"text": "",
+					"text": "خوبه بدونید تجربه‌های متفاوت من باعث شده بتونم با زبون افراد مختلف صحبت کنم.",
 					"voice": "/audio/voice/presentations/intro/29-job-1.mp3",
 					"duration": 5725
 				},
 				{
 					"id": "29-job-2",
-					"text": "",
+					"text": "واسه همین می‌تونم توی شرایط جدید راحت‌تر سازگار باشم یا مشکلات رو راحت برطرف کنم.",
 					"voice": "/audio/voice/presentations/intro/29-job-2.mp3",
 					"duration": 5557
 				}
 			],
-			"nextSectionId": ""
+			"nextSectionId": "30-job"
 		},
 		{
 			"id": "30-job",
-			"title": "",
+			"title": "دﺳﺘﺎوردﻫﺎ",
 			"steps": [
 				{
 					"id": "30-job-1",
-					"text": "",
+					"text": "توی جاهای مختلف تمرکز من فقط روی تولید خروجی نبوده همیشه تلاش کردم ساختاررا فرایند ها و تجربه کار بهتر کنم.",
 					"voice": "/audio/voice/presentations/intro/30-job-1.mp3",
 					"duration": 8797
 				},
 				{
-					"id": "30-job-10",
-					"text": "",
-					"voice": "/audio/voice/presentations/intro/30-job-10.mp3",
-					"duration": 12157
-				},
-				{
 					"id": "30-job-2",
-					"text": "",
+					"text": "مثلا تو نماتک مشکل اصلی پرفورمنس پایین تیم تولید بود",
 					"voice": "/audio/voice/presentations/intro/30-job-2.mp3",
 					"duration": 4693
 				},
 				{
 					"id": "30-job-3",
-					"text": "",
+					"text": "که با اتوماسیون فرایند تولید و ابزارهایی مثل او بی اس زمان انرژی تین روی کارای تکراری و ساده کم شد.",
 					"voice": "/audio/voice/presentations/intro/30-job-3.mp3",
 					"duration": 7981
 				},
 				{
 					"id": "30-job-4",
-					"text": "",
+					"text": "نتیجه‌اش عجیب بود هزینه تولید هر ساعت محتوا از ۱۸ نفر ساعت به ۵ نفر ساعت کاهش پیدا کرد و استهلاک تجهیزات هم تقریبا نصف شد.",
 					"voice": "/audio/voice/presentations/intro/30-job-4.mp3",
 					"duration": 11917
 				},
 				{
 					"id": "30-job-5",
-					"text": "",
+					"text": "توی مهبانگم اولین مشکل نارضایتی اونرا از پیگیری و شفاف نبودن مسئولیت‌ها بود.",
 					"voice": "/audio/voice/presentations/intro/30-job-5.mp3",
 					"duration": 6949
 				},
 				{
 					"id": "30-job-6",
-					"text": "",
+					"text": "که با یه داشبورد اسکرام مجازی با امکان استریم و رکورد فرایند هماهنگی و پاسخگویی تیم رو شفاف کرد.",
 					"voice": "/audio/voice/presentations/intro/30-job-6.mp3",
 					"duration": 8629
 				},
 				{
 					"id": "30-job-7",
-					"text": "",
+					"text": "نتیجه‌شم این بود که تمام تسک‌ها بدون نیاز به جلسه اسکرام تعریف اولویت بندی می‌شد و رضایت اونرا از تسک های یک سال به ۹۵ درصد رسید",
 					"voice": "/audio/voice/presentations/intro/30-job-7.mp3",
 					"duration": 11797
 				},
 				{
 					"id": "30-job-8",
-					"text": "",
+					"text": "توی مهبانگ مشکل بعدی این بودش که با دنیای چاپ آشنایی کافی نداشتند و این هم باعث جلسات متعدد برآوردهای طولانی قیمت و خطاهای زیاد تو گذاشتن سفارش میشد.",
 					"voice": "/audio/voice/presentations/intro/30-job-8.mp3",
 					"duration": 12613
 				},
 				{
 					"id": "30-job-9",
-					"text": "",
+					"text": "ابزار ساده راهنمای چاپ که پیشنهاد گزینه‌های بهینه و برآورد هزینه‌های تولید و میداد.",
 					"voice": "/audio/voice/presentations/intro/30-job-9.mp3",
 					"duration": 7429
+				},
+				{
+					"id": "30-job-10",
+					"text": "تنوع محصولات چاپیمون ۵ برابر شد هزینه سفارشات حدود ۳۵ درصد کاهش پیدا کرد و میانگین زمان آماده شدن محصولات چاپی ۱۲ روز کم شد",
+					"voice": "/audio/voice/presentations/intro/30-job-10.mp3",
+					"duration": 12157
 				}
 			],
-			"nextSectionId": ""
+			"nextSectionId": "31-job"
 		},
 		{
 			"id": "31-job",
-			"title": "",
+			"title": "ﻧﻤﻮﻧﻪ ﮐﺎر ﻫﺎ",
 			"steps": [
 				{
 					"id": "31-job-1",
-					"text": "",
+					"text": " برای مشاهده مهارت‌های فنی و یا نمونه کارای من روی پروژه‌های من کلیک.",
 					"voice": "/audio/voice/presentations/intro/31-job-1.mp3",
-					"duration": 6013
+					"duration": 6013,
+					"question": {
+						"showOnTime": 0,
+						"pause": 8000,
+						"title": "میخوای با جزئیات بیشتر بگم ؟",
+						"answers": [
+							{
+								"id": "q-10-2",
+								"label": "پروژه من",
+								"gotoSectionId": "26-job",
+								"face": "happy"
+							}
+						]
+					}
 				}
 			],
-			"nextSectionId": ""
+			"nextSectionId": "11-skill"
 		}
 	],
 	"endSection": {
