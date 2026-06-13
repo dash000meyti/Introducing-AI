@@ -6,14 +6,25 @@
 	"music": "/audio/music/ambient.mp3",
 	"slides": [
 		{
-			"id": "00-intro-1",
+			"id": "s-start",
 			"theme": "image",
 			"image": "/assets/slides/intro/00-intro-1.png"
 		},
 		{
-			"id": "00-intro-2",
+			"id": "s-info",
 			"theme": "image",
 			"image": "/assets/slides/intro/00-intro-2.png"
+		},
+		{
+			"id": "s-skills",
+			"theme": "text",
+			"title": "مهارت‌ها",
+			"bullets": [
+				"طراحی تجربه و رابط کاربری",
+				"توسعهٔ فرانت‌اند",
+				"انیمیشن و تعامل",
+				"روایت محصول"
+			]
 		}
 	],
 	"startSection": {
@@ -33,7 +44,7 @@
 					{
 						"time": 0,
 						"changes": {
-							"slide": "00-intro-1",
+							"slide": "s-start",
 							"character": {
 								"move": "in"
 							},
@@ -69,7 +80,7 @@
 					{
 						"time": 3000,
 						"changes": {
-							"slide": "00-intro-2"
+							"slide": "s-skills"
 						}
 					}
 				]
@@ -81,34 +92,19 @@
 				"duration": 4213
 			}
 		],
-		"nextSectionId": "01-about"
+		"nextSectionId": "00-about"
 	},
 	"sections": [
 		{
-			"id": "01-about",
-			"title": "من کی هستم",
+			"id": "00-about",
+			"title": "انتخاب مسیر",
 			"steps": [
 				{
-					"id": "01-about-1",
-					"text": "توی شروع می‌خوام خودمو معرفی کنم.",
-					"voice": "/audio/voice/presentations/intro/01-about-1.mp3",
-					"duration": 2269,
-					"change": [
-						{
-							"time": 0,
-							"changes": {
-								"slide": "00-intro-1"
-							}
-						}
-					]
-				},
-				{
-					"id": "01-about-2",
-					"text": "فراتر از عناوین شغلی‌ای مثل طراح و توسعه‌دهنده، کار من تصمیم‌گیری است.",
-					"voice": "/audio/voice/presentations/intro/01-about-2.mp3",
-					"duration": 5173,
+					"id": "00-about-1",
+					"text": "",
+					"duration": 313,
 					"question": {
-						"pause": 8000,
+						"pause": 12000,
 						"title": "میخوای از بخش دیگه ای شروع کنم ؟",
 						"answers": [
 							{
@@ -137,6 +133,33 @@
 							}
 						]
 					}
+				}
+			],
+			"nextSectionId": "01-about"
+		},
+		{
+			"id": "01-about",
+			"title": "من کی هستم",
+			"steps": [
+				{
+					"id": "01-about-1",
+					"text": "توی شروع می‌خوام خودمو معرفی کنم.",
+					"voice": "/audio/voice/presentations/intro/01-about-1.mp3",
+					"duration": 2269,
+					"change": [
+						{
+							"time": 0,
+							"changes": {
+								"slide": "s-start"
+							}
+						}
+					]
+				},
+				{
+					"id": "01-about-2",
+					"text": "فراتر از عناوین شغلی‌ای مثل طراح و توسعه‌دهنده، کار من تصمیم‌گیری است.",
+					"voice": "/audio/voice/presentations/intro/01-about-2.mp3",
+					"duration": 5173
 				}
 			],
 			"nextSectionId": "02-about"
@@ -437,7 +460,7 @@
 			"nextSectionId": "13-skill",
 			"nextSectionIf": [
 				{
-					"inId": "01-about",
+					"inId": "00-about",
 					"outId": "12-skill-end"
 				}
 			]
@@ -476,19 +499,19 @@
 					}
 				}
 			],
-			"nextSectionId": "02-about",
+			"nextSectionId": "01-about",
 			"nextSectionIf": [
 				{
 					"inId": "18-history-end",
-					"outId": "02-about"
+					"outId": "00-about"
 				},
 				{
 					"inId": "26-job-end",
-					"outId": "02-about"
+					"outId": "00-about"
 				},
 				{
 					"inId": "27-job-end",
-					"outId": "02-about"
+					"outId": "00-about"
 				}
 			]
 		},
@@ -584,7 +607,7 @@
 							{
 								"id": "q-end",
 								"label": "شروع مجدد",
-								"gotoSectionId": "01-about",
+								"gotoSectionId": "00-about",
 								"restart": true,
 								"face": "happy"
 							}
@@ -614,7 +637,7 @@
 							{
 								"id": "q-end",
 								"label": "شروع مجدد",
-								"gotoSectionId": "01-about",
+								"gotoSectionId": "00-about",
 								"restart": true,
 								"face": "happy"
 							}
@@ -698,7 +721,7 @@
 			"nextSectionId": "07-idea",
 			"nextSectionIf": [
 				{
-					"inId": "01-about",
+					"inId": "00-about",
 					"outId": "18-history-end"
 				}
 			]
@@ -737,19 +760,19 @@
 					}
 				}
 			],
-			"nextSectionId": "02-about",
+			"nextSectionId": "01-about",
 			"nextSectionIf": [
 				{
 					"inId": "12-skill-end",
-					"outId": "02-about"
+					"outId": "00-about"
 				},
 				{
 					"inId": "26-job-end",
-					"outId": "02-about"
+					"outId": "00-about"
 				},
 				{
 					"inId": "27-job-end",
-					"outId": "02-about"
+					"outId": "00-about"
 				}
 			]
 		},
@@ -924,7 +947,7 @@
 			"nextSectionId": "27-job",
 			"nextSectionIf": [
 				{
-					"inId": "01-about",
+					"inId": "00-about",
 					"outId": "26-job-end"
 				}
 			]
@@ -963,19 +986,19 @@
 					}
 				}
 			],
-			"nextSectionId": "02-about",
+			"nextSectionId": "01-about",
 			"nextSectionIf": [
 				{
 					"inId": "12-skill-end",
-					"outId": "02-about"
+					"outId": "00-about"
 				},
 				{
 					"inId": "18-history-end",
-					"outId": "02-about"
+					"outId": "00-about"
 				},
 				{
 					"inId": "27-job-end",
-					"outId": "02-about"
+					"outId": "00-about"
 				}
 			]
 		},
@@ -990,82 +1013,82 @@
 					"duration": 10165
 				},
 				{
-					"id": "27-job-10",
-					"text": "ترکیب مدیریتی شناخت فنی و سلیقه بصری به من کمک می‌کنه بین زیبایی کارکرد و محدودیت‌ها تعادل ایجاد کنم.",
-					"voice": "/audio/voice/presentations/intro/27-job-10.mp3",
-					"duration": 2821
-				},
-				{
-					"id": "27-job-11",
-					"text": "بخشی از کارای من شامل:",
-					"voice": "/audio/voice/presentations/intro/27-job-11.mp3",
-					"duration": 2437
-				},
-				{
-					"id": "27-job-12",
-					"text": "طراحی هویت سازمانی و برند",
-					"voice": "/audio/voice/presentations/intro/27-job-12.mp3",
-					"duration": 2773
-				},
-				{
-					"id": "27-job-13",
-					"text": "طراحی تبلیغات و کمپین",
-					"voice": "/audio/voice/presentations/intro/27-job-13.mp3",
-					"duration": 2581
-				},
-				{
 					"id": "27-job-2",
-					"text": "طراحی سه بعدی",
+					"text": "ترکیب مدیریتی شناخت فنی و سلیقه بصری به من کمک می‌کنه بین زیبایی کارکرد و محدودیت‌ها تعادل ایجاد کنم.",
 					"voice": "/audio/voice/presentations/intro/27-job-2.mp3",
 					"duration": 10357
 				},
 				{
 					"id": "27-job-3",
-					"text": "طراحی محتوای شبکه اجتماعی",
+					"text": "بخشی از کارای من شامل:",
 					"voice": "/audio/voice/presentations/intro/27-job-3.mp3",
 					"duration": 2485
 				},
 				{
 					"id": "27-job-4",
-					"text": "تصویرسازی",
+					"text": "طراحی هویت سازمانی و برند",
 					"voice": "/audio/voice/presentations/intro/27-job-4.mp3",
 					"duration": 2677
 				},
 				{
 					"id": "27-job-5",
-					"text": "طراحی‌های چاپ و بسته بندی",
+					"text": "طراحی تبلیغات و کمپین",
 					"voice": "/audio/voice/presentations/intro/27-job-5.mp3",
 					"duration": 2365
 				},
 				{
 					"id": "27-job-6",
-					"text": "طراحی ظاهری رابط کاربری",
+					"text": "طراحی سه بعدی",
 					"voice": "/audio/voice/presentations/intro/27-job-6.mp3",
 					"duration": 1717
 				},
 				{
 					"id": "27-job-7",
-					"text": "عکاسی صنعتی و تبلیغاتی",
+					"text": "طراحی محتوای شبکه اجتماعی",
 					"voice": "/audio/voice/presentations/intro/27-job-7.mp3",
 					"duration": 3109
 				},
 				{
 					"id": "27-job-8",
-					"text": "طراحی هنری و توکن های بصری",
+					"text": "تصویرسازی",
 					"voice": "/audio/voice/presentations/intro/27-job-8.mp3",
 					"duration": 1549
 				},
 				{
 					"id": "27-job-9",
-					"text": "طراحی رویداد و تجربه حضور",
+					"text": "طراحی‌های چاپ و بسته بندی",
 					"voice": "/audio/voice/presentations/intro/27-job-9.mp3",
 					"duration": 2701
+				},
+				{
+					"id": "27-job-10",
+					"text": "طراحی ظاهری رابط کاربری",
+					"voice": "/audio/voice/presentations/intro/27-job-10.mp3",
+					"duration": 2821
+				},
+				{
+					"id": "27-job-11",
+					"text": "عکاسی صنعتی و تبلیغاتی",
+					"voice": "/audio/voice/presentations/intro/27-job-11.mp3",
+					"duration": 2437
+				},
+				{
+					"id": "27-job-12",
+					"text": "طراحی هنری و توکن های بصری",
+					"voice": "/audio/voice/presentations/intro/27-job-12.mp3",
+					"duration": 2773
+				},
+				{
+					"id": "27-job-13",
+					"text": "طراحی رویداد و تجربه حضور",
+					"voice": "/audio/voice/presentations/intro/27-job-13.mp3",
+					"duration": 2581
 				}
 			],
 			"nextSectionId": "28-job",
 			"nextSectionIf": [
 				{
-					"inId": "01-about",
+					"inId": "00-about",
 					"outId": "27-job-end"
 				}
 			]
@@ -1104,19 +1127,19 @@
 					}
 				}
 			],
-			"nextSectionId": "02-about",
+			"nextSectionId": "01-about",
 			"nextSectionIf": [
 				{
 					"inId": "12-skill-end",
-					"outId": "02-about"
+					"outId": "00-about"
 				},
 				{
 					"inId": "18-history-end",
-					"outId": "02-about"
+					"outId": "00-about"
 				},
 				{
 					"inId": "26-job-end",
-					"outId": "02-about"
+					"outId": "00-about"
 				}
 			]
 		},
@@ -1317,7 +1340,7 @@
 							"camera": {
 								"zoom": "in"
 							},
-							"slide": "00-intro-1"
+							"slide": "s-start"
 						}
 					}
 				]
