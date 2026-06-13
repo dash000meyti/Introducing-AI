@@ -1976,14 +1976,14 @@
 							"id": "c-2",
 							"label": "ایمیل",
 							"url": "mailto:m9020120014@gmail.com",
-							"icon": "💬",
+							"icon": "m9020120014@gmail.com",
 							"face": "happy"
 						},
 						{
 							"id": "c-3",
 							"label": "شماره تماس",
 							"url": "tel:+989020120014",
-							"icon": "📞",
+							"icon": "09020120014",
 							"face": "happy"
 						}
 					]
