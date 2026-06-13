@@ -27,6 +27,10 @@
 			const Reveal = (await import('reveal.js')).default;
 			deck = new Reveal(deckEl, {
 				embedded: true,
+				// Embedded deck lives in a narrow phone frame (<435px). Reveal 6
+				// auto-enables scroll mode at that width; programmatic slide() then
+				// skips updateSlides and only scrolls, so engine-driven changes fail.
+				scrollActivationWidth: 0,
 				controls: false,
 				progress: false,
 				slideNumber: false,
