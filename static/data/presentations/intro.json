@@ -22,7 +22,7 @@
 			{
 				"id": "intro-0",
 				"startCue": "[ورود مهدی گودینی]",
-				"duration": 2500,
+				"duration": 2800,
 				"sfx": [
 					{
 						"time": 313,
@@ -43,17 +43,9 @@
 								"character": "on"
 							}
 						}
-					}
-				]
-			},
-			{
-				"id": "intro-1",
-				"text": "من مهدی گودینی طراح و توسعه دهنده تجربه کاربری هستم.",
-				"voice": "/audio/voice/presentations/intro/00-intro-1.mp3",
-				"duration": 421.3,
-				"change": [
+					},
 					{
-						"time": 0,
+						"time": 2400,
 						"changes": {
 							"camera": {
 								"zoom": "out"
@@ -63,8 +55,14 @@
 				]
 			},
 			{
+				"id": "intro-1",
+				"text": "من مهدی گودینی طراح و توسعه دهنده تجربه کاربری هستم.",
+				"voice": "/audio/voice/presentations/intro/00-intro-1.mp3",
+				"duration": 421.3
+			},
+			{
 				"id": "intro-2",
-				"text": "هدف این نوع ارائه اینه که شما با انتخاب مسیر و تامل سریع تر به نتیجه ای که می خواد برسید",
+				"text": "هدف این نوع ارائه اینه که شما با انتخاب مسیر و تعامل سریع‌تر به نتیجه‌ای که می‌خواید برسید",
 				"voice": "/audio/voice/presentations/intro/00-intro-2.mp3",
 				"duration": 596.5,
 				"change": [
@@ -78,12 +76,12 @@
 			},
 			{
 				"id": "intro-3",
-				"text": "پس اگه هدف خاصی داری انتخاب کن وگرنه به صورت پیشفرض ادامه بده",
+				"text": "پس اگه هدف خاصی داری انتخاب کن وگرنه مسیر پیش فرض رو ادامه بده",
 				"voice": "/audio/voice/presentations/intro/00-intro-3.mp3",
-				"duration": 4213
+				"duration": 421.3
 			}
 		],
-		"nextSectionId": "04-history"
+		"nextSectionId": "end"
 	},
 	"sections": [
 		{
@@ -92,7 +90,7 @@
 			"steps": [
 				{
 					"id": "01-about-1",
-					"text": "توی شروع می‌خوام خودم رو معرفی کنم.",
+					"text": "توی شروع می‌خوام خودمو معرفی کنم.",
 					"voice": "/audio/voice/presentations/intro/01-about-1.mp3",
 					"duration": 2269,
 					"change": [
@@ -108,7 +106,37 @@
 					"id": "01-about-2",
 					"text": "فراتر از عناوین شغلی‌ای مثل طراح و توسعه‌دهنده، کار من تصمیم‌گیری است.",
 					"voice": "/audio/voice/presentations/intro/01-about-2.mp3",
-					"duration": 5173
+					"duration": 5173,
+					"question": {
+						"pause": 8000,
+						"title": "میخوای از بخش دیگه ای شروع کنم ؟",
+						"answers": [
+							{
+								"id": "q-00-1",
+								"label": "تاریخچه کاری",
+								"gotoSectionId": "18-history",
+								"face": "happy"
+							},
+							{
+								"id": "q-00-2",
+								"label": "طراحی های من",
+								"gotoSectionId": "XXX",
+								"face": "happy"
+							},
+							{
+								"id": "q-00-3",
+								"label": "توسعه های من",
+								"gotoSectionId": "XXX",
+								"face": "happy"
+							},
+							{
+								"id": "q-00-4",
+								"label": "مهارت ها",
+								"gotoSectionId": "XXX",
+								"face": "happy"
+							}
+						]
+					}
 				}
 			],
 			"nextSectionId": "02-about"
@@ -119,19 +147,19 @@
 			"steps": [
 				{
 					"id": "02-about-1",
-					"text": "",
+					"text": "اگه بخوام امروز خودمو تعریف کنم میگم کسی هستم که از حل مسئله بیشتر از انجام وظایف لذت می‌بره.",
 					"voice": "/audio/voice/presentations/intro/02-about-1.mp3",
 					"duration": 7021
 				},
 				{
 					"id": "02-about-2",
-					"text": "",
+					"text": "کسی که بین طراحی و تکنولوژی کسب و کار مرزی نمیبینه و تلاش میکنه با فهمیدن عمیق مسئله راهی خلق کنه که واقعا ارزشمند باشه.",
 					"voice": "/audio/voice/presentations/intro/02-about-2.mp3",
 					"duration": 8197
 				},
 				{
 					"id": "02-about-3",
-					"text": "",
+					"text": "کنجکاوی من باعث شده کمتر با پاسخ های آماده قانع بشم و بیشتر دنبال راه حل‌های جدید.",
 					"voice": "/audio/voice/presentations/intro/02-about-3.mp3",
 					"duration": 6061
 				}
@@ -144,13 +172,13 @@
 			"steps": [
 				{
 					"id": "03-about-1",
-					"text": "",
+					"text": "از همین ارائه که ساختم می‌تونید بفهمید که طراحی و توسعه برای یک کار خوب هدف من نیست",
 					"voice": "/audio/voice/presentations/intro/03-about-1.mp3",
 					"duration": 6061
 				},
 				{
 					"id": "03-about-2",
-					"text": "",
+					"text": "دقت روی جزئیات که تفاوت یک کار خوب باعالی رو می‌سازه",
 					"voice": "/audio/voice/presentations/intro/03-about-2.mp3",
 					"duration": 4237
 				}
@@ -163,13 +191,13 @@
 			"steps": [
 				{
 					"id": "04-history-1",
-					"text": "",
+					"text": "اولین جرقه علاقه من نه به طراحی بلکه به خلق کردن بود",
 					"voice": "/audio/voice/presentations/intro/04-history-1.mp3",
 					"duration": 4645
 				},
 				{
 					"id": "04-history-2",
-					"text": "",
+					"text": "لذتی که هنوز بعد از نزدیک دو دهه دلیل اصلی ادامه مسیرمه",
 					"voice": "/audio/voice/presentations/intro/04-history-2.mp3",
 					"duration": 5053
 				}
@@ -178,47 +206,47 @@
 		},
 		{
 			"id": "05-history",
-			"title": "",
+			"title": "روایت رشد",
 			"steps": [
 				{
 					"id": "05-history-1",
-					"text": "",
+					"text": "از سال ۱۳۸۵ تا ۱۳۹۲ با طراحی توسعه و اجرای پروژه‌های واقعی آشنا شدم،",
 					"voice": "/audio/voice/presentations/intro/05-history-1.mp3",
 					"duration": 6061
 				},
 				{
 					"id": "05-history-2",
-					"text": "",
+					"text": "و مهمترین چیزی که یاد گرفتم تبدیل ایده به خروجی بود.",
 					"voice": "/audio/voice/presentations/intro/05-history-2.mp3",
 					"duration": 3517
 				},
 				{
 					"id": "05-history-3",
-					"text": "",
+					"text": "بین سال های ۱۳۹۲ تا ۱۳۹۶ یاد گرفتم فراتر از طراحی فکر کنم،",
 					"voice": "/audio/voice/presentations/intro/05-history-3.mp3",
 					"duration": 5125
 				},
 				{
 					"id": "05-history-4",
-					"text": "",
+					"text": "مفاهیمی مثل چاپ و بسته بندی بودجه برند بازاریابی مدیریت ذینفعان و اهداف کسب و کار.",
 					"voice": "/audio/voice/presentations/intro/05-history-4.mp3",
 					"duration": 6661
 				},
 				{
 					"id": "05-history-5",
-					"text": "",
+					"text": "از سال ۱۳۹۶ تا ۱۴۰۳ من تمرکزمو از ساخت خروجی به طراحی سیستم‌ها فرایندها محصولات",
 					"voice": "/audio/voice/presentations/intro/05-history-5.mp3",
 					"duration": 7213
 				},
 				{
 					"id": "05-history-6",
-					"text": "",
+					"text": "با درک کردن روابط بین انسان‌ها تیم و کسب و کار تغییر دادم.",
 					"voice": "/audio/voice/presentations/intro/05-history-6.mp3",
 					"duration": 4261
 				},
 				{
 					"id": "05-history-7",
-					"text": "",
+					"text": "از سال ۱۴۰۳ تا الانم به صورت فریلنس به دنبال حل مسائل مختلف هستم.",
 					"voice": "/audio/voice/presentations/intro/05-history-7.mp3",
 					"duration": 5413
 				}
@@ -227,43 +255,67 @@
 		},
 		{
 			"id": "06-history",
-			"title": "",
+			"title": "توضیحات بیشتر تاریخچه کاری !؟",
 			"steps": [
 				{
 					"id": "06-history-1",
-					"text": "",
+					"text": "اگه می‌خوای کل تاریخچه کاریمو به تفصیل ببینی روی دکمه زیر کلیک کن.",
 					"voice": "/audio/voice/presentations/intro/06-history-1.mp3",
-					"duration": 4573
+					"duration": 4573,
+					"question": {
+						"pause": 8000,
+						"title": "میخوای از بخش دیگه ای شروع کنم ؟",
+						"answers": [
+							{
+								"id": "q-06-1",
+								"label": "تاریخچه تفصیلی",
+								"gotoSectionId": "18-history",
+								"face": "happy"
+							}
+						]
+					}
 				}
 			],
 			"nextSectionId": "07-idea"
 		},
 		{
 			"id": "07-idea",
-			"title": "",
+			"title": "شناخت مدل فکری من !؟",
 			"steps": [
 				{
 					"id": "07-idea-1",
-					"text": "",
+					"text": "اگه دوست داشته باشی تو بخش بعدی میتونی با مدل فکری من آشنا بشی وگرنه بریم بخش کارهامو ببینیم",
 					"voice": "/audio/voice/presentations/intro/07-idea-1.mp3",
-					"duration": 6733
+					"duration": 6733,
+					"question": {
+						"pause": 8000,
+						"title": "میخوای من و مدل فکریم رو بیشتر بشناسی ؟",
+						"answers": [
+							{
+								"id": "q-06-1",
+								"label": "شناخت مدل فکری",
+								"gotoSectionId": "XXX",
+								"face": "happy"
+							}
+						]
+					}
 				}
 			],
 			"nextSectionId": "08-job"
 		},
 		{
 			"id": "08-job",
-			"title": "",
+			"title": "ﺷﺨﺼﯿت کلی من",
 			"steps": [
 				{
 					"id": "08-job-1",
-					"text": "",
+					"text": "من آدم پر سر و صدایی نیستم معمولاً ترجیح میدم بیشتر ببینم بیشتر بشنوم و بعد تصمیم بگیرم",
 					"voice": "/audio/voice/presentations/intro/08-job-1.mp3",
 					"duration": 7381
 				},
 				{
 					"id": "08-job-2",
-					"text": "",
+					"text": "انرژی من بیشتر صرف فهمیدن آدما موقعیت‌ها و الگوها میشه تا اثبات کردن خودم",
 					"voice": "/audio/voice/presentations/intro/08-job-2.mp3",
 					"duration": 5917
 				}
@@ -272,17 +324,17 @@
 		},
 		{
 			"id": "09-job",
-			"title": "",
+			"title": "شخصیت فنی من",
 			"steps": [
 				{
 					"id": "09-job-1",
-					"text": "",
+					"text": "تو بخش فنی خودمو وابسته به ابزار نمیدونم واسه همین توی مسیر حرفه ایم",
 					"voice": "/audio/voice/presentations/intro/09-job-1.mp3",
 					"duration": 5989
 				},
 				{
 					"id": "09-job-2",
-					"text": "",
+					"text": "تونستم بین طراحی توسعه هوش مصنوعی و غیره حرکت کنم بدون اینکه بخوام به هیچ حوزه محدود بشم",
 					"voice": "/audio/voice/presentations/intro/09-job-2.mp3",
 					"duration": 6181
 				}
@@ -291,30 +343,68 @@
 		},
 		{
 			"id": "10-job",
-			"title": "",
+			"title": "جزئیات بیشتر !؟",
 			"steps": [
 				{
 					"id": "10-job-1",
-					"text": "",
+					"text": "اگه میخوای بیشتر در مورد دستاوردام که توی جاهای مختلف، کار کردم آشنا بشی روی تجربه من",
 					"voice": "/audio/voice/presentations/intro/10-job-1.mp3",
-					"duration": 6181
+					"duration": 6181,
+					"question": {
+						"showOnTime": 5600,
+						"pause": 0,
+						"title": "میخوای با جزئیات بیشتر بگم ؟",
+						"answers": [
+							{
+								"id": "q-10-1",
+								"label": "تجربه من",
+								"gotoSectionId": "XXX",
+								"face": "happy"
+							},
+							{
+								"id": "q-10-2",
+								"label": "پروژه من",
+								"gotoSectionId": "XXX",
+								"face": "happy"
+							}
+						]
+					}
 				},
 				{
 					"id": "10-job-2",
-					"text": "",
+					"text": "و اگه می‌خوای با مهارت‌های فنی یا نمونه کارام بیشتر آشنا بشی روی پروژه من کلیک کن.",
 					"voice": "/audio/voice/presentations/intro/10-job-2.mp3",
-					"duration": 6541
+					"duration": 6541,
+					"question": {
+						"showOnTime": 0,
+						"pause": 5000,
+						"title": "میخوای با جزئیات بیشتر بگم ؟",
+						"answers": [
+							{
+								"id": "q-10-1",
+								"label": "تجربه من",
+								"gotoSectionId": "XXX",
+								"face": "happy"
+							},
+							{
+								"id": "q-10-2",
+								"label": "پروژه من",
+								"gotoSectionId": "XXX",
+								"face": "happy"
+							}
+						]
+					}
 				}
 			],
 			"nextSectionId": "11-skill"
 		},
 		{
 			"id": "11-skill",
-			"title": "",
+			"title": "مهارت ها",
 			"steps": [
 				{
 					"id": "11-skill-1",
-					"text": "",
+					"text": "توی بخش پایانی ارائه‌م می‌خوام در مورد مهارت‌های سخت و نرمم صحبت کنم.",
 					"voice": "/audio/voice/presentations/intro/11-skill-1.mp3",
 					"duration": 4933
 				}
@@ -323,23 +413,23 @@
 		},
 		{
 			"id": "12-skill",
-			"title": "",
+			"title": "اﺑﺰار ﻫﺎ",
 			"steps": [
 				{
 					"id": "12-skill-1",
-					"text": "",
+					"text": "تو دنیای نرم‌افزار معمولاً ابزارها خیلی تغییر می‌کنند اما یه چیز ثابت میمونه و اونم یادگیری سریع ابزارهای جدیده،",
 					"voice": "/audio/voice/presentations/intro/12-skill-1.mp3",
 					"duration": 8149
 				},
 				{
 					"id": "12-skill-2",
-					"text": "",
+					"text": "العان ﻣﺤﺒﻮب ﺗﺮﯾﻦ اﺑﺰارﻫﺎی ﻣﻦ ﺗﺮﮐﯿﺒﯽاز ﻃﺮاﺣﯽ، ﺗﻮﻟﯿﺪ ﻣﺤﺘﻮا، ﺗﻮﺳﻌﻪ ﻧﺮم اﻓﺰار و ﻫﻮش ﻣﺼﻨﻮﻋﯽ ﻫﺴﺘﻨﺪ",
 					"voice": "/audio/voice/presentations/intro/12-skill-2.mp3",
 					"duration": 7429
 				},
 				{
 					"id": "12-skill-3",
-					"text": "",
+					"text": "توی این لیست فقط ابزارهایی آوردم که از کار کردن باهاشون واقعاً لذت می‌برم و خب قاعدتاً هم به ترتیب علاقم چیدمشون.",
 					"voice": "/audio/voice/presentations/intro/12-skill-3.mp3",
 					"duration": 8365
 				}
@@ -348,17 +438,17 @@
 		},
 		{
 			"id": "13-skill",
-			"title": "",
+			"title": "ﻣﻬﺎرت ﻫﺎی ﺷﺨﺼﯿﺘﯽ",
 			"steps": [
 				{
 					"id": "13-skill-1",
-					"text": "",
+					"text": "خب بخش مهمی از توانایی من به نحوه مواجه با آدما و ابهاما و تصمیم گیری ها برمیگرده",
 					"voice": "/audio/voice/presentations/intro/13-skill-1.mp3",
 					"duration": 6445
 				},
 				{
 					"id": "13-skill-2",
-					"text": "",
+					"text": "و این ۵ مهارت اصلی تو شخصیت منه تجربه کاری توی.",
 					"voice": "/audio/voice/presentations/intro/13-skill-2.mp3",
 					"duration": 3181
 				}
@@ -367,23 +457,23 @@
 		},
 		{
 			"id": "14-skill",
-			"title": "",
+			"title": "ﻣﻬﺎرت ﻫﺎی ﺗﺠﺮﺑﯽ",
 			"steps": [
 				{
 					"id": "14-skill-1",
-					"text": "",
+					"text": "تجربه کاری توی جایگاه های مختلف باعث شده زاویه دید متنوعی داشته باشم",
 					"voice": "/audio/voice/presentations/intro/14-skill-1.mp3",
 					"duration": 5461
 				},
 				{
 					"id": "14-skill-2",
-					"text": "",
+					"text": "و بتونم بین افراد تیما و اهداف مختلف ارتباط ایجاد کنم ",
 					"voice": "/audio/voice/presentations/intro/14-skill-2.mp3",
 					"duration": 4909
 				},
 				{
 					"id": "14-skill-3",
-					"text": "",
+					"text": "و این پنج مهارت به واسطه تجربه‌ام ساخته شده",
 					"voice": "/audio/voice/presentations/intro/14-skill-3.mp3",
 					"duration": 3541
 				}
@@ -392,29 +482,29 @@
 		},
 		{
 			"id": "15-skill",
-			"title": "",
+			"title": "ﭼﺮا ﻣﻦ",
 			"steps": [
 				{
 					"id": "15-skill-1",
-					"text": "",
+					"text": "اگه بخوام خلاصه خودم رو بگم میشه:",
 					"voice": "/audio/voice/presentations/intro/15-skill-1.mp3",
 					"duration": 2917
 				},
 				{
 					"id": "15-skill-2",
-					"text": "",
+					"text": "زاویه دید متفاوت که از تنوع مهارت به دست اومده و حل مسئله رو راحت می‌کنه.",
 					"voice": "/audio/voice/presentations/intro/15-skill-2.mp3",
 					"duration": 5773
 				},
 				{
 					"id": "15-skill-3",
-					"text": "",
+					"text": "تجربه حاصل از سال‌ها حضور توی پوزیشن‌های مختلف برای برطرف کردن مشکلات تیم و پروژه نقطه قوت منه.",
 					"voice": "/audio/voice/presentations/intro/15-skill-3.mp3",
 					"duration": 8581
 				},
 				{
 					"id": "15-skill-4",
-					"text": "",
+					"text": "و در نهایت نگاه فرایندی برای بهبود عملکرد یعنی سرعت کیفیت و هزینه تمام شده است",
 					"voice": "/audio/voice/presentations/intro/15-skill-4.mp3",
 					"duration": 7909
 				}
@@ -427,7 +517,7 @@
 			"steps": [
 				{
 					"id": "16-outro-1",
-					"text": "",
+					"text": "خب ارائه تموم شد اگه میخوای از اول با مسیر متفاوتی این ارائه رو ببینی روی دکمه شروع مجدد بزن",
 					"voice": "/audio/voice/presentations/intro/16-outro-1.mp3",
 					"duration": 7789,
 					"question": {
@@ -457,7 +547,7 @@
 				},
 				{
 					"id": "16-outro-2",
-					"text": "",
+					"text": "و برای پایان ارائه و مشاهده اطلاعات تماسی من دکمه پایان ارائه رو بزن",
 					"voice": "/audio/voice/presentations/intro/16-outro-2.mp3",
 					"duration": 5461,
 					"question": {
@@ -480,76 +570,82 @@
 		},
 		{
 			"id": "18-history",
-			"title": "",
+			"title": "تاریخچه تفصیلی",
 			"steps": [
 				{
 					"id": "18-history-1",
-					"text": "",
+					"text": "در سال ۱۳۸۷ به عنوان فرانت دولوپر در آیبک فعالیت و برای اولین بار با توسعه محصول واقعی کار تیمی و تبدیل شدن ایده‌های طراحی به تجربه قابل استفاده برای کاربران آشنا شدم.",
 					"voice": "/audio/voice/presentations/intro/18-history-1.mp3",
 					"duration": 14245
 				},
 				{
-					"id": "18-history-10",
-					"text": "",
-					"voice": "/audio/voice/presentations/intro/18-history-10.mp3",
-					"duration": 9949
-				},
-				{
-					"id": "18-history-11",
-					"text": "",
-					"voice": "/audio/voice/presentations/intro/18-history-11.mp3",
-					"duration": 12733
-				},
-				{
 					"id": "18-history-2",
-					"text": "",
+					"text": "سال ۱۳۹۰ در گروه مهیار به عنوان فرانتند دولوپر نگاه ساختاری‌تری به توسعه نرم‌افزار پیدا کردم و یاد گرفتم چطور بین محدودیت‌های فنی و نیازهای کاربر تعادل ایجاد کنم.",
 					"voice": "/audio/voice/presentations/intro/18-history-2.mp3",
 					"duration": 12253
 				},
 				{
 					"id": "18-history-3",
-					"text": "",
+					"text": "به خاطر توجه به جزئیات و یادگیری سریع توی سال ۹۱ به عنوان طراح گرافیک توی همون مجموعه فعالیت کردم و فهمیدم ارتباط بصری موقعی ارزشمنده که بتونه پیام و هدف کسب و کار رو به درستی منتقل کنه.",
 					"voice": "/audio/voice/presentations/intro/18-history-3.mp3",
 					"duration": 14629
 				},
 				{
 					"id": "18-history-4",
-					"text": "",
+					"text": "تو سال ۱۳۹۲ مدیریت پروژه‌ای در جامعه حمایت از بیماران ایران را به عهده گرفتم و اهمیت برنامه‌ریزی هماهنگی و مدیریت منابع رو به صورت عملی تجربه کردم.",
 					"voice": "/audio/voice/presentations/intro/18-history-4.mp3",
 					"duration": 11749
 				},
 				{
 					"id": "18-history-5",
-					"text": "",
+					"text": "تو سال ۱۳۹۳ به عنوان مدیر تبلیغات در هلدینگ ایران زمین استخدام شدم و با برنامه‌ریزی کمپین‌ها و فعالیت‌های بازاریابی شناخت عمیق‌تری از ارتباط بین طراحی برند و کسب و کار پیدا کردم.",
 					"voice": "/audio/voice/presentations/intro/18-history-5.mp3",
 					"duration": 13237
 				},
 				{
 					"id": "18-history-6",
-					"text": "",
+					"text": "تو سال ۱۳۹۴ در داتیس به عنوان مدیر هنری فعالیت و تجربه رهبری تیم ایجاد استانداردهای اجرایی و حفظ کیفیت خروجی رو توی مقیاس بزرگتری به دست آوردم.",
 					"voice": "/audio/voice/presentations/intro/18-history-6.mp3",
 					"duration": 11989
 				},
 				{
 					"id": "18-history-7",
-					"text": "",
+					"text": "سال ۱۳۹۶ در شتاب دهنده هارتک به عنوان مشاور با ده‌ها تیم عهده مختلف روبرو شدند و یاد گرفتم مهمترین مهارت در طراحی محصول درک درست مسئله قبل از ساخت راه حل.",
 					"voice": "/audio/voice/presentations/intro/18-history-7.mp3",
 					"duration": 13237
 				},
 				{
 					"id": "18-history-8",
-					"text": "",
+					"text": "خب سال ۱۳۹۸ توی همون مجموعه به سمت مدیر ارشد اجرایی و مسئولیت توسعه ساختارها هماهنگی تیم و بهبود عملکرد بخش‌های عملیاتی را به عهده گرفتم.",
 					"voice": "/audio/voice/presentations/intro/18-history-8.mp3",
 					"duration": 11725
 				},
 				{
 					"id": "18-history-9",
-					"text": "",
+					"text": "تو سال ۱۴۰۳ به گروه مهبانگ پیوستم و به عنوان مدیر هنری روی توسعه محصولات بهبود فرایندا و هدایت تیم‌ها فعالیت کردم و اونجا یاد گرفتم که عملکرد تیم‌ها با ساختار مناسب و ابزار درست می‌تونه چند برابر بشه.",
 					"voice": "/audio/voice/presentations/intro/18-history-9.mp3",
 					"duration": 15997
+				},
+				{
+					"id": "18-history-10",
+					"text": "سال ۱۴۰۳ به عنوان مشاور با نماتک همکاری کردم و روی بهبود ساختارهای آموزشی و افزایش بهره‌وری سازمانیشون تمرکز داشتم.",
+					"voice": "/audio/voice/presentations/intro/18-history-10.mp3",
+					"duration": 9949
+				},
+				{
+					"id": "18-history-11",
+					"text": "از سال ۱۴۰۴ تا الان به صورت فریلنس با افراد و تیم ها و سازمان های مختلف همکاری می‌کنم واینکه تجربه نزدیک به دو دهه فعالیتم رو تبدیل به ارزشی برای اونا بکنم.",
+					"voice": "/audio/voice/presentations/intro/18-history-11.mp3",
+					"duration": 12733
 				}
 			],
-			"nextSectionId": ""
+			"nextSectionId": "07-idea",
+			"nextSectionIf": [
+				{
+					"inId": "01-about",
+					"outId": "01-about"
+				}
+			]
 		},
 		{
 			"id": "19-idea",
@@ -936,7 +1032,7 @@
 		"steps": [
 			{
 				"id": "17-outro-1",
-				"text": "",
+				"text": "این ارائه تلاشی بود برای نشون دادن بخشی از مسیری که طی کرده‌ام تجربه‌هایی که به دست آوردم و دیدی که باهاش دنیا رو نگاه می‌کنم.",
 				"voice": "/audio/voice/presentations/intro/17-outro-1.mp3",
 				"duration": 8533,
 				"change": [
@@ -953,19 +1049,19 @@
 			},
 			{
 				"id": "17-outro-2",
-				"text": "",
+				"text": "از اینکه وقت گذاشتید و اونو تا انتها نگاه کردید واقعاً ممنونم.",
 				"voice": "/audio/voice/presentations/intro/17-outro-2.mp3",
 				"duration": 4333
 			},
 			{
 				"id": "17-outro-3",
-				"text": "",
+				"text": "اگه این آشنایی شروع یه گفتگو یا همکاری باشه خیلی خوشحال میشم",
 				"voice": "/audio/voice/presentations/intro/17-outro-3.mp3",
 				"endCue": "[صدای دست زدن]",
-				"duration": 6645,
+				"duration": 4645,
 				"sfx": [
 					{
-						"time": 4645,
+						"time": 4640,
 						"sound": "applaus"
 					}
 				],
@@ -991,24 +1087,24 @@
 					"title": "راه‌های ارتباطی",
 					"links": [
 						{
-							"id": "c-instagram",
-							"label": "اینستاگرام",
-							"url": "https://instagram.com/",
-							"icon": "📸",
-							"face": "happy"
-						},
-						{
-							"id": "c-linkedin",
+							"id": "c-1",
 							"label": "لینکدین",
-							"url": "https://linkedin.com/",
-							"icon": "in",
+							"url": "https://linkedin.com/in/mahdi-goudini-518b1218b",
+							"icon": "💼",
 							"face": "normal"
 						},
 						{
-							"id": "c-email",
+							"id": "c-2",
 							"label": "ایمیل",
-							"url": "mailto:hello@example.com",
-							"icon": "✉️",
+							"url": "mailto:m9020120014@gmail.com",
+							"icon": "💬",
+							"face": "happy"
+						},
+						{
+							"id": "c-3",
+							"label": "شماره تماس",
+							"url": "tel:+989020120014",
+							"icon": "📞",
 							"face": "happy"
 						}
 					]

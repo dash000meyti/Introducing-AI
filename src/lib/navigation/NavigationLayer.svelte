@@ -50,6 +50,11 @@
 	function hoverOff() {
 		engine.setHoverFace(null);
 	}
+
+	/** mailto/tel must not use target=_blank — the OS handler never runs in a new tab. */
+	function opensInNewTab(url: string): boolean {
+		return /^https?:\/\//i.test(url);
+	}
 </script>
 
 <nav class="navigation">
@@ -81,8 +86,8 @@
 								<a
 									class="box choice"
 									href={l.url}
-									target="_blank"
-									rel="noopener noreferrer"
+									target={opensInNewTab(l.url) ? '_blank' : undefined}
+									rel={opensInNewTab(l.url) ? 'noopener noreferrer' : undefined}
 									onpointerenter={() => hoverOn(l.face)}
 									onpointerleave={hoverOff}
 									onpointerdown={() => hoverOn(l.face)}
@@ -189,8 +194,8 @@
 								<a
 									class="box choice"
 									href={l.url}
-									target="_blank"
-									rel="noopener noreferrer"
+									target={opensInNewTab(l.url) ? '_blank' : undefined}
+									rel={opensInNewTab(l.url) ? 'noopener noreferrer' : undefined}
 									onpointerenter={() => hoverOn(l.face)}
 									onpointerleave={hoverOff}
 									onpointerdown={() => hoverOn(l.face)}
